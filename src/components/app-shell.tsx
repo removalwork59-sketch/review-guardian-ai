@@ -3,6 +3,7 @@ import { LayoutGrid, MapPin, Send, Upload, LogOut, Search } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { Wordmark } from "@/components/brand";
+import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 
 const NAV = [
@@ -31,36 +32,37 @@ export function AppShell({
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-card/70 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-4">
-          <Link to="/">
+    <div className="app-frame min-h-screen bg-background">
+      <header className="app-header">
+        <div className="app-container grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-4 sm:flex sm:justify-between">
+          <Link to="/" className="min-w-0">
             <Wordmark />
           </Link>
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <Link
               to="/"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-border px-3 py-2 text-sm font-medium text-ink transition hover:bg-muted"
+              className="app-secondary-action"
             >
               <Search className="size-4" />
               New scan
             </Link>
-            <button
+            <Button
               type="button"
+              variant="ghost"
               onClick={signOut}
-              className="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium text-muted-foreground transition hover:text-ink"
+              className="app-signout"
             >
               <LogOut className="size-4" />
               Sign out
-            </button>
+            </Button>
           </div>
         </div>
-        <nav className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-4 pb-2">
+        <nav className="app-container app-nav" aria-label="Workspace">
           {NAV.map((item) => (
             <Link
               key={item.to}
               to={item.to}
-              className="inline-flex items-center gap-2 whitespace-nowrap rounded-xl px-3 py-2 text-sm font-medium text-muted-foreground transition hover:bg-muted hover:text-ink"
+              className="app-nav-link"
               activeProps={{ className: "bg-info-soft text-primary hover:bg-info-soft" }}
             >
               <item.icon className="size-4" />
@@ -70,15 +72,15 @@ export function AppShell({
         </nav>
       </header>
 
-      <main className="mx-auto w-full max-w-6xl px-5 pb-24 pt-8">
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h1 className="font-display text-3xl font-semibold text-ink">{title}</h1>
-            <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+      <main className="app-container app-main">
+        <div className="app-page-heading">
+          <div className="min-w-0">
+            <h1 className="app-page-title">{title}</h1>
+            <p className="app-page-description">{description}</p>
           </div>
-          {actions}
+          {actions ? <div className="shrink-0">{actions}</div> : null}
         </div>
-        <div className="mt-7">{children}</div>
+        <div className="app-page-content">{children}</div>
       </main>
     </div>
   );

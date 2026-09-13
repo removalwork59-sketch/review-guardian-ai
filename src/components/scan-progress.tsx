@@ -13,7 +13,7 @@ export function ScanProgress({ steps, done }: { steps: string[]; done: boolean }
   }, [done, steps.length]);
 
   return (
-    <div className="surface mx-auto w-full max-w-xl p-5 sm:p-6">
+    <div className="surface app-card mx-auto w-full max-w-xl">
       <div className="relative mb-5 h-1 overflow-hidden rounded-full bg-muted">
         <span className="absolute inset-y-0 w-1/3 animate-[sweep_1.8s_cubic-bezier(0.4,0,0.2,1)_infinite] rounded-full bg-primary" />
       </div>

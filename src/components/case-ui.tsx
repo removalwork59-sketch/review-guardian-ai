@@ -9,6 +9,7 @@ import {
   VERDICT_TONE,
 } from "@/lib/case-types";
 import type { CaseRecord, CaseStatus } from "@/lib/case-types";
+import { Button } from "@/components/ui/button";
 
 const TONE_CLASS: Record<string, string> = {
   neutral: "border-border bg-muted text-muted-foreground",
@@ -48,9 +49,9 @@ export function CaseCard({
   busy: boolean;
 }) {
   return (
-    <article className="surface animate-rise p-5">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
+    <article className="surface app-card animate-rise">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 max-sm:grid-cols-1">
+        <div className="min-w-0">
           <p className="font-display text-lg font-semibold text-ink">{item.locationName}</p>
           <p className="text-sm text-muted-foreground">
             {item.authorName || "Anonymous"} · {item.reviewRelativeTime || "date unknown"}
@@ -62,7 +63,7 @@ export function CaseCard({
             ) : null}
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
           <VerdictBadge verdict={item.verdict} />
           <StatusBadge status={item.status} />
         </div>
@@ -72,7 +73,7 @@ export function CaseCard({
       <p className="mt-3 text-sm font-medium text-ink">{item.headline}</p>
       <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.plainSummary}</p>
 
-      <div className="mt-4 flex flex-wrap items-center gap-2">
+      <div className="mt-5 flex flex-wrap items-center gap-2">
         <label className="text-xs text-muted-foreground" htmlFor={`status-${item.id}`}>
           Status
         </label>
@@ -81,7 +82,7 @@ export function CaseCard({
           value={item.status}
           disabled={busy}
           onChange={(event) => onStatusChange(event.target.value as CaseStatus)}
-          className="rounded-xl border border-border bg-card px-3 py-2 text-sm text-ink outline-none focus:border-primary disabled:opacity-60"
+          className="app-select"
         >
           {CASE_STATUSES.map((status) => (
             <option key={status} value={status}>
@@ -107,7 +108,7 @@ export function CaseCard({
 
 export function EmptyState({ title, body }: { title: string; body: string }) {
   return (
-    <div className="surface p-10 text-center">
+    <div className="surface app-empty-state text-center">
       <p className="font-display text-lg font-semibold text-ink">{title}</p>
       <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">{body}</p>
     </div>
