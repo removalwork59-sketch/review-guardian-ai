@@ -18,7 +18,7 @@ SERVICE=review-guardian-ai.service
 COMMIT=$(git -C "$APP" rev-parse HEAD)
 SHORT=$(git -C "$APP" rev-parse --short HEAD)
 echo "== releasing $SHORT: $(git -C "$APP" log -1 --format=%s)"
-[ -z "$(git -C "$APP" status --porcelain)" ] || { echo "ABORT: $APP has uncommitted changes"; exit 1; }
+[ -z "$(git -C "$APP" status --porcelain --untracked-files=no)" ] || { echo "ABORT: $APP has uncommitted changes"; exit 1; }
 
 # --- build checkout ---------------------------------------------------------------------------
 [ -d "$BUILD/.git" ] || git clone -q "$APP" "$BUILD"
