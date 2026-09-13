@@ -214,16 +214,16 @@ export function ReferenceLanding({
         <div className="reference-boundary-stage">
           <div className="reference-tilt">
             {[
-              { stars: "01", text: "Read the review and its available business context.", who: "Source review" },
-              { stars: "02", text: "Compare the words against published policy categories.", who: "Policy analysis" },
-              { stars: "03", text: "Weigh supporting evidence and the strongest counterargument.", who: "Adversarial check" },
-              { stars: "04", text: "Prepare a report only when the evidence supports one.", who: "Human decision" },
-              { stars: "05", text: "Record the outcome you actually observe — never assume it.", who: "Honest tracking" },
+              { text: "Fast to review, simple to understand, and clear about what happens next.", who: "Sample reviewer", initials: "SR" },
+              { text: "The policy analysis made the important details much easier to check.", who: "Sample reviewer", initials: "SR" },
+              { text: "Evidence and counterpoints were arranged clearly before any decision.", who: "Sample reviewer", initials: "SR" },
+              { text: "The report workflow felt focused and kept the final choice in my hands.", who: "Sample reviewer", initials: "SR" },
+              { text: "Outcome tracking stayed honest and never claimed a result too early.", who: "Sample reviewer", initials: "SR" },
             ].map((card) => (
               <article key={card.who}>
-                <div className="t-stars">{card.stars}</div>
+                <div className="t-review-head"><span className="t-avatar" aria-hidden="true">{card.initials}</span><span><b>{card.who}</b><small>Interface example</small></span></div>
+                <div className="t-stars" aria-label="Five star rating">★★★★★</div>
                 <p>{card.text}</p>
-                <b>{card.who}</b>
               </article>
             ))}
           </div>
