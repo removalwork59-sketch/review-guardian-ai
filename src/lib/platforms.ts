@@ -42,6 +42,7 @@ export function detectPlatform(rawUrl: string): PlatformId {
     url.includes("google.com/maps") ||
     url.includes("maps.app.goo.gl") ||
     url.includes("goo.gl/maps") ||
+    url.includes("share.google") ||
     url.includes("google.com/search") ||
     url.includes("g.page")
   ) {

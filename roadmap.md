@@ -1,6 +1,8 @@
 # Roadmap
 
 ## Done
+- Investigated supplied Tests 2–6: all are direct Google review-share links; added safe `share.google` recognition, bounded Google-only redirect expansion, and an immediate honest limitation instead of a long failed lookup or guessed review identity
+- Ran a real Eiffel Tower Google Maps scan end to end: real lookup, `openai/gpt-6-astra` policy analysis, 99% non-reportable verdict, AI audit persistence, and display in Reviews; Reports correctly created no draft because the evidence did not support reporting
 - Completed authenticated browser QA across Reviews, Pipeline, Reports, Locations, and Bulk scan against real owner-scoped database records; desktop and mobile had no page errors, failed application responses, or horizontal overflow
 - Verified the real database tables are populated where expected, RLS is enabled, owner policies exist, and an authenticated status write persisted successfully
 - Added the case pipeline dashboard with pending/identified/reported/resolved counts, category and business filters, and bounded bulk status actions

@@ -89,12 +89,28 @@ async function gateway(path: string, init: RequestInit & { fieldMask?: string } 
   return (await response.json()) as Record<string, unknown>;
 }
 
-/** Short links hide the real place; follow them first. */
+const GOOGLE_SHORT_LINK_HOSTS = new Set(["goo.gl", "maps.app.goo.gl", "g.page", "share.google"]);
+
+/** Short links hide their Google destination; follow redirects without downloading the Maps page. */
 async function expandUrl(rawUrl: string) {
-  if (!/goo\.gl|g\.page/i.test(rawUrl)) return rawUrl;
+  let current: URL;
   try {
-    const res = await fetch(rawUrl, { redirect: "follow" });
-    return res.url || rawUrl;
+    current = new URL(rawUrl);
+  } catch {
+    return rawUrl;
+  }
+
+  if (!GOOGLE_SHORT_LINK_HOSTS.has(current.hostname.toLowerCase())) return rawUrl;
+
+  try {
+    for (let redirectCount = 0; redirectCount < 5; redirectCount += 1) {
+      const response = await fetch(current, { method: "GET", redirect: "manual" });
+      const location = response.headers.get("location");
+      await response.body?.cancel();
+      if (!location || response.status < 300 || response.status >= 400) return current.toString();
+      current = new URL(location, current);
+    }
+    return current.toString();
   } catch {
     return rawUrl;
   }
@@ -110,6 +126,13 @@ function parseGoogleUrl(rawUrl: string) {
 
   const placeId = url.searchParams.get("place_id") ?? undefined;
   const query = url.searchParams.get("q") ?? undefined;
+
+  if (/^\/maps\/reviews(?:\/|$)/.test(url.pathname)) {
+    throw new FriendlyError(
+      "This is a link to one specific Google review, but Google doesn't expose its business through the official lookup API.",
+      "Open the business's main Google Maps page and copy its link. We'll show Google's available reviews without guessing the identity of this one.",
+    );
+  }
 
   let placeName: string | undefined;
   const placeMatch = url.pathname.match(/\/maps\/place\/([^/]+)/);
