@@ -14,6 +14,97 @@ export type Database = {
   }
   public: {
     Tables: {
+      case_appeals: {
+        Row: {
+          case_id: string
+          created_at: string
+          external_reference: string | null
+          id: string
+          reason: string
+          resolved_at: string | null
+          round: number
+          status: string
+          submitted_at: string | null
+          supporting_evidence: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          case_id: string
+          created_at?: string
+          external_reference?: string | null
+          id?: string
+          reason: string
+          resolved_at?: string | null
+          round: number
+          status?: string
+          submitted_at?: string | null
+          supporting_evidence?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          case_id?: string
+          created_at?: string
+          external_reference?: string | null
+          id?: string
+          reason?: string
+          resolved_at?: string | null
+          round?: number
+          status?: string
+          submitted_at?: string | null
+          supporting_evidence?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_appeals_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "review_cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      case_events: {
+        Row: {
+          case_id: string
+          created_at: string
+          event_type: string
+          id: string
+          message: string
+          metadata: Json
+          user_id: string
+        }
+        Insert: {
+          case_id: string
+          created_at?: string
+          event_type: string
+          id?: string
+          message?: string
+          metadata?: Json
+          user_id: string
+        }
+        Update: {
+          case_id?: string
+          created_at?: string
+          event_type?: string
+          id?: string
+          message?: string
+          metadata?: Json
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_events_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "review_cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       locations: {
         Row: {
           address: string
@@ -86,10 +177,70 @@ export type Database = {
         }
         Relationships: []
       }
+      report_drafts: {
+        Row: {
+          case_id: string
+          counter_evidence: Json
+          created_at: string
+          evidence: Json
+          external_reference: string | null
+          id: string
+          report_body: string
+          report_reason: string
+          status: string
+          submitted_at: string | null
+          updated_at: string
+          user_id: string
+          version: number
+        }
+        Insert: {
+          case_id: string
+          counter_evidence?: Json
+          created_at?: string
+          evidence?: Json
+          external_reference?: string | null
+          id?: string
+          report_body?: string
+          report_reason?: string
+          status?: string
+          submitted_at?: string | null
+          updated_at?: string
+          user_id: string
+          version?: number
+        }
+        Update: {
+          case_id?: string
+          counter_evidence?: Json
+          created_at?: string
+          evidence?: Json
+          external_reference?: string | null
+          id?: string
+          report_body?: string
+          report_reason?: string
+          status?: string
+          submitted_at?: string | null
+          updated_at?: string
+          user_id?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "report_drafts_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "review_cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       review_cases: {
         Row: {
           analysis: Json
+          analysis_version: number
+          appeal_round: number
+          appealed_at: string | null
           author_name: string
+          canonical_source_url: string
           confidence: number
           created_at: string
           headline: string
@@ -102,6 +253,7 @@ export type Database = {
           resolved_at: string | null
           review_external_id: string
           review_rating: number | null
+          review_record_id: string | null
           review_relative_time: string
           review_text: string
           review_url: string
@@ -116,7 +268,11 @@ export type Database = {
         }
         Insert: {
           analysis?: Json
+          analysis_version?: number
+          appeal_round?: number
+          appealed_at?: string | null
           author_name?: string
+          canonical_source_url?: string
           confidence?: number
           created_at?: string
           headline?: string
@@ -129,6 +285,7 @@ export type Database = {
           resolved_at?: string | null
           review_external_id: string
           review_rating?: number | null
+          review_record_id?: string | null
           review_relative_time?: string
           review_text?: string
           review_url?: string
@@ -143,7 +300,11 @@ export type Database = {
         }
         Update: {
           analysis?: Json
+          analysis_version?: number
+          appeal_round?: number
+          appealed_at?: string | null
           author_name?: string
+          canonical_source_url?: string
           confidence?: number
           created_at?: string
           headline?: string
@@ -156,6 +317,7 @@ export type Database = {
           resolved_at?: string | null
           review_external_id?: string
           review_rating?: number | null
+          review_record_id?: string | null
           review_relative_time?: string
           review_text?: string
           review_url?: string
@@ -171,6 +333,90 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "review_cases_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "review_cases_review_record_id_fkey"
+            columns: ["review_record_id"]
+            isOneToOne: false
+            referencedRelation: "review_records"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      review_records: {
+        Row: {
+          author_name: string
+          author_photo_url: string
+          canonical_source_url: string
+          content_fingerprint: string
+          created_at: string
+          external_id: string
+          first_seen_at: string
+          id: string
+          last_seen_at: string
+          location_id: string
+          observed_absent_at: string | null
+          platform: string
+          published_at: string | null
+          rating: number | null
+          raw_source: Json
+          relative_time: string
+          review_text: string
+          review_url: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          author_name?: string
+          author_photo_url?: string
+          canonical_source_url?: string
+          content_fingerprint: string
+          created_at?: string
+          external_id: string
+          first_seen_at?: string
+          id?: string
+          last_seen_at?: string
+          location_id: string
+          observed_absent_at?: string | null
+          platform?: string
+          published_at?: string | null
+          rating?: number | null
+          raw_source?: Json
+          relative_time?: string
+          review_text?: string
+          review_url?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          author_name?: string
+          author_photo_url?: string
+          canonical_source_url?: string
+          content_fingerprint?: string
+          created_at?: string
+          external_id?: string
+          first_seen_at?: string
+          id?: string
+          last_seen_at?: string
+          location_id?: string
+          observed_absent_at?: string | null
+          platform?: string
+          published_at?: string | null
+          rating?: number | null
+          raw_source?: Json
+          relative_time?: string
+          review_text?: string
+          review_url?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_records_location_id_fkey"
             columns: ["location_id"]
             isOneToOne: false
             referencedRelation: "locations"
