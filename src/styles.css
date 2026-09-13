@@ -489,13 +489,11 @@
   min-height: 100vh;
   color: var(--color-foreground);
   background:
-    linear-gradient(to right, color-mix(in oklab, var(--color-cyan) 7%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklab, var(--color-cyan) 7%, transparent) 1px, transparent 1px),
-    radial-gradient(900px 520px at 2% 0%, color-mix(in oklab, var(--color-violet) 18%, transparent), transparent 62%),
-    radial-gradient(780px 480px at 100% 0%, color-mix(in oklab, var(--color-cyan) 14%, transparent), transparent 65%),
+    radial-gradient(1100px 620px at 8% -6%, color-mix(in oklab, var(--color-primary) 12%, transparent), transparent 62%),
+    radial-gradient(900px 520px at 96% 2%, color-mix(in oklab, var(--color-primary) 9%, transparent), transparent 66%),
     var(--color-background);
-  background-size: 44px 44px, 44px 44px, 100% 100%, 100% 100%, 100% 100%;
 }
+
 
 .reference-page.reference-light {
   --background: oklch(0.975 0.008 250);
