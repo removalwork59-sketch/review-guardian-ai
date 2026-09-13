@@ -41,6 +41,7 @@ export function AppShell({
           <div className="flex shrink-0 items-center gap-2">
             <Link
               to="/"
+              aria-label="Start a new review scan"
               className="app-secondary-action"
             >
               <Search className="size-4" />
@@ -63,7 +64,7 @@ export function AppShell({
               key={item.to}
               to={item.to}
               className="app-nav-link"
-              activeProps={{ className: "bg-info-soft text-primary hover:bg-info-soft" }}
+              activeProps={{ className: "bg-info-soft text-ink hover:bg-info-soft" }}
             >
               <item.icon className="size-4" />
               {item.label}

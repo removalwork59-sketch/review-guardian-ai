@@ -62,7 +62,7 @@ function ReportsPage() {
           The AI found a case worth making. Open the review on Google, flag it there, then mark it
           reported here.
         </p>
-        <div className="app-list-grid mt-5">
+        <div className="app-section-list app-list-grid">
           {isPending ? (
             <EmptyState title="Loading…" body="One moment." />
           ) : ready.length === 0 ? (
@@ -88,7 +88,7 @@ function ReportsPage() {
         <p className="app-section-description">
           Google decides the outcome — update the status here when you hear back.
         </p>
-        <div className="app-list-grid mt-5">
+        <div className="app-section-list app-list-grid">
           {tracked.length === 0 ? (
             <EmptyState
               title="Nothing reported yet"

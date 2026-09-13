@@ -323,7 +323,7 @@
 .app-page-heading {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  align-items: end;
+  align-items: start;
   gap: 1rem;
 }
 .app-page-title { color: var(--color-ink); font-family: var(--font-display); font-size: clamp(1.75rem, 3vw, 2rem); font-weight: 650; line-height: 1.15; }
@@ -333,6 +333,7 @@
 .app-empty-state { min-height: 8.5rem; display: grid; align-content: center; padding: 2rem var(--card-pad); }
 .app-filter-row { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.25rem; }
 .app-list-grid { display: grid; gap: 1rem; }
+.app-section-list { margin-top: 1.25rem; }
 .app-card-grid { display: grid; gap: var(--grid-gap); grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; }
 .app-stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .75rem; }
 .app-section { margin-top: 2.5rem; }
@@ -359,6 +360,11 @@
   .app-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .app-card-grid { grid-template-columns: 1fr; }
   .app-section { margin-top: 2.25rem; }
+}
+
+@media (max-width: 900px) {
+  .app-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .app-card-grid { grid-template-columns: 1fr; }
 }
 
 @utility text-gradient-brand {
@@ -1660,7 +1666,7 @@
 .auth-kicker svg { width: 15px; }
 .auth-story h1 { max-width: 8ch; margin-top: 20px; color: var(--color-ink); font-size: clamp(3.5rem, 5.4vw, 5.7rem); font-weight: 780; line-height: .96; text-wrap: balance; }
 .auth-story-copy > p { max-width: 520px; margin-top: 24px; color: color-mix(in oklab, var(--color-ink) 68%, transparent); font-size: 1.05rem; line-height: 1.7; }
-.auth-slider { height: 124px; margin-top: 42px; }
+.auth-slider { min-height: 124px; margin-top: 42px; }
 .auth-slide { position: absolute; inset: 0; display: grid; grid-template-columns: 48px 1fr auto; align-items: center; gap: 15px; padding: 18px 20px; overflow: hidden; border: 1px solid color-mix(in oklab, var(--color-cyan) 26%, transparent); border-radius: 15px; background: linear-gradient(145deg, color-mix(in oklab, var(--color-card) 92%, transparent), color-mix(in oklab, var(--color-background) 86%, transparent)); box-shadow: inset 0 1px 0 oklch(1 0 0 / .1), 0 25px 48px -28px oklch(0 0 0 / .9); opacity: 0; animation: auth-slide 12s cubic-bezier(.22,1,.36,1) infinite; }
 .auth-slide:nth-child(2) { animation-delay: 4s; }.auth-slide:nth-child(3) { animation-delay: 8s; }
 .auth-slide > span { display: grid; width: 48px; height: 48px; place-items: center; border: 1px solid color-mix(in oklab, var(--brand-cyan) 32%, transparent); border-radius: 13px; color: var(--brand-cyan); background: color-mix(in oklab, var(--brand-cyan) 9%, transparent); box-shadow: inset 0 1px 0 oklch(1 0 0 / .09), 0 0 24px color-mix(in oklab, var(--brand-cyan) 9%, transparent); }
@@ -1981,4 +1987,41 @@ body {
   .reference-page .three-step-card { min-height: 390px; }
   .reference-page .audit-finale { padding-inline: 1rem; }
   .app-page-heading { grid-template-columns: minmax(0, 1fr) auto; }
+}
+
+/* End-to-end structural finishing: preserve the visual concept while unifying geometry. */
+.app-header > .app-container:first-child { min-height: 72px; padding-block: .75rem; }
+.app-header .font-display { white-space: nowrap; }
+.app-nav { scroll-padding-inline: .25rem; }
+.bulk-result-verdict { justify-self: end; }
+
+.reference-page.reference-light .review-impression {
+  background:
+    radial-gradient(ellipse at 27% 70%, color-mix(in oklab, var(--brand-cyan) 11%, transparent), transparent 34%),
+    radial-gradient(ellipse at 77% 68%, color-mix(in oklab, var(--color-danger) 5%, transparent), transparent 29%),
+    linear-gradient(180deg, oklch(0.955 0.016 220), oklch(0.91 0.024 221));
+}
+.reference-page.reference-light .audit-finale {
+  background:
+    radial-gradient(ellipse 38% 92% at 55% 52%, color-mix(in oklab, var(--color-star) 13%, transparent), transparent 63%),
+    radial-gradient(ellipse 45% 100% at 100% 100%, color-mix(in oklab, var(--brand-cyan) 11%, transparent), transparent 63%),
+    linear-gradient(180deg, oklch(0.955 0.016 220), oklch(0.905 0.025 222));
+}
+.reference-page.reference-light :where(.rating-owner, .rating-score strong, .audit-finale-copy h2, .audit-finale-lede, .audit-finale-note, .audit-chat-panel h3, .audit-chat-panel > p, .audit-chat-meta) {
+  color: var(--ink);
+  text-shadow: none;
+}
+.reference-page.reference-light .audit-chat-panel {
+  background: linear-gradient(145deg, var(--card), color-mix(in oklab, var(--muted) 52%, var(--card)));
+}
+
+@media (max-width: 640px) {
+  .app-header > .app-container:first-child { min-height: 66px; padding-block: .5rem; }
+  .app-header .app-secondary-action { padding-inline: .625rem; }
+  .app-header .app-signout { font-size: .75rem; }
+  .app-nav { gap: 0; }
+  .app-nav-link { gap: .375rem; padding-inline: .5rem; font-size: .8125rem; }
+  .bulk-result-row { grid-template-columns: auto minmax(0, 1fr); }
+  .bulk-result-verdict { grid-column: 2; justify-self: start; }
+  .reference-page .audit-finale-copy h2 { font-size: clamp(2.6rem, 12.5vw, 3.25rem); }
 }
