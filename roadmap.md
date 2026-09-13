@@ -20,6 +20,7 @@
 - Desktop and mobile homepage validation with no overflow or console errors
 
 ## Open
+- Increase existing palette density/richness with restrained filled glow across homepage and dashboards; then verify every authenticated dashboard, real database path, security boundary, and production blocker end to end
 - Case pipeline dashboard with pending/identified/reported/resolved counts, category and business filters, and a bulk action queue — done
 - Enable Connect Google by saving the approved Google Business Profile client ID and secret (secure form; user must supply)
 - Sync the user's own Google Business Profile reviews into review records and show them in Reviews with AI analysis and a report button (code ready; needs the approved Google OAuth client saved)
