@@ -2014,13 +2014,19 @@ body {
 .reference-page.reference-light .audit-chat-panel {
   background: linear-gradient(145deg, var(--card), color-mix(in oklab, var(--muted) 52%, var(--card)));
 }
+.reference-page.reference-light .rw-header,
+.reference-page.reference-light .rw-mobile {
+  border-color: color-mix(in oklab, var(--brand-cyan) 24%, transparent);
+  background: color-mix(in oklab, var(--card) 92%, transparent);
+}
 
 @media (max-width: 640px) {
   .app-header > .app-container:first-child { min-height: 66px; padding-block: .5rem; }
   .app-header .app-secondary-action { padding-inline: .625rem; }
   .app-header .app-signout { font-size: .75rem; }
   .app-nav { gap: 0; }
-  .app-nav-link { gap: .375rem; padding-inline: .5rem; font-size: .8125rem; }
+  .app-nav-link { gap: .25rem; padding-inline: .375rem; font-size: .75rem; }
+  .app-nav-link svg { width: .875rem; height: .875rem; }
   .bulk-result-row { grid-template-columns: auto minmax(0, 1fr); }
   .bulk-result-verdict { grid-column: 2; justify-self: start; }
   .reference-page .audit-finale-copy h2 { font-size: clamp(2.6rem, 12.5vw, 3.25rem); }
