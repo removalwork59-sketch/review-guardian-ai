@@ -168,17 +168,18 @@ function Home() {
   const busy = stage === "scanning" || stage === "analyzing";
 
   return (
-    <main className="min-h-screen bg-background">
-      <header className="mx-auto flex max-w-4xl items-center justify-between px-5 py-5">
+    <main className="aurora-bg relative min-h-screen overflow-hidden bg-background">
+      <div className="grid-veil pointer-events-none absolute inset-x-0 top-0 -z-10 h-[80vh]" />
+      <header className="mx-auto flex max-w-5xl items-center justify-between px-5 py-5">
         <Wordmark />
         <div className="flex items-center gap-2">
-          <span className="hidden items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground lg:inline-flex">
+          <span className="hidden items-center gap-1.5 rounded-full border border-border bg-card/60 px-3 py-1.5 text-xs text-muted-foreground backdrop-blur lg:inline-flex">
             <ShieldCheck className="size-3.5 text-safe" />
             Independent tool — not affiliated with Google
           </span>
           <Link
             to={signedIn ? "/dashboard" : "/auth"}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 text-sm font-medium text-ink transition hover:bg-muted"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-card/70 px-3 py-2 text-sm font-medium text-ink backdrop-blur transition hover:border-primary/40 hover:bg-muted"
           >
             <LayoutGrid className="size-4" />
             {signedIn ? "Dashboard" : "Sign in"}
@@ -189,17 +190,23 @@ function Home() {
       <div className="mx-auto w-full max-w-4xl px-5 pb-24">
         {stage === "idle" || stage === "scanning" ? (
           <section className="pt-8 text-center sm:pt-16">
-            <h1 className="text-balance font-display text-4xl font-semibold leading-[1.05] text-ink sm:text-6xl">
-              Find problematic <span className="text-gradient-brand">reviews.</span> Fast.
+            <span className="animate-rise inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3.5 py-1.5 text-xs font-medium text-primary">
+              <Sparkles className="size-3.5" />
+              AI policy analysis on real Google reviews
+            </span>
+            <h1 className="animate-rise mt-5 text-balance font-display text-4xl font-semibold leading-[1.04] text-ink sm:text-6xl">
+              Find problematic <span className="text-gradient-brand">reviews.</span>
+              <br className="hidden sm:block" /> Report them properly.
             </h1>
-            <p className="mx-auto mt-4 max-w-lg text-balance text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Paste a review link and let AI check it for policy violations.
+            <p className="animate-rise mx-auto mt-5 max-w-xl text-balance text-base leading-relaxed text-muted-foreground sm:text-lg">
+              Paste a review link. AI reads the real review, checks it against platform policy and
+              builds the evidence for a legitimate report.
             </p>
 
             <form onSubmit={handleScan} className="mx-auto mt-9 w-full max-w-2xl">
-              <div className="surface flex flex-col gap-2 p-2.5 sm:flex-row sm:items-center sm:rounded-[28px] sm:p-2">
+              <div className="surface animate-rise flex flex-col gap-2 p-2.5 ring-1 ring-primary/10 sm:flex-row sm:items-center sm:rounded-[28px] sm:p-2">
                 <div className="flex flex-1 items-center gap-3 px-3 py-2">
-                  <Search className="size-5 shrink-0 text-muted-foreground" />
+                  <Search className="size-5 shrink-0 text-primary" />
                   <input
                     value={url}
                     onChange={(event) => setUrl(event.target.value)}
@@ -213,13 +220,14 @@ function Home() {
                 <button
                   type="submit"
                   disabled={busy}
-                  className="inline-flex h-13 items-center justify-center gap-2 rounded-2xl bg-primary px-7 text-base font-semibold text-primary-foreground shadow-soft transition hover:brightness-110 disabled:opacity-60 sm:rounded-[22px]"
+                  className="cta-glow inline-flex h-13 items-center justify-center gap-2 rounded-2xl px-7 text-base font-semibold disabled:opacity-60 sm:rounded-[22px]"
                 >
                   Scan review
                   <ArrowRight className="size-4.5" />
                 </button>
               </div>
             </form>
+
 
             <div className="mt-6 flex flex-wrap items-center justify-center gap-2 text-sm">
               <Pill label="Google" ready />
@@ -273,7 +281,7 @@ function Home() {
                           key={item.id}
                           type="button"
                           onClick={() => handleAnalyze(item, result.business)}
-                          className="surface animate-rise group w-full p-4 text-left transition hover:shadow-lift sm:p-5"
+                          className="surface surface-hover animate-rise group w-full p-4 text-left sm:p-5"
                           style={{ animationDelay: `${index * 60}ms` }}
                         >
                           <div className="flex items-center justify-between gap-3">
@@ -468,7 +476,7 @@ function Workflow() {
         {WORKFLOW.map((step, index) => (
           <li
             key={step.label}
-            className="surface animate-rise p-4"
+            className="surface surface-hover animate-rise p-4"
             style={{ animationDelay: `${index * 70}ms` }}
           >
             <span
