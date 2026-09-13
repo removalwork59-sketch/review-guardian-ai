@@ -16,6 +16,7 @@ import { Route as AuthenticatedBulkRouteImport } from './routes/_authenticated/b
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedLocationsRouteImport } from './routes/_authenticated/locations'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
+import { Route as ApiPublicGoogleBusinessCallbackRouteImport } from './routes/api/public/google-business/callback'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -51,6 +52,12 @@ const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
   path: '/reports',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicGoogleBusinessCallbackRoute =
+  ApiPublicGoogleBusinessCallbackRouteImport.update({
+    id: '/api/public/google-business/callback',
+    path: '/api/public/google-business/callback',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/locations': typeof AuthenticatedLocationsRoute
   '/reports': typeof AuthenticatedReportsRoute
+  '/api/public/google-business/callback': typeof ApiPublicGoogleBusinessCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -67,6 +75,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/locations': typeof AuthenticatedLocationsRoute
   '/reports': typeof AuthenticatedReportsRoute
+  '/api/public/google-business/callback': typeof ApiPublicGoogleBusinessCallbackRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -77,12 +86,27 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/locations': typeof AuthenticatedLocationsRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
+  '/api/public/google-business/callback': typeof ApiPublicGoogleBusinessCallbackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/bulk' | '/dashboard' | '/locations' | '/reports'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/bulk'
+    | '/dashboard'
+    | '/locations'
+    | '/reports'
+    | '/api/public/google-business/callback'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/bulk' | '/dashboard' | '/locations' | '/reports'
+  to:
+    | '/'
+    | '/auth'
+    | '/bulk'
+    | '/dashboard'
+    | '/locations'
+    | '/reports'
+    | '/api/public/google-business/callback'
   id:
     | '__root__'
     | '/'
@@ -92,12 +116,14 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/locations'
     | '/_authenticated/reports'
+    | '/api/public/google-business/callback'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiPublicGoogleBusinessCallbackRoute: typeof ApiPublicGoogleBusinessCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -151,6 +177,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedReportsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/google-business/callback': {
+      id: '/api/public/google-business/callback'
+      path: '/api/public/google-business/callback'
+      fullPath: '/api/public/google-business/callback'
+      preLoaderRoute: typeof ApiPublicGoogleBusinessCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -175,6 +208,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiPublicGoogleBusinessCallbackRoute: ApiPublicGoogleBusinessCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
