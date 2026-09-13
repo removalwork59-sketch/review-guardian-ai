@@ -1,10 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, CheckCircle2, MoonStar, Sparkles, Sun } from "lucide-react";
+import { ArrowRight, CheckCircle2, ChevronDown, MoonStar, Sparkles, Sun } from "lucide-react";
 import { useState } from "react";
 
 import analyticsIcon from "@/assets/reference-icons/analytics.png";
 import casesIcon from "@/assets/reference-icons/cases.png";
-import dashboardIcon from "@/assets/reference-icons/dashboard.png";
 import locationsIcon from "@/assets/reference-icons/locations.png";
 import reportsIcon from "@/assets/reference-icons/reports.png";
 import reviewsIcon from "@/assets/reference-icons/reviews.png";
@@ -12,12 +11,7 @@ import scannerIcon from "@/assets/reference-icons/scanner.png";
 import { Wordmark } from "@/components/brand";
 import { Button } from "@/components/ui/button";
 
-const productTiles = [
-  { label: "DASHBOARD", icon: dashboardIcon },
-  { label: "SCANNER", icon: scannerIcon },
-  { label: "CASES", icon: casesIcon },
-  { label: "ANALYTICS", icon: analyticsIcon },
-];
+
 
 const steps = [
   { title: "Import", body: "Bring in your Google review export or paste a public review link." },
