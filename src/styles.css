@@ -632,12 +632,12 @@
 .removal-hammer {
   position: absolute;
   z-index: 6;
-  right: -6px;
-  top: -56px;
-  width: 96px;
-  height: 138px;
+  right: 10%;
+  top: -32px;
+  width: 80px;
+  height: 108px;
   opacity: 0;
-  transform-origin: 50px 12px;
+  transform-origin: 42px 10px;
   animation: hammer-strike 5.23s cubic-bezier(.42, 0, .18, 1) infinite;
   filter: drop-shadow(0 10px 14px color-mix(in oklab, var(--color-background) 55%, transparent));
 }
