@@ -619,7 +619,8 @@
 .envelope-check { position: absolute; z-index: 7; right: 10%; bottom: 21px; display: grid; width: 27px; height: 27px; place-items: center; border-radius: 50%; background: var(--brand-cyan); color: var(--color-background); font-weight: 900; opacity: 0; animation: envelope-confirm 5.23s ease-in-out infinite; }
 
 .step-removal { width: min(260px, 94%); margin-inline: auto; }
-.removal-review { position: absolute; left: 8%; bottom: 25px; width: 72%; height: 76px; padding: 17px 16px 12px 48px; border-radius: 13px; background: color-mix(in oklab, var(--color-ink) 96%, var(--brand-cyan)); animation: review-dim 5.23s ease-in-out infinite; transform-origin: center; }
+.removal-review { position: absolute; left: 8%; bottom: 25px; width: 72%; height: 76px; padding: 17px 16px 12px 48px; border-radius: 13px; background: color-mix(in oklab, var(--color-ink) 96%, var(--brand-cyan)); box-shadow: 0 10px 26px color-mix(in oklab, var(--color-background) 45%, transparent); animation: review-dim 5.23s ease-in-out infinite; transform-origin: 50% 100%; }
+
 .removal-avatar { position: absolute; left: 16px; top: 18px; width: 15px; height: 15px; border-radius: 50%; background: color-mix(in oklab, var(--brand-cyan) 14%, var(--color-ink)); }
 .removal-stars { display: block; margin-bottom: 8px; color: color-mix(in oklab, var(--color-muted-foreground) 20%, transparent); font-size: 12px; }
 .removal-stars b { color: var(--color-danger); }
