@@ -15,6 +15,13 @@
       "when": 1789309104505,
       "tag": "0001_add_profiles_and_superadmin_roles",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789310452532,
+      "tag": "0002_add_review_workflow_foundation",
+      "breakpoints": true
     }
   ]
 }

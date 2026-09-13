@@ -27,9 +27,26 @@ const reviewSchema = z.object({
   reviewUrl: z.string(),
 });
 
-const analysisSchema = z.object({}).passthrough();
-
 type Db = { from: (table: string) => any };
+
+function canonicalizeSourceUrl(raw: string) {
+  try {
+    const url = new URL(raw.trim());
+    url.hash = "";
+    for (const key of [...url.searchParams.keys()]) {
+      if (key.toLowerCase().startsWith("utm_")) url.searchParams.delete(key);
+    }
+    return url.toString();
+  } catch {
+    return raw.trim();
+  }
+}
+
+async function fingerprintReview(platform: string, placeId: string, review: z.infer<typeof reviewSchema>) {
+  const stable = [platform, placeId, review.authorName.trim().toLowerCase(), review.rating, review.publishTime, review.text.trim()].join("\u001f");
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(stable));
+  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+}
 
 function toCase(row: any): CaseRecord {
   const location = row.locations ?? {};
@@ -95,6 +112,35 @@ export async function persistCase(
 
   if (locationError) throw locationError;
 
+  const canonicalSourceUrl = canonicalizeSourceUrl(input.sourceUrl);
+  const contentFingerprint = await fingerprintReview(input.platform, input.business.placeId, input.review);
+  const { data: reviewRecord, error: reviewError } = await supabase
+    .from("review_records")
+    .upsert(
+      {
+        user_id: userId,
+        location_id: location.id,
+        platform: input.platform,
+        external_id: input.review.id,
+        canonical_source_url: canonicalSourceUrl,
+        review_url: input.review.reviewUrl,
+        author_name: input.review.authorName,
+        author_photo_url: input.review.authorPhoto,
+        rating: input.review.rating,
+        review_text: input.review.text,
+        relative_time: input.review.relativeTime,
+        published_at: input.review.publishTime || null,
+        content_fingerprint: contentFingerprint,
+        raw_source: input.review,
+        last_seen_at: new Date().toISOString(),
+        observed_absent_at: null,
+      },
+      { onConflict: "user_id,platform,external_id" },
+    )
+    .select("id")
+    .single();
+  if (reviewError) throw reviewError;
+
   const payload = {
     user_id: userId,
     location_id: location.id,
@@ -114,32 +160,40 @@ export async function persistCase(
     severity: input.analysis.severity,
     rejection_risk: input.analysis.rejectionRisk,
     analysis: input.analysis,
+    review_record_id: reviewRecord.id,
+    canonical_source_url: canonicalSourceUrl,
+    analysis_version: 2,
   };
-
-  const { data: existing } = await supabase
-    .from("review_cases")
-    .select("id")
-    .eq("user_id", userId)
-    .eq("review_external_id", input.review.id)
-    .maybeSingle();
-
-  if (existing) {
-    const { data, error } = await supabase
-      .from("review_cases")
-      .update(payload)
-      .eq("id", existing.id)
-      .select(CASE_SELECT)
-      .single();
-    if (error) throw error;
-    return toCase(data);
-  }
 
   const { data, error } = await supabase
     .from("review_cases")
-    .insert(payload)
+    .upsert(payload, { onConflict: "user_id,review_external_id" })
     .select(CASE_SELECT)
     .single();
   if (error) throw error;
+
+  const reportable = input.analysis.verdict !== "not_reportable";
+  if (reportable) {
+    const reportBody = [
+      input.analysis.policyReasoning,
+      ...input.analysis.evidence.map((item) => `Evidence: ${item}`),
+      input.analysis.recommendedAction,
+    ].filter(Boolean).join("\n\n");
+    const { error: reportError } = await supabase.from("report_drafts").upsert(
+      {
+        user_id: userId,
+        case_id: data.id,
+        version: 1,
+        report_reason: input.analysis.recommendedReportReason,
+        report_body: reportBody,
+        evidence: input.analysis.evidence,
+        counter_evidence: input.analysis.counterEvidence,
+        status: "ready",
+      },
+      { onConflict: "case_id,version" },
+    );
+    if (reportError) throw reportError;
+  }
   return toCase(data);
 }
 
@@ -152,18 +206,20 @@ export const saveCase = createServerFn({ method: "POST" })
         sourceUrl: z.string().default(""),
         business: businessSchema,
         review: reviewSchema,
-        analysis: analysisSchema,
       })
       .parse(input),
   )
-  .handler(async ({ data, context }): Promise<CaseRecord> => {
-    return persistCase(context.supabase as unknown as Db, context.userId, {
+  .handler(async ({ data, context }): Promise<{ case: CaseRecord; analysis: ReviewAnalysis }> => {
+    const { analyzeReview } = await import("./analysis.server");
+    const analysis = await analyzeReview(data.business, data.review);
+    const saved = await persistCase(context.supabase as unknown as Db, context.userId, {
       platform: data.platform,
       sourceUrl: data.sourceUrl,
       business: data.business,
       review: data.review,
-      analysis: data.analysis as unknown as ReviewAnalysis,
+      analysis,
     });
+    return { case: saved, analysis };
   });
 
 export const listCases = createServerFn({ method: "POST" })
