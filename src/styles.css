@@ -898,6 +898,54 @@
   .rating-score > span, .store-glow, .customer-line i, .customer-line i span, .customer-line i small, .customer-line i::before, .customer-line i::after, .money, .bad-review, .leaving-customer, .leaving-customer i, .leaving-customer i span, .leaving-customer i small, .leaving-customer i::before, .leaving-customer i::after, .leaving-customer u { animation: none; }
   .customer-line i, .money, .leaving-customer { opacity: 1; }
 }
+
+/* Finished live vector rating scene */
+.rating-vector-scene { position: absolute; inset: 174px 32px 20px; width: calc(100% - 64px); height: calc(100% - 194px); overflow: visible; }
+.rating-vector-scene .scene-ground-glow { fill: none; stroke: color-mix(in oklab, var(--color-primary) 88%, var(--brand-cyan)); stroke-width: 2.5; filter: drop-shadow(0 0 7px color-mix(in oklab, var(--color-primary) 62%, transparent)); }
+.shop-wall-light { stop-color: color-mix(in oklab, var(--color-primary) 72%, var(--color-ink)); }.shop-wall-dark { stop-color: color-mix(in oklab, var(--color-primary) 38%, var(--color-background)); }
+.shop-roof-light { stop-color: color-mix(in oklab, var(--color-primary) 84%, var(--color-ink)); }.shop-roof-dark { stop-color: color-mix(in oklab, var(--color-primary) 42%, var(--color-background)); }
+.window-glow-core { stop-color: color-mix(in oklab, var(--color-star) 82%, var(--color-ink)); }.window-glow-edge { stop-color: color-mix(in oklab, var(--color-star) 35%, var(--color-primary)); }
+.rating-vector-quiet .shop-wall-light, .rating-vector-quiet .shop-roof-light { stop-color: color-mix(in oklab, var(--color-primary) 47%, var(--color-background)); }
+.rating-vector-quiet .shop-wall-dark, .rating-vector-quiet .shop-roof-dark { stop-color: color-mix(in oklab, var(--color-primary) 19%, var(--color-background)); }
+.rating-vector-quiet .window-glow-core { stop-color: color-mix(in oklab, var(--color-primary) 28%, var(--color-background)); }.rating-vector-quiet .window-glow-edge { stop-color: color-mix(in oklab, var(--color-primary) 10%, var(--color-background)); }
+.shop-halo { fill: color-mix(in oklab, var(--color-star) 34%, transparent); opacity: .62; animation: vector-shop-glow 3.2s ease-in-out infinite; }
+.rating-vector-quiet .shop-halo { fill: color-mix(in oklab, var(--color-primary) 13%, transparent); opacity: .35; }
+.shop-main, .shop-roof-vector, .shop-sign, .shop-side { stroke: color-mix(in oklab, var(--color-primary) 73%, var(--color-ink)); stroke-width: 2; }
+.shop-side { fill: color-mix(in oklab, var(--color-primary) 27%, var(--color-background)); }
+.shop-roof-vector { filter: drop-shadow(0 7px 5px oklch(0 0 0 / .32)); }
+.shop-awning-vector path:first-child { fill: color-mix(in oklab, var(--color-ink) 76%, var(--color-primary)); stroke: color-mix(in oklab, var(--color-primary) 68%, var(--color-ink)); stroke-width: 2; }
+.shop-awning-vector path:last-child { fill: none; stroke: color-mix(in oklab, var(--color-primary) 68%, var(--color-ink)); stroke-width: 15; stroke-dasharray: 15 15; }
+.shop-window-vector, .shop-door-vector { stroke: color-mix(in oklab, var(--color-primary) 80%, var(--color-ink)); stroke-width: 5; filter: drop-shadow(0 0 13px color-mix(in oklab, var(--color-star) 45%, transparent)); }
+.rating-vector-quiet .shop-window-vector, .rating-vector-quiet .shop-door-vector { filter: none; stroke: color-mix(in oklab, var(--color-primary) 42%, var(--color-background)); }
+.window-bars { fill: none; stroke: color-mix(in oklab, var(--color-primary) 58%, var(--color-background)); stroke-width: 3; }.door-knob { fill: var(--color-ink); filter: drop-shadow(0 0 6px var(--color-ink)); }
+.scene-arc { fill: none; stroke: color-mix(in oklab, var(--brand-cyan) 33%, transparent); stroke-width: 3; }.scene-arc-b { opacity: .5; }
+.money-token { filter: drop-shadow(0 0 11px color-mix(in oklab, var(--brand-cyan) 65%, transparent)); animation: vector-money 4s ease-in-out infinite; }
+.money-token circle { fill: color-mix(in oklab, var(--brand-cyan) 72%, var(--color-background)); stroke: color-mix(in oklab, var(--brand-cyan) 62%, var(--color-ink)); stroke-width: 2; }.money-token text { fill: var(--color-ink); font-size: 25px; font-weight: 800; text-anchor: middle; }
+.money-token-a { transform: translate(191px, 128px); }.money-token-b { transform: translate(257px, 94px); animation-delay: -1.3s; }.money-token-c { transform: translate(335px, 66px); animation-delay: -2.6s; }
+.client-shadow { fill: color-mix(in oklab, var(--color-primary) 33%, transparent); filter: blur(3px); }
+.client-head, .client-torso { fill: color-mix(in oklab, var(--color-primary) 30%, var(--color-ink)); stroke: var(--color-ink); stroke-width: 3; filter: drop-shadow(0 0 7px color-mix(in oklab, var(--color-primary) 65%, transparent)); }
+.client-limb { fill: none; stroke: var(--color-ink); stroke-width: 7; stroke-linecap: round; transform-box: fill-box; transform-origin: 50% 0; }
+.vector-client { animation: vector-client-enter 7.4s linear var(--walk-delay) infinite; }
+.client-body { animation: vector-body-bob .62s ease-in-out var(--walk-delay) infinite alternate; }
+.client-arm-a, .client-leg-b { animation: vector-limb-forward .62s ease-in-out var(--walk-delay) infinite alternate; }.client-arm-b, .client-leg-a { animation: vector-limb-back .62s ease-in-out var(--walk-delay) infinite alternate; }
+.loss-vector-arc { fill: none; stroke: color-mix(in oklab, var(--color-primary) 52%, transparent); stroke-width: 3; stroke-dasharray: 8 9; }
+.negative-review-vector { animation: vector-review-float 3.3s ease-in-out infinite; }.negative-review-vector > path:first-child { fill: color-mix(in oklab, var(--color-danger) 17%, var(--color-primary)); stroke: color-mix(in oklab, var(--color-danger) 70%, var(--color-primary)); stroke-width: 4; }.negative-star { fill: var(--color-danger); filter: drop-shadow(0 0 7px color-mix(in oklab, var(--color-danger) 58%, transparent)); }.review-speed { fill: none; stroke: var(--color-danger); stroke-width: 4; stroke-linecap: round; }
+.vector-client-leaving { animation: vector-client-leave 6.2s ease-in-out infinite; }
+@keyframes vector-client-enter { 0% { opacity: 0; transform: translateX(-38px); } 8% { opacity: 1; } 82% { opacity: 1; transform: translateX(42px); } 100% { opacity: 0; transform: translateX(68px) scale(.78); } }
+@keyframes vector-client-leave { 0%,8% { opacity: 0; transform: translateX(-15px); } 18% { opacity: 1; } 83% { opacity: 1; } 100% { opacity: 0; transform: translateX(122px); } }
+@keyframes vector-body-bob { from { transform: translateY(0) rotate(-1deg); } to { transform: translateY(-5px) rotate(1deg); } }
+@keyframes vector-limb-forward { from { transform: rotate(18deg); } to { transform: rotate(-28deg); } } @keyframes vector-limb-back { from { transform: rotate(-23deg); } to { transform: rotate(25deg); } }
+@keyframes vector-money { 0%,100% { opacity: .65; translate: 0 7px; } 50% { opacity: 1; translate: 0 -9px; } }
+@keyframes vector-shop-glow { 0%,100% { opacity: .48; transform: scale(.96); transform-origin: center; } 50% { opacity: .78; transform: scale(1.04); } }
+@keyframes vector-review-float { 0%,100% { translate: 0 0; } 50% { translate: 0 -11px; } }
+
+@media (max-width: 760px) {
+  .rating-vector-scene { inset: 137px 8px 16px; width: calc(100% - 16px); height: calc(100% - 153px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shop-halo, .money-token, .vector-client, .client-body, .client-limb, .negative-review-vector, .vector-client-leaving { animation: none; }
+}
 .reference-features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 28px; }
 .reference-features article { min-height: 202px; padding: 22px; border-radius: 22px; }
 .reference-features img { width: 42px; height: 42px; object-fit: contain; animation: floaty 6s ease-in-out infinite; }
