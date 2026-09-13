@@ -22,6 +22,7 @@ import {
 
 
 import { BrandMark, StarRating, Wordmark } from "@/components/brand";
+import { ReferenceLanding } from "@/components/reference-landing";
 import {
   ClosingSection,
   DashboardSection,
@@ -185,7 +186,10 @@ function Home() {
 
   return (
     <main className="premium-home grid-bg relative min-h-screen overflow-hidden bg-background">
-      <header className="site-nav sticky top-0 z-50">
+      {stage === "idle" ? (
+        <ReferenceLanding signedIn={signedIn} url={url} setUrl={setUrl} onScan={handleScan} busy={busy} />
+      ) : null}
+      {stage !== "idle" ? <header className="site-nav sticky top-0 z-50">
         <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-5 py-4 sm:px-8 lg:px-10">
           <Wordmark />
           <nav className="hidden items-center gap-7 text-sm font-medium text-muted-foreground lg:flex">
@@ -210,10 +214,10 @@ function Home() {
             </a>
           </div>
         </div>
-      </header>
+      </header> : null}
 
       <div className="mx-auto w-full max-w-[1400px] px-3 pb-24 sm:px-6 lg:px-8">
-        {stage === "idle" || stage === "scanning" ? (
+        {stage === "scanning" ? (
           <>
             <section id="scan" className="hero-shell animate-rise relative overflow-hidden rounded-[18px] border border-border px-5 pb-24 pt-9 sm:px-10 sm:pb-28 sm:pt-12 lg:px-14 lg:pb-32">
               <div className="hero-grain pointer-events-none absolute inset-0" />

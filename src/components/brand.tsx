@@ -35,7 +35,7 @@ export function Wordmark() {
   return (
     <span className="flex items-center gap-2.5">
       <BrandMark className="size-8" />
-      <span className="font-display text-[15px] font-bold text-ink">
+      <span className="font-display text-[15px] font-bold text-ink sm:text-base">
         Removal Work
       </span>
     </span>
