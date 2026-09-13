@@ -192,6 +192,16 @@
   }
 }
 
+@keyframes orbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes status-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-safe) 40%, transparent); }
+  50% { box-shadow: 0 0 0 7px transparent; }
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
@@ -293,6 +303,77 @@
 @utility scan-sweep {
   position: relative;
   overflow: hidden;
+}
+
+@utility premium-home {
+  background-image:
+    linear-gradient(to right, oklch(1 0 0 / 0.018) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(1 0 0 / 0.018) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.hero-shell {
+  background:
+    radial-gradient(60% 90% at 88% 46%, oklch(0.52 0.11 180 / 0.18), transparent 72%),
+    linear-gradient(125deg, oklch(0.255 0.043 195), oklch(0.225 0.034 210));
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06), 0 30px 100px oklch(0 0 0 / 0.24);
+}
+
+.hero-grain {
+  opacity: 0.35;
+  background-image:
+    linear-gradient(to right, oklch(1 0 0 / 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(1 0 0 / 0.025) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: linear-gradient(to right, transparent, black 45%, black);
+}
+
+.scanner-stage::before {
+  content: "";
+  position: absolute;
+  inset: 14% 8%;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--color-primary) 22%, transparent);
+  filter: blur(52px);
+}
+
+.scanner-orbit {
+  position: absolute;
+  inset: -20px;
+  border-radius: 28px;
+  border: 1px dashed color-mix(in oklab, var(--color-primary) 28%, transparent);
+  animation: orbit 28s linear infinite;
+}
+
+.scanner-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 30%, oklch(1 0 0 / 0.045) 48%, transparent 64%);
+  transform: translateX(-120%);
+  animation: sweep 5s ease-in-out infinite;
+}
+
+.status-pulse { animation: status-pulse 2s ease-out infinite; }
+
+.signal-tile:nth-child(2) { animation: pulse-soft 2.4s ease-in-out infinite; }
+
+.workflow-card {
+  background: linear-gradient(145deg, color-mix(in oklab, var(--color-card) 95%, transparent), color-mix(in oklab, var(--color-background) 96%, transparent));
+  transition: transform .35s cubic-bezier(.22,1,.36,1), border-color .35s ease;
+}
+
+.workflow-card:nth-child(1) { transform: rotate(-3deg) translateY(7px); }
+.workflow-card:nth-child(2) { transform: rotate(2deg) translateY(-2px); }
+.workflow-card:nth-child(3) { transform: rotate(-1deg) translateY(5px); }
+.workflow-card:nth-child(4) { transform: rotate(2deg) translateY(1px); }
+.workflow-card:nth-child(5) { transform: rotate(-2deg) translateY(7px); }
+.workflow-card:nth-child(6) { transform: rotate(3deg); }
+.workflow-card:hover { transform: translateY(-7px) rotate(0); border-color: color-mix(in oklab, var(--color-primary) 42%, transparent); }
+
+@media (max-width: 639px) {
+  .workflow-card:nth-child(n) { transform: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
