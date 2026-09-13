@@ -255,58 +255,32 @@ export function ReferenceLanding({
           </div>
         </section>
 
-        <section className="review-impression" aria-labelledby="review-impression-title">
-          <div className="review-impression-intro">
-            <h2 id="review-impression-title">Your Reviews Are the Only<br />First <span>Impression You Get.</span></h2>
-            <p>Every potential customer who has never heard of you before will judge your entire business by your reviews. Not your website. Not your years of experience. Not the thousands of happy customers you&apos;ve served. Your star rating.</p>
-          </div>
-
+        <section className="review-impression" aria-label="Google rating impact comparison">
           <div className="rating-showdown">
             <article className="rating-business rating-competitor">
               <span className="rating-owner">Your Competitor</span>
               <div className="rating-score"><strong>4.9</strong><span aria-label="5 stars">★★★★★</span></div>
               <div className="store-scene competitor-store" aria-hidden="true">
+                <div className="growth-arc growth-arc-one" /><div className="growth-arc growth-arc-two" />
                 <span className="money money-one">$</span><span className="money money-two">$</span><span className="money money-three">$</span>
                 <div className="customer-line">
-                  {[0, 1, 2, 3, 4, 5].map((person) => (
-                    <i key={person} style={{ "--person": person } as React.CSSProperties}>
-                      <b /><em /><span /><small />
-                    </i>
-                  ))}
+                  {[0, 1, 2, 3, 4, 5].map((person) => <i key={person} style={{ "--person": person } as React.CSSProperties}><b /><em /><span /><small /></i>)}
                 </div>
-                <div className="store-building"><i className="store-sign" /><i className="store-roof" /><i className="store-awning" /><i className="store-window" /><i className="store-door" /><i className="store-step" /></div>
+                <div className="store-glow" />
+                <div className="store-building"><i className="store-sign" /><i className="store-roof" /><i className="store-awning" /><i className="store-window" /><i className="store-door" /><i className="store-step" /><i className="store-side" /></div>
               </div>
-              <ul className="rating-facts rating-good">
-                <li><span>✓</span>Opened 18 months ago</li>
-                <li><span>✓</span>Half the experience you have</li>
-                <li><span>✓</span>Knows how to game the system</li>
-                <li><span>✓</span>Buys fake reviews, removes bad ones</li>
-                <li className="rating-outcome"><span>⌕</span>Getting all the calls</li>
-              </ul>
             </article>
 
             <article className="rating-business rating-you">
               <span className="rating-owner">You</span>
-              <div className="rating-score"><strong>3.9</strong><span aria-label="3.9 stars">★★★★☆</span></div>
+              <div className="rating-score rating-score-low"><strong>3.9</strong><span aria-label="3 out of 5 highlighted stars"><i>★</i><i>★</i><i>★</i><i>★</i><i>★</i></span></div>
               <div className="store-scene quiet-store" aria-hidden="true">
-                <div className="wind-lines"><i /><i /><i /></div>
-                <span className="tumbleweed"><i /><i /><i /></span>
-                <div className="store-building"><i className="store-sign" /><i className="store-roof" /><i className="store-awning" /><i className="store-window" /><i className="store-door" /><i className="store-step" /></div>
+                <div className="loss-arc" />
+                <div className="bad-review"><i>★</i></div>
+                <div className="leaving-customer"><i><b /><em /><span /><small /></i><u /><u /><u /></div>
+                <div className="store-building"><i className="store-sign" /><i className="store-roof" /><i className="store-awning" /><i className="store-window" /><i className="store-door" /><i className="store-step" /><i className="store-side" /></div>
               </div>
-              <ul className="rating-facts rating-bad">
-                <li><span>×</span>10+ years in business</li>
-                <li><span>×</span>Better service, better results</li>
-                <li><span>×</span>A few unfair 1-stars dragging you down</li>
-                <li><span>×</span>Google won&apos;t do anything about it</li>
-                <li className="rating-loss"><span>×</span>Losing customers every day</li>
-              </ul>
             </article>
-          </div>
-
-          <div className="rating-change">
-            <h3>That changes today.</h3>
-            <p>You shouldn&apos;t lose business because some competitor knows how to play the review game better than you. You built something real. It&apos;s time your reputation reflected that.</p>
-            <button type="button" onClick={openScanner} className="rating-change-cta">Level the Playing Field <span><ArrowRight className="size-4" /></span></button>
           </div>
         </section>
 
