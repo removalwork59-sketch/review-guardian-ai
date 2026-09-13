@@ -211,53 +211,55 @@ export function ReferenceLanding({
           </div>
         </div>
 
-        <div className="reference-tilt">
-          {[
-            { stars: "01", text: "Read the review and its available business context.", who: "Source review" },
-            { stars: "02", text: "Compare the words against published policy categories.", who: "Policy analysis" },
-            { stars: "03", text: "Weigh supporting evidence and the strongest counterargument.", who: "Adversarial check" },
-            { stars: "04", text: "Prepare a report only when the evidence supports one.", who: "Human decision" },
-            { stars: "05", text: "Record the outcome you actually observe — never assume it.", who: "Honest tracking" },
-          ].map((card) => (
-            <article key={card.who}>
-              <div className="t-stars">{card.stars}</div>
-              <p className="mt-2">{card.text}</p>
-              <b>{card.who}</b>
-            </article>
-          ))}
+        <div className="reference-boundary-stage">
+          <div className="reference-tilt">
+            {[
+              { stars: "01", text: "Read the review and its available business context.", who: "Source review" },
+              { stars: "02", text: "Compare the words against published policy categories.", who: "Policy analysis" },
+              { stars: "03", text: "Weigh supporting evidence and the strongest counterargument.", who: "Adversarial check" },
+              { stars: "04", text: "Prepare a report only when the evidence supports one.", who: "Human decision" },
+              { stars: "05", text: "Record the outcome you actually observe — never assume it.", who: "Honest tracking" },
+            ].map((card) => (
+              <article key={card.who}>
+                <div className="t-stars">{card.stars}</div>
+                <p>{card.text}</p>
+                <b>{card.who}</b>
+              </article>
+            ))}
+          </div>
+
+          <ul className="reference-checks reference-checks-row">
+            {["Policy-aligned AI classification", "Submission-ready evidence packages", "Multi-location workspaces", "Client-ready reporting"].map((item) => <li key={item}><CheckCircle2 />{item}</li>)}
+          </ul>
+
+          <section id="platforms" className="reference-platforms">
+            <div className="reference-platforms-copy">
+              <h2>Finally, a way for businesses to protect themselves and <span>fight back.</span></h2>
+              <div className="reference-platforms-shield" aria-hidden="true">
+                <ShieldCheck />
+                <i className="shield-spark shield-spark-a" />
+                <i className="shield-spark shield-spark-b" />
+              </div>
+              <p>Google review scanning is live today — every other platform joins the same simple paste → AI check → report → track flow as it rolls out.</p>
+            </div>
+            <div className="reference-platforms-grid-wrap">
+              <span className="reference-platforms-label">Platform roadmap</span>
+              <div className="reference-platforms-grid">
+                {platforms.map((platform, index) => {
+                  const Icon = platform.icon;
+                  return (
+                    <article key={platform.name} style={{ animationDelay: `${index * 90}ms` }}>
+                      <span className="platform-glyph" style={{ color: platform.color }}>
+                        {Icon ? <Icon className="size-6" fill={platform.icon === Star || platform.icon === Youtube ? platform.color : "none"} /> : platform.glyph}
+                      </span>
+                      <b>{platform.name}</b>
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
         </div>
-
-        <ul className="reference-checks reference-checks-row">
-          {["Policy-aligned AI classification", "Submission-ready evidence packages", "Multi-location workspaces", "Client-ready reporting"].map((item) => <li key={item}><CheckCircle2 />{item}</li>)}
-        </ul>
-
-        <section id="platforms" className="reference-platforms">
-          <div className="reference-platforms-copy">
-            <h2>Finally, a way for businesses to protect themselves and <span>fight back.</span></h2>
-            <div className="reference-platforms-shield" aria-hidden="true">
-              <ShieldCheck />
-              <i className="shield-spark shield-spark-a" />
-              <i className="shield-spark shield-spark-b" />
-            </div>
-            <p>Google review scanning is live today — every other platform joins the same simple paste → AI check → report → track flow as it rolls out.</p>
-          </div>
-          <div className="reference-platforms-grid-wrap">
-            <span className="reference-platforms-label">Platform roadmap</span>
-            <div className="reference-platforms-grid">
-              {platforms.map((platform, index) => {
-                const Icon = platform.icon;
-                return (
-                  <article key={platform.name} style={{ animationDelay: `${index * 90}ms` }}>
-                    <span className="platform-glyph" style={{ color: platform.color }}>
-                      {Icon ? <Icon className="size-6" fill={platform.icon === Star || platform.icon === Youtube ? platform.color : "none"} /> : platform.glyph}
-                    </span>
-                    <b>{platform.name}</b>
-                  </article>
-                );
-              })}
-            </div>
-          </div>
-        </section>
 
 
 
