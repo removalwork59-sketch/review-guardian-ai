@@ -1693,40 +1693,41 @@
 
 /* Premium density pass — color, optical depth and clarity only. */
 :root {
-  --background: oklch(0.205 0.042 225);
+  --background: oklch(0.185 0.052 225);
   --foreground: oklch(0.94 0.014 213);
   --ink: oklch(0.99 0.006 210);
-  --card: oklch(0.225 0.044 218);
+  --card: oklch(0.215 0.056 218);
   --card-foreground: oklch(0.97 0.01 210);
   --popover: oklch(0.215 0.043 220);
   --popover-foreground: oklch(0.97 0.01 210);
   --secondary: oklch(0.285 0.047 211);
   --muted: oklch(0.265 0.041 215);
-  --muted-foreground: oklch(0.79 0.027 210);
-  --border: oklch(0.8 0.15 168 / 22%);
-  --input: oklch(0.8 0.15 168 / 32%);
-  --brand-cyan: oklch(0.84 0.17 166);
-  --brand-violet: oklch(0.76 0.16 174);
-  --brand-magenta: oklch(0.69 0.12 194);
+  --muted-foreground: oklch(0.82 0.03 210);
+  --border: oklch(0.8 0.18 168 / 29%);
+  --input: oklch(0.8 0.18 168 / 40%);
+  --primary: oklch(0.82 0.19 160);
+  --brand-cyan: oklch(0.85 0.2 166);
+  --brand-violet: oklch(0.77 0.19 174);
+  --brand-magenta: oklch(0.71 0.16 194);
   --brand-surface: oklch(0.215 0.043 220);
-  --shadow-soft: 0 1px 1px oklch(1 0 0 / .04), 0 18px 45px -20px oklch(0 0 0 / .68);
-  --shadow-lift: 0 1px 1px oklch(1 0 0 / .06), 0 30px 72px -24px oklch(0 0 0 / .82);
-  --shadow-glow: 0 0 0 1px color-mix(in oklab, var(--brand-cyan) 34%, transparent), 0 18px 46px -18px color-mix(in oklab, var(--brand-cyan) 48%, transparent);
+  --shadow-soft: 0 1px 1px oklch(1 0 0 / .06), 0 18px 45px -20px oklch(0 0 0 / .72), 0 0 30px -24px color-mix(in oklab, var(--brand-cyan) 40%, transparent);
+  --shadow-lift: 0 1px 1px oklch(1 0 0 / .08), 0 30px 72px -24px oklch(0 0 0 / .86), 0 0 44px -22px color-mix(in oklab, var(--brand-cyan) 52%, transparent);
+  --shadow-glow: 0 0 0 1px color-mix(in oklab, var(--brand-cyan) 46%, transparent), 0 18px 48px -16px color-mix(in oklab, var(--brand-cyan) 62%, transparent), 0 0 30px -20px color-mix(in oklab, var(--brand-violet) 60%, transparent);
 }
 
 .dark {
-  --background: oklch(0.135 0.034 246);
+  --background: oklch(0.115 0.043 246);
   --foreground: oklch(0.94 0.012 218);
   --ink: oklch(0.99 0.005 215);
-  --card: oklch(0.18 0.039 237);
+  --card: oklch(0.17 0.052 237);
   --card-foreground: oklch(0.97 0.008 215);
   --popover: oklch(0.17 0.038 240);
   --popover-foreground: oklch(0.97 0.008 215);
   --secondary: oklch(0.235 0.04 228);
   --muted: oklch(0.22 0.036 230);
-  --muted-foreground: oklch(0.77 0.024 216);
-  --border: oklch(0.78 0.14 178 / 20%);
-  --input: oklch(0.78 0.14 178 / 29%);
+  --muted-foreground: oklch(0.81 0.028 216);
+  --border: oklch(0.78 0.18 178 / 27%);
+  --input: oklch(0.78 0.18 178 / 38%);
   --brand-surface: oklch(0.155 0.036 242);
 }
 
@@ -1755,18 +1756,18 @@ body {
 }
 
 .reference-page.reference-light {
-  --background: oklch(0.982 0.008 218);
+  --background: oklch(0.958 0.022 218);
   --foreground: oklch(0.205 0.042 242);
   --ink: oklch(0.155 0.046 245);
-  --card: oklch(0.998 0.003 218);
-  --muted: oklch(0.93 0.021 217);
-  --muted-foreground: oklch(0.41 0.043 236);
-  --border: oklch(0.48 0.12 202 / 28%);
-  --input: oklch(0.46 0.11 204 / 38%);
+  --card: oklch(0.985 0.014 218);
+  --muted: oklch(0.91 0.038 217);
+  --muted-foreground: oklch(0.36 0.052 236);
+  --border: oklch(0.48 0.16 202 / 37%);
+  --input: oklch(0.46 0.15 204 / 48%);
   background:
-    radial-gradient(860px 430px at 7% -4%, oklch(0.76 0.13 181 / .2), transparent 67%),
-    radial-gradient(760px 400px at 97% 5%, oklch(0.7 0.11 218 / .14), transparent 70%),
-    linear-gradient(180deg, oklch(0.992 0.005 218), oklch(0.945 0.019 220));
+    radial-gradient(860px 430px at 7% -4%, oklch(0.76 0.17 181 / .29), transparent 67%),
+    radial-gradient(760px 400px at 97% 5%, oklch(0.7 0.15 218 / .22), transparent 70%),
+    linear-gradient(180deg, oklch(0.98 0.013 218), oklch(0.91 0.042 220));
 }
 
 .reference-page :where(.reference-proof, .reference-platforms-grid article, .reference-promise, .three-step-card, .reference-features article, .reference-scan-panel, .audit-chat-panel) {
@@ -1901,9 +1902,11 @@ body {
 .reference-page.reference-light :where(.reference-proof, .reference-platforms-grid article, .reference-promise, .three-step-card, .reference-features article, .reference-scan-panel, .audit-chat-panel) {
   box-shadow:
     inset 0 1px 0 oklch(1 0 0 / .95),
-    inset 0 -1px 0 color-mix(in oklab, var(--brand-cyan) 9%, transparent),
-    0 24px 58px -32px oklch(0.3 0.06 230 / .35),
-    0 0 0 1px color-mix(in oklab, var(--brand-cyan) 8%, transparent);
+    inset 0 -1px 0 color-mix(in oklab, var(--brand-cyan) 15%, transparent),
+    inset 0 0 34px color-mix(in oklab, var(--brand-cyan) 7%, transparent),
+    0 24px 58px -30px oklch(0.3 0.09 230 / .46),
+    0 0 0 1px color-mix(in oklab, var(--brand-cyan) 14%, transparent),
+    0 0 38px -24px color-mix(in oklab, var(--brand-cyan) 45%, transparent);
 }
 
 .reference-page.reference-light .reference-proof,
@@ -2013,6 +2016,46 @@ body {
 }
 .reference-page.reference-light .audit-chat-panel {
   background: linear-gradient(145deg, var(--card), color-mix(in oklab, var(--muted) 52%, var(--card)));
+}
+
+/* Richness authority — same palette, stronger material depth and a controlled filled glow. */
+.app-frame {
+  background:
+    radial-gradient(720px 380px at 12% -5%, color-mix(in oklab, var(--brand-cyan) 13%, transparent), transparent 70%),
+    radial-gradient(680px 360px at 92% 0%, color-mix(in oklab, var(--brand-violet) 10%, transparent), transparent 72%),
+    var(--color-background);
+}
+.surface,
+.stat-tile {
+  border-color: color-mix(in oklab, var(--color-border) 76%, var(--brand-cyan) 24%);
+  background:
+    radial-gradient(360px 150px at 18% 0%, color-mix(in oklab, var(--brand-cyan) 8%, transparent), transparent 72%),
+    linear-gradient(145deg, color-mix(in oklab, var(--color-card) 98%, var(--brand-cyan) 2%), color-mix(in oklab, var(--color-background) 90%, var(--brand-violet) 10%));
+  box-shadow:
+    var(--shadow-soft),
+    inset 0 1px 0 color-mix(in oklab, var(--color-ink) 10%, transparent),
+    inset 0 0 30px color-mix(in oklab, var(--brand-cyan) 4%, transparent);
+}
+.surface:hover {
+  border-color: color-mix(in oklab, var(--brand-cyan) 42%, transparent);
+}
+.app-header {
+  border-bottom-color: color-mix(in oklab, var(--brand-cyan) 22%, transparent);
+  background: color-mix(in oklab, var(--color-card) 88%, transparent);
+  backdrop-filter: blur(20px) saturate(145%);
+  box-shadow: 0 16px 38px -34px color-mix(in oklab, var(--brand-cyan) 55%, transparent);
+}
+.app-nav-link[aria-current="page"] {
+  border: 1px solid color-mix(in oklab, var(--brand-cyan) 30%, transparent);
+  box-shadow: inset 0 0 18px color-mix(in oklab, var(--brand-cyan) 8%, transparent), 0 0 22px -16px color-mix(in oklab, var(--brand-cyan) 70%, transparent);
+}
+.app-secondary-action,
+.app-select,
+.app-textarea {
+  box-shadow: inset 0 1px 0 color-mix(in oklab, var(--color-ink) 8%, transparent), 0 12px 30px -24px color-mix(in oklab, var(--brand-cyan) 42%, transparent);
+}
+.stat-tile-value {
+  text-shadow: 0 0 20px color-mix(in oklab, currentColor 18%, transparent);
 }
 .reference-page.reference-light .rw-header,
 .reference-page.reference-light .rw-mobile {

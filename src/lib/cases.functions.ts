@@ -325,6 +325,7 @@ export const updateCaseStatus = createServerFn({ method: "POST" })
       .from("review_cases")
       .select("status")
       .eq("id", data.id)
+      .eq("user_id", context.userId)
       .single();
     if (currentError) throw currentError;
 
@@ -348,6 +349,8 @@ export const updateCaseStatus = createServerFn({ method: "POST" })
       .from("review_cases")
       .update(patch)
       .eq("id", data.id)
+      .eq("user_id", context.userId)
+      .eq("status", currentStatus)
       .select(CASE_SELECT)
       .single();
     if (error) throw error;
@@ -358,7 +361,11 @@ export const deleteCase = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }) => {
-    const { error } = await context.supabase.from("review_cases").delete().eq("id", data.id);
+    const { error } = await context.supabase
+      .from("review_cases")
+      .delete()
+      .eq("id", data.id)
+      .eq("user_id", context.userId);
     if (error) throw error;
     return { ok: true as const };
   });
