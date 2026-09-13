@@ -29,13 +29,6 @@ const platforms = [
   { name: "More platforms", glyph: "20+", color: "#b8f26d" },
 ];
 
-const steps = [
-  { title: "Import", body: "Bring in your Google review export or paste a public review link." },
-  { title: "Scan", body: "The AI scanner classifies each review and assigns a removal priority." },
-  { title: "Build", body: "Open a case, collect evidence and generate the submission package." },
-  { title: "Report", body: "Submit to Google, log the appeal and report outcomes to the client." },
-];
-
 const features = [
   { icon: scannerIcon, title: "AI policy violation scanner", body: "Every review is analysed against Google's published review policies — spam, fake content, off-topic, conflict of interest, harassment and more — with a confidence score and written rationale." },
   { icon: reviewsIcon, title: "Review operations at scale", body: "Import or scan reviews, filter by rating, category, priority and status, and batch-triage the queue without losing a single record." },
@@ -189,10 +182,49 @@ export function ReferenceLanding({
           </div>
         </section>
 
-        <section id="how" className="reference-section">
-          <h2>How removal actually works</h2>
-          <p className="reference-section-intro">Google decides every removal. Removal Work makes your case as strong, consistent and well-evidenced as it can possibly be — and keeps the whole pipeline auditable.</p>
-          <div className="reference-steps">{steps.map((step, index) => <article key={step.title}><b>{index + 1}</b><h3>{step.title}</h3><p>{step.body}</p></article>)}</div>
+        <section id="how" className="reference-section reference-three-steps">
+          <h2>Three Steps. That&apos;s It.</h2>
+          <div className="three-step-grid">
+            <article className="three-step-card three-step-links">
+              <div className="step-visual step-link-flight" aria-hidden="true">
+                <svg viewBox="0 0 320 150" role="presentation">
+                  <path className="flight-path" d="M25 118 C 92 120, 128 72, 237 39" />
+                </svg>
+                <span className="flight-link"><span>↗</span></span>
+                <span className="flight-dot flight-dot-one" />
+                <span className="flight-dot flight-dot-two" />
+              </div>
+              <h3>Send Us the Links</h3>
+              <p>Just send us the review links. That&apos;s it. We don&apos;t need access to your Google Business Profile. Zero risk to your account, zero setup.</p>
+            </article>
+
+            <article className="three-step-card three-step-case">
+              <div className="step-visual step-envelope" aria-hidden="true">
+                <div className="envelope-back" />
+                <span className="case-note case-note-one"><i /><i /><i /></span>
+                <span className="case-note case-note-two"><i /><i /><i /></span>
+                <span className="case-note case-note-three"><i /><i /><i /></span>
+                <div className="envelope-front" />
+                <div className="envelope-flap" />
+              </div>
+              <h3>AI Builds Your Case</h3>
+              <p>No spammed appeals and no unsupported claims. Our AI checks the review against published policy, organises the evidence and prepares the strongest legitimate report.</p>
+            </article>
+
+            <article className="three-step-card three-step-outcome">
+              <div className="step-visual step-removal" aria-hidden="true">
+                <div className="removal-review">
+                  <span className="removal-avatar" />
+                  <span className="removal-stars"><b>★</b> ☆ ☆ ☆ ☆</span>
+                  <i /><i /><i />
+                </div>
+                <div className="removal-hammer"><span /><b /></div>
+                <span className="removal-burst">✦</span>
+              </div>
+              <h3>Track the Real Outcome</h3>
+              <p>Submit the prepared report to Google, then track every case in your dashboard. Google makes the final decision, and the real result stays visible.</p>
+            </article>
+          </div>
         </section>
 
         <section className="reference-section reference-features-section">
