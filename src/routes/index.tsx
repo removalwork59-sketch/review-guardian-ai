@@ -1,10 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowRight,
   ExternalLink,
   Info,
+  LayoutGrid,
   MapPin,
   MessageSquareQuote,
   Search,
@@ -16,9 +17,11 @@ import { BrandMark, StarRating, Wordmark } from "@/components/brand";
 import { ScanProgress } from "@/components/scan-progress";
 import { AnalysisPanel } from "@/components/analysis-panel";
 import { analyzeReviewForPolicy, scanReviewUrl } from "@/lib/review.functions";
+import { saveCase } from "@/lib/cases.functions";
 import type { ScanResult } from "@/lib/review.functions";
 import type { BusinessInfo, ReviewAnalysis, ReviewInfo } from "@/lib/analysis-types";
 import { looksLikeUrl } from "@/lib/platforms";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/")({
   head: () => ({
