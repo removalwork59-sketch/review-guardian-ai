@@ -182,6 +182,23 @@ export function ReferenceLanding({
           </section>
         ) : null}
 
+        <section className="reference-promise">
+          <div className="reference-promise-left">
+            <h2>No Violation Found?<br />We Say So.</h2>
+            <p>The AI tells you honestly when a review breaks the rules — and when it doesn&apos;t. No fake flags, no wasted reports.</p>
+          </div>
+          <div className="reference-promise-right">
+            <div className="reference-promise-item">
+              <h3><Scale className="promise-icon" /> Real Policy Checks. The Legit Way.</h3>
+              <p>No spammed appeals, no fake claims. Every report cites the actual platform policy, the review evidence and a confidence score — and Google makes the final call.</p>
+            </div>
+            <div className="reference-promise-item">
+              <h3><BadgeCheck className="promise-icon" /> Only Real Outcomes</h3>
+              <p>Every case is tracked from report to Google&apos;s decision. If a review stays up, your dashboard says so — that&apos;s the deal.</p>
+            </div>
+          </div>
+        </section>
+
         <section id="how" className="reference-section">
           <h2>How removal actually works</h2>
           <p className="reference-section-intro">Google decides every removal. Removal Work makes your case as strong, consistent and well-evidenced as it can possibly be — and keeps the whole pipeline auditable.</p>
