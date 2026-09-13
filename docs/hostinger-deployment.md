@@ -19,4 +19,4 @@ Removal Work must not be deployed with a root password shared in chat.
 - Health checks and restart policy
 - Firewall allowing only SSH, HTTP, and HTTPS
 
-The current Lovable Cloud database remains authoritative until a separate, backed-up migration is verified. Deployment must not copy or overwrite production records blindly.
+The current production database remains authoritative until a separate, backed-up migration is verified. Deployment must not copy or overwrite production records blindly.
