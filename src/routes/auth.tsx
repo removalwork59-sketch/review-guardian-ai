@@ -9,6 +9,9 @@ import { lovable } from "@/integrations/lovable/index";
 import "@lovable.dev/cloud-auth-js/styles.css";
 
 export const Route = createFileRoute("/auth")({
+  // The sign-in screen reads the browser session before it can render anything
+  // meaningful, so rendering it on the server only produced a hydration mismatch.
+  ssr: false,
   head: () => ({
     meta: [
       { title: "Sign in — Removal Work" },
