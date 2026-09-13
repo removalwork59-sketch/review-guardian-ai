@@ -736,3 +736,11 @@
   .reference-chat-bubble { max-width: 210px; font-size: 12px; padding: 11px 13px; }
   .reference-chat-avatar { width: 46px; height: 46px; }
 }
+
+/* nav fit */
+.reference-nav .reference-wrap { width: min(1320px, calc(100% - 40px)); }
+.reference-nav .reference-wrap > * { flex: 0 0 auto; }
+.reference-navlinks { gap: 22px; }
+.reference-navlinks a, .reference-outline-button, .reference-gradient-button { white-space: nowrap; }
+.reference-nav .reference-outline-button, .reference-nav .reference-gradient-button { min-height: 44px; padding: 0 18px; font-size: 14px; }
+.reference-wrap :where(.reference-copy) h1 { max-width: 12ch; }
