@@ -86,6 +86,151 @@ export type Database = {
           },
         ]
       }
+      bulk_job_items: {
+        Row: {
+          attempt_count: number
+          business_name: string | null
+          canonical_source_url: string
+          case_id: string | null
+          completed_at: string | null
+          created_at: string
+          detail: string
+          error_code: string | null
+          id: string
+          job_id: string
+          lease_expires_at: string | null
+          lease_token: string | null
+          review_record_id: string | null
+          source_kind: string
+          source_url: string
+          started_at: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          attempt_count?: number
+          business_name?: string | null
+          canonical_source_url: string
+          case_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          detail?: string
+          error_code?: string | null
+          id?: string
+          job_id: string
+          lease_expires_at?: string | null
+          lease_token?: string | null
+          review_record_id?: string | null
+          source_kind?: string
+          source_url: string
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          attempt_count?: number
+          business_name?: string | null
+          canonical_source_url?: string
+          case_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          detail?: string
+          error_code?: string | null
+          id?: string
+          job_id?: string
+          lease_expires_at?: string | null
+          lease_token?: string | null
+          review_record_id?: string | null
+          source_kind?: string
+          source_url?: string
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bulk_job_items_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "review_cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bulk_job_items_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "bulk_jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bulk_job_items_review_record_id_fkey"
+            columns: ["review_record_id"]
+            isOneToOne: false
+            referencedRelation: "review_records"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bulk_jobs: {
+        Row: {
+          analyzing_count: number
+          completed_at: string | null
+          created_at: string
+          discovering_count: number
+          failed_count: number
+          id: string
+          identified_count: number
+          needs_review_count: number
+          pause_reason: string | null
+          queued_count: number
+          report_ready_count: number
+          started_at: string | null
+          status: string
+          total_items: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          analyzing_count?: number
+          completed_at?: string | null
+          created_at?: string
+          discovering_count?: number
+          failed_count?: number
+          id?: string
+          identified_count?: number
+          needs_review_count?: number
+          pause_reason?: string | null
+          queued_count?: number
+          report_ready_count?: number
+          started_at?: string | null
+          status?: string
+          total_items?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          analyzing_count?: number
+          completed_at?: string | null
+          created_at?: string
+          discovering_count?: number
+          failed_count?: number
+          id?: string
+          identified_count?: number
+          needs_review_count?: number
+          pause_reason?: string | null
+          queued_count?: number
+          report_ready_count?: number
+          started_at?: string | null
+          status?: string
+          total_items?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       case_appeals: {
         Row: {
           case_id: string
@@ -537,6 +682,36 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      claim_bulk_job_item: {
+        Args: { _job_id: string; _lease_seconds?: number }
+        Returns: {
+          attempt_count: number
+          business_name: string | null
+          canonical_source_url: string
+          case_id: string | null
+          completed_at: string | null
+          created_at: string
+          detail: string
+          error_code: string | null
+          id: string
+          job_id: string
+          lease_expires_at: string | null
+          lease_token: string | null
+          review_record_id: string | null
+          source_kind: string
+          source_url: string
+          started_at: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "bulk_job_items"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       ensure_my_profile: {
         Args: never
         Returns: {
@@ -561,6 +736,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      refresh_bulk_job_counts: { Args: { _job_id: string }; Returns: undefined }
     }
     Enums: {
       app_role: "superadmin" | "admin" | "user"
