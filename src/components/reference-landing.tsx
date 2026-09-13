@@ -15,26 +15,26 @@ import { Button } from "@/components/ui/button";
 
 
 const platforms = [
-  { name: "Google Reviews", glyph: "G", color: "#4285f4" },
-  { name: "Instagram", icon: Instagram, color: "#e1306c" },
-  { name: "Trustpilot", icon: Star, color: "#00b67a" },
-  { name: "Facebook", icon: Facebook, color: "#1877f2" },
-  { name: "Reddit", glyph: "r", color: "#ff4500" },
-  { name: "Indeed", glyph: "i", color: "#2164f3" },
-  { name: "TripAdvisor", glyph: "oo", color: "#34e0a1" },
-  { name: "Airbnb", glyph: "A", color: "#ff5a5f" },
-  { name: "X", glyph: "𝕏", color: "#e7e9ea" },
-  { name: "YouTube", icon: Youtube, color: "#ff0000" },
-  { name: "Glassdoor", glyph: "g", color: "#0caa41" },
-  { name: "More platforms", glyph: "20+", color: "#b8f26d" },
+  { name: "Google · Live", glyph: "G", color: "#4285f4" },
+  { name: "Instagram · Planned", icon: Instagram, color: "#e1306c" },
+  { name: "Trustpilot · Planned", icon: Star, color: "#00b67a" },
+  { name: "Facebook · Planned", icon: Facebook, color: "#1877f2" },
+  { name: "Reddit · Planned", glyph: "r", color: "#ff4500" },
+  { name: "Indeed · Planned", glyph: "i", color: "#2164f3" },
+  { name: "TripAdvisor · Planned", glyph: "oo", color: "#34e0a1" },
+  { name: "Airbnb · Planned", glyph: "A", color: "#ff5a5f" },
+  { name: "X · Planned", glyph: "𝕏", color: "#e7e9ea" },
+  { name: "YouTube · Planned", icon: Youtube, color: "#ff0000" },
+  { name: "Glassdoor · Planned", glyph: "g", color: "#0caa41" },
+  { name: "More · Planned", glyph: "+", color: "#b8f26d" },
 ];
 
 const features = [
   { icon: scannerIcon, title: "AI policy violation scanner", body: "Every review is analysed against Google's published review policies — spam, fake content, off-topic, conflict of interest, harassment and more — with a confidence score and written rationale." },
   { icon: reviewsIcon, title: "Review operations at scale", body: "Import or scan reviews, filter by rating, category, priority and status, and batch-triage the queue without losing a single record." },
-  { icon: casesIcon, title: "Removal case management", body: "Move cases from New through Reviewing, Evidence ready, Reported, Appeal and Resolved, with a full audit trail on every action." },
+  { icon: casesIcon, title: "Removal case management", body: "Move cases from New through evidence preparation and the outcome you record, with a clear history of saved case changes." },
   { icon: reportsIcon, title: "Evidence packages", body: "Build a professional, submission-ready summary containing the review, business context, policy category and AI analysis." },
-  { icon: analyticsIcon, title: "Reputation analytics", body: "Rating context, violation mix, negative-review tracking and per-location case status computed from live data." },
+  { icon: analyticsIcon, title: "Reputation analytics", body: "Rating context, violation mix, negative-review tracking and per-location case status computed from your saved workspace data." },
   { icon: locationsIcon, title: "Multi-location workspaces", body: "One workspace for your business, with per-location attribution for every review and case." },
 ];
 
@@ -148,10 +148,10 @@ export function ReferenceLanding({
         <section className="reference-hero">
           <div className="reference-copy">
             <h1>Report Only<br />What Breaks The Rules</h1>
-            <p>Checked against Google, Facebook, Yelp and 20+ more platform policies.<br />No policy violation, no report. It&apos;s that simple.</p>
+            <p>Google review scanning is live now. Other platform connections are planned.<br />No policy violation, no report. It&apos;s that simple.</p>
             <div className="reference-actions">
               <button type="button" onClick={openScanner} className="reference-gradient-button reference-primary-action">Get Your Free Review Audit <span className="arrow-dot"><ArrowRight className="size-3.5" /></span></button>
-              <a href="#how" className="reference-outline-button reference-secondary-action">Book a Call <ArrowRight className="size-4" /></a>
+              <a href="#how" className="reference-outline-button reference-secondary-action">See How It Works <ArrowRight className="size-4" /></a>
             </div>
           </div>
 
@@ -191,9 +191,9 @@ export function ReferenceLanding({
           </div>
         </section>
 
-        <div className="reference-press" aria-hidden="true">
+        <div className="reference-press" aria-label="Removal Work workflow">
           <div className="reference-press-track">
-            {["Forbes", "Business Insider", "CEO", "Inc.", "Forbes", "Business Insider", "CEO", "Inc."].map((name, index) => (
+            {["Real review", "Policy check", "Evidence", "Your decision", "Real review", "Policy check", "Evidence", "Your decision"].map((name, index) => (
               <span key={`${name}-${index}`} className={`press-${name.toLowerCase().split(" ")[0]}`}>{name}</span>
             ))}
           </div>
@@ -201,11 +201,11 @@ export function ReferenceLanding({
 
         <div className="reference-tilt">
           {[
-            { stars: "★★★★★", text: "\"Cleared the two fake reviews that were costing us bookings.\"", who: "Multi-location dental group" },
-            { stars: "★★★★★", text: "\"A fake 1-star from a competitor was flagged with real evidence.\"", who: "Home services brand" },
-            { stars: "★★★★★", text: "\"No retainer, no guesswork — we see every case status.\"", who: "Franchise operator" },
-            { stars: "★★★★★", text: "\"The portal shows exactly what Google decided, good or bad.\"", who: "Hospitality group" },
-            { stars: "★★★★★", text: "\"Honest about what can and can't be removed.\"", who: "Medical practice" },
+            { stars: "01", text: "Read the review and its available business context.", who: "Source review" },
+            { stars: "02", text: "Compare the words against published policy categories.", who: "Policy analysis" },
+            { stars: "03", text: "Weigh supporting evidence and the strongest counterargument.", who: "Adversarial check" },
+            { stars: "04", text: "Prepare a report only when the evidence supports one.", who: "Human decision" },
+            { stars: "05", text: "Record the outcome you actually observe — never assume it.", who: "Honest tracking" },
           ].map((card) => (
             <article key={card.who}>
               <div className="t-stars">{card.stars}</div>
@@ -230,7 +230,7 @@ export function ReferenceLanding({
             <p>Google review scanning is live today — every other platform joins the same simple paste → AI check → report → track flow as it rolls out.</p>
           </div>
           <div className="reference-platforms-grid-wrap">
-            <span className="reference-platforms-label">Platforms we cover</span>
+            <span className="reference-platforms-label">Platform roadmap</span>
             <div className="reference-platforms-grid">
               {platforms.map((platform, index) => {
                 const Icon = platform.icon;
@@ -271,7 +271,7 @@ export function ReferenceLanding({
             </div>
             <div className="reference-promise-item">
               <h3><BadgeCheck className="promise-icon" /> Only Real Outcomes</h3>
-              <p>Every case is tracked from report to Google&apos;s decision. If a review stays up, your dashboard says so — that&apos;s the deal.</p>
+              <p>Record each report handoff and the outcome you observe. No Google decision is inferred, and nothing is marked removed automatically.</p>
             </div>
           </div>
         </section>
@@ -355,7 +355,7 @@ export function ReferenceLanding({
           <div className="audit-finale-copy">
             <p className="audit-finale-kicker">Protect Yourself Now</p>
             <h2 id="audit-finale-title">Get Your Free<br />Reputation<br />Audit Report</h2>
-            <p className="audit-finale-lede">See exactly which reviews show clear policy issues in 60 seconds. No obligations.</p>
+            <p className="audit-finale-lede">See whether the available review evidence shows a clear policy issue. No obligations.</p>
             <div className="audit-finale-actions">
               <button type="button" onClick={openScanner} className="audit-main-action">Get Your Free Audit <span><ArrowRight /></span></button>
               <a href="#how" className="audit-call-action">How It Works <ArrowRight /></a>
@@ -383,15 +383,15 @@ export function ReferenceLanding({
 
         <footer className="reference-footer">
           <p>© {new Date().getFullYear()} Removal Work. Reputation intelligence for multi-location brands.</p>
-          <p>Removal Work is not affiliated with Google. Removal outcomes are determined solely by Google after reviewing each report.</p>
+          <p>Removal Work is not affiliated with Google. Google determines outcomes; workspace statuses are recorded by the user.</p>
         </footer>
       </div>
 
       {chatOpen ? (
         <div className="reference-chat">
           <div className="reference-chat-bubble">
-            <span>Have bad reviews you want to remove?</span>
-            <button type="button" onClick={() => setChatOpen(false)} aria-label="Dismiss"><X className="size-3.5" /></button>
+            <span>Have a review that may break policy?</span>
+            <button type="button" onClick={() => setChatOpen(false)} aria-label="Dismiss"><X className="size-4" /></button>
           </div>
           <button type="button" onClick={openScanner} className="reference-chat-avatar" aria-label="Start a review audit">RW</button>
         </div>

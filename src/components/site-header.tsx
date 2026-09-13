@@ -31,13 +31,13 @@ const reviewItems = [
   { label: "All reviews", to: "/dashboard", hint: "Everything you have scanned" },
   { label: "Possible violations", to: "/dashboard", hint: "Flagged by the AI policy check" },
   { label: "Needs a look", to: "/dashboard", hint: "Waiting on your decision" },
-  { label: "Reported", to: "/reports", hint: "Sent to the platform" },
+  { label: "Submitted", to: "/reports", hint: "Marked submitted by you" },
 ];
 
 const reportItems = [
-  { label: "Active reports", to: "/reports", hint: "Submitted and in progress" },
-  { label: "Pending", to: "/reports", hint: "Awaiting a platform decision" },
-  { label: "Resolved", to: "/reports", hint: "Outcome recorded" },
+  { label: "Submitted reports", to: "/reports", hint: "Submission recorded by you" },
+  { label: "Awaiting outcome", to: "/reports", hint: "Status recorded by you" },
+  { label: "Recorded outcomes", to: "/reports", hint: "Your latest confirmed result" },
 ];
 
 const howSteps = [

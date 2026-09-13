@@ -24,12 +24,12 @@ export const Route = createFileRoute("/_authenticated/pipeline")({
       { title: "Case pipeline — Removal Work" },
       {
         name: "description",
-        content: "Track pending, identified and reported review cases and act on many at once.",
+        content: "Track pending, identified and user-recorded review case stages.",
       },
       { property: "og:title", content: "Case pipeline — Removal Work" },
       {
         property: "og:description",
-        content: "Track pending, identified and reported review cases and act on many at once.",
+        content: "Track pending, identified and user-recorded review case stages.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -44,7 +44,7 @@ const STAGES: { id: Stage; label: string }[] = [
   { id: "all", label: "All cases" },
   { id: "pending", label: "Pending" },
   { id: "identified", label: "Identified" },
-  { id: "reported", label: "Reported" },
+  { id: "reported", label: "Submitted / tracking" },
   { id: "resolved", label: "Resolved" },
 ];
 
@@ -58,9 +58,9 @@ function stageOf(item: CaseRecord): Exclude<Stage, "all"> {
 }
 
 const BULK_ACTIONS: { status: CaseStatus; label: string }[] = [
-  { status: "reported", label: "Mark reported" },
-  { status: "pending", label: "Mark waiting" },
-  { status: "removed", label: "Mark removed" },
+  { status: "reported", label: "Mark submitted" },
+  { status: "pending", label: "Mark awaiting outcome" },
+  { status: "removed", label: "Confirm removed" },
   { status: "ignored", label: "Leave alone" },
 ];
 
@@ -159,7 +159,7 @@ function PipelinePage() {
       <dl className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <StatTile label="Pending" value={counts.pending} />
         <StatTile label="Identified" value={counts.identified} tone="text-warning" />
-        <StatTile label="Reported" value={counts.reported} tone="text-primary" />
+        <StatTile label="Submitted / tracking" value={counts.reported} tone="text-primary" />
         <StatTile label="Resolved" value={counts.resolved} tone="text-safe" />
       </dl>
 

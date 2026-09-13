@@ -113,10 +113,9 @@ export function CaseCard({
             disabled={busy}
             onClick={() => {
               window.open(item.reviewUrl, "_blank", "noopener");
-              if (availableStatuses.includes("reported")) onStatusChange("reported");
             }}
           >
-            Report on Google
+            Open Google reporting
           </Button>
         ) : null}
       </div>
