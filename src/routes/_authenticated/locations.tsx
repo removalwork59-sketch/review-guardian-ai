@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ExternalLink, Link2, Loader2, MapPin, Unlink } from "lucide-react";
+import { ExternalLink, Link2, Loader2, MapPin, RefreshCw, Unlink } from "lucide-react";
+import { toast } from "sonner";
 import { useState } from "react";
 
 import { AppShell } from "@/components/app-shell";
@@ -10,7 +11,7 @@ import { StarRating } from "@/components/brand";
 import { listLocations } from "@/lib/cases.functions";
 import { StatTile } from "@/components/ui/stat-tile";
 import { Button } from "@/components/ui/button";
-import { disconnectGoogleBusiness, getGoogleBusinessConnection, startGoogleBusinessConnection } from "@/lib/google-business.functions";
+import { disconnectGoogleBusiness, getGoogleBusinessConnection, startGoogleBusinessConnection, syncGoogleBusinessReviews } from "@/lib/google-business.functions";
 
 export const Route = createFileRoute("/_authenticated/locations")({
   head: () => ({
@@ -52,6 +53,22 @@ function LocationsPage() {
     try {
       const result = await startConnection({ data: { origin: window.location.origin } });
       window.location.assign(result.authorizationUrl);
+    } finally {
+      setConnectionBusy(false);
+    }
+  }
+
+  async function syncGoogle() {
+    setConnectionBusy(true);
+    try {
+      const result = await syncReviews({ data: undefined });
+      toast.success(result.message, {
+        description: `${result.reviewsStored} reviews saved, ${result.reviewsAnalyzed} newly checked across ${result.locations} listings.`,
+      });
+      await queryClient.invalidateQueries({ queryKey: ["locations"] });
+      await queryClient.invalidateQueries({ queryKey: ["cases"] });
+    } catch (error) {
+      toast.error((error as Error).message);
     } finally {
       setConnectionBusy(false);
     }
