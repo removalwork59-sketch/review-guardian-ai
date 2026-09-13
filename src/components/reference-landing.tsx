@@ -38,6 +38,67 @@ const features = [
   { icon: locationsIcon, title: "Multi-location workspaces", body: "One workspace for your business, with per-location attribution for every review and case." },
 ];
 
+function WalkingClient({ x, delay, leaving = false }: { x: number; delay: number; leaving?: boolean }) {
+  return (
+    <g className="client-position" transform={`translate(${x} 0)`}>
+      <g className={`vector-client ${leaving ? "vector-client-leaving" : ""}`} style={{ "--walk-delay": `${delay}s` } as React.CSSProperties}>
+        <ellipse className="client-shadow" cx="0" cy="274" rx="22" ry="5" />
+        <g className="client-body">
+          <circle className="client-head" cx="0" cy="197" r="11" />
+          <path className="client-torso" d="M-7 211 Q0 205 7 211 L11 242 Q0 249 -11 242Z" />
+          <path className="client-limb client-arm-a" d="M-7 216 Q-18 228 -20 239" />
+          <path className="client-limb client-arm-b" d="M7 216 Q18 227 23 234" />
+          <path className="client-limb client-leg-a" d="M-5 242 Q-11 258 -18 272" />
+          <path className="client-limb client-leg-b" d="M5 242 Q13 257 20 270" />
+        </g>
+      </g>
+    </g>
+  );
+}
+
+function RatingScene({ quiet = false }: { quiet?: boolean }) {
+  return (
+    <svg className={`rating-vector-scene ${quiet ? "rating-vector-quiet" : "rating-vector-busy"}`} viewBox="0 0 620 310" role="img" aria-label={quiet ? "A customer walking away from a poorly rated business" : "Customers walking toward a highly rated business"}>
+      <defs>
+        <linearGradient id={quiet ? "shop-wall-quiet" : "shop-wall-busy"} x1="0" y1="0" x2="1" y2="1"><stop className="shop-wall-light" /><stop offset="1" className="shop-wall-dark" /></linearGradient>
+        <linearGradient id={quiet ? "shop-roof-quiet" : "shop-roof-busy"} x1="0" y1="0" x2="0" y2="1"><stop className="shop-roof-light" /><stop offset="1" className="shop-roof-dark" /></linearGradient>
+        <radialGradient id={quiet ? "window-glow-quiet" : "window-glow-busy"}><stop className="window-glow-core" /><stop offset="1" className="window-glow-edge" /></radialGradient>
+        <filter id={quiet ? "soft-glow-quiet" : "soft-glow-busy"} x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="9" /></filter>
+      </defs>
+
+      <path className="scene-ground-glow" d="M14 276 H606" />
+      {!quiet && <>
+        <path className="scene-arc scene-arc-a" d="M58 257 Q214 94 420 221" />
+        <path className="scene-arc scene-arc-b" d="M86 268 Q237 125 435 226" />
+        <g className="money-token money-token-a"><circle r="19" /><text x="0" y="8">$</text></g>
+        <g className="money-token money-token-b"><circle r="22" /><text x="0" y="8">$</text></g>
+        <g className="money-token money-token-c"><circle r="24" /><text x="0" y="9">$</text></g>
+      </>}
+      {quiet && <>
+        <path className="loss-vector-arc" d="M88 238 Q226 75 392 220" />
+        <g className="negative-review-vector" transform="translate(285 94) rotate(12)"><path d="M-30-24 H30 Q38-24 38-16 V19 Q38 27 30 27 H-6 L-20 42 V27 H-30 Q-38 27-38 19 V-16 Q-38-24-30-24Z" /><path className="negative-star" d="M0-15 5-5 17-3 8 5 10 17 0 11-10 17-8 5-17-3-5-5Z" /><path className="review-speed" d="M-55-10h-19M-54 2h-28M-51 14h-16" /></g>
+      </>}
+
+      <g className="vector-shop" transform={quiet ? "translate(405 112)" : "translate(365 91)"}>
+        <ellipse className="shop-halo" cx="105" cy="171" rx="136" ry="74" filter={`url(#${quiet ? "soft-glow-quiet" : "soft-glow-busy"})`} />
+        <path className="shop-side" d={quiet ? "M175 51 205 64V178H175Z" : "M194 49 224 64V188H194Z"} />
+        <rect className="shop-main" x="0" y="47" width={quiet ? "176" : "196"} height={quiet ? "131" : "141"} fill={`url(#${quiet ? "shop-wall-quiet" : "shop-wall-busy"})`} />
+        <rect className="shop-sign" x={quiet ? "73" : "82"} y="11" width="58" height="37" rx="3" fill={`url(#${quiet ? "shop-roof-quiet" : "shop-roof-busy"})`} />
+        <path className="shop-roof-vector" d={quiet ? "M-14 43Q-14 35-6 35H181L205 48V60H-14Z" : "M-15 43Q-15 34-7 34H202L225 48V61H-15Z"} fill={`url(#${quiet ? "shop-roof-quiet" : "shop-roof-busy"})`} />
+        {!quiet && <g className="shop-awning-vector"><path d="M-4 61H199L190 100H4Z" /><path d="M20 61 15 100M50 61 48 100M80 61 81 100M111 61 114 100M143 61 147 100M174 61 181 100" /></g>}
+        <rect className="shop-window-vector" x="19" y={quiet ? "78" : "111"} width={quiet ? "72" : "91"} height={quiet ? "63" : "62"} rx="2" fill={`url(#${quiet ? "window-glow-quiet" : "window-glow-busy"})`} />
+        <path className="window-bars" d={quiet ? "M55 78v63M19 109h72" : "M65 111v62M19 142h91"} />
+        <rect className="shop-door-vector" x={quiet ? "116" : "132"} y={quiet ? "72" : "99"} width="48" height={quiet ? "106" : "89"} rx="2" fill={`url(#${quiet ? "window-glow-quiet" : "window-glow-busy"})`} />
+        <circle className="door-knob" cx={quiet ? "153" : "170"} cy={quiet ? "127" : "151"} r="2.5" />
+      </g>
+
+      {!quiet ? <g className="client-stream">
+        {[52, 126, 200, 274, 348, 422].map((x, index) => <WalkingClient key={x} x={x} delay={index * -.82} />)}
+      </g> : <g className="leaving-stream" transform="translate(252 0) scale(-1 1)"><WalkingClient x={0} delay={0} leaving /></g>}
+    </svg>
+  );
+}
+
 export function ReferenceLanding({
   signedIn,
   url,
@@ -260,26 +321,13 @@ export function ReferenceLanding({
             <article className="rating-business rating-competitor">
               <span className="rating-owner">Your Competitor</span>
               <div className="rating-score"><strong>4.9</strong><span aria-label="5 stars">★★★★★</span></div>
-              <div className="store-scene competitor-store" aria-hidden="true">
-                <div className="growth-arc growth-arc-one" /><div className="growth-arc growth-arc-two" />
-                <span className="money money-one">$</span><span className="money money-two">$</span><span className="money money-three">$</span>
-                <div className="customer-line">
-                  {[0, 1, 2, 3, 4, 5].map((person) => <i key={person} style={{ "--person": person } as React.CSSProperties}><b /><em /><span /><small /></i>)}
-                </div>
-                <div className="store-glow" />
-                <div className="store-building"><i className="store-sign" /><i className="store-roof" /><i className="store-awning" /><i className="store-window" /><i className="store-door" /><i className="store-step" /><i className="store-side" /></div>
-              </div>
+              <RatingScene />
             </article>
 
             <article className="rating-business rating-you">
               <span className="rating-owner">You</span>
               <div className="rating-score rating-score-low"><strong>3.9</strong><span aria-label="3 out of 5 highlighted stars"><i>★</i><i>★</i><i>★</i><i>★</i><i>★</i></span></div>
-              <div className="store-scene quiet-store" aria-hidden="true">
-                <div className="loss-arc" />
-                <div className="bad-review"><i>★</i></div>
-                <div className="leaving-customer"><i><b /><em /><span /><small /></i><u /><u /><u /></div>
-                <div className="store-building"><i className="store-sign" /><i className="store-roof" /><i className="store-awning" /><i className="store-window" /><i className="store-door" /><i className="store-step" /><i className="store-side" /></div>
-              </div>
+              <RatingScene quiet />
             </article>
           </div>
         </section>
