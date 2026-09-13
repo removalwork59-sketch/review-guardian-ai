@@ -17,6 +17,8 @@
 - Desktop and mobile homepage validation with no overflow or console errors
 
 ## Open
+- Connect owner-authorized Google Business Profile OAuth and sync complete listing reviews into the verified review pipeline; preserve the current sampled public lookup as a limited fallback
+- Use the saved `OPENAI_API_KEY` and `ANTHROPIC_API_KEY` only if an explicitly selected production integration needs them; keep the current tested Lovable AI analysis path unchanged
 - Prepare a controlled external-database/VPS migration when the destination is ready: rotate exposed credentials, provision fresh restricted credentials, back up and verify data, apply repository migrations, test RLS/auth/storage, then switch configuration with rollback available
 - Production mission: complete the one-review flow first, then implement platform adapters, verified review identity, multi-stage auditable AI, evidence/report strategy, immutable outcomes/appeals, durable bounded workers, bulk import, analytics and admin configuration without importing old UI
 - Integrate the strongest production backend capabilities from the audited old repository without importing its UI: secure Google Business Profile connection/sync, durable review records and case history, reliable bulk jobs, reporting/status workflows, and hardened AI analysis
