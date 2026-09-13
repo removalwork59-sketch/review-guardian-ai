@@ -9,11 +9,7 @@ export type BulkOutcome =
   | { ok: true; case: CaseRecord; businessName: string; reviewsSeen: number }
   | { ok: false; message: string; hint: string };
 
-/**
- * One pasted link, end to end: find the business, pick the review most likely
- * to be a problem (lowest rating, longest text as the tie-break), run the AI
- * policy check and save it as a case.
- */
+/** A bulk link may identify a business but cannot safely identify one review. */
 export const scanAndSaveUrl = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ url: z.string().min(4) }).parse(input))
@@ -38,9 +34,18 @@ export const scanAndSaveUrl = createServerFn({ method: "POST" })
         };
       }
 
-      const review = [...lookup.reviews].sort(
-        (a, b) => a.rating - b.rating || b.text.length - a.text.length,
-      )[0]!;
+      const exactMatches = lookup.reviews.filter((review) => review.identityStatus === "exact_url_match");
+      if (exactMatches.length !== 1) {
+        return {
+          ok: false,
+          message: "This link doesn't identify one exact review in Google's returned data.",
+          hint: "Open it on its own and choose the matching review. Bulk processing never guesses.",
+        };
+      }
+      const review = exactMatches[0];
+      if (!review) {
+        return { ok: false, message: "No exact review match was found.", hint: "Open this link on its own." };
+      }
 
       const analysis = await analyzeReview(lookup.business, review);
       const saved = await persistCase(context.supabase as never, context.userId, {

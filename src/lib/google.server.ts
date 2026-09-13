@@ -9,6 +9,9 @@ export type NormalizedReview = {
   relativeTime: string;
   publishTime: string;
   reviewUrl: string;
+  identityStatus: "provider_observed" | "exact_url_match" | "unverified";
+  identityMethod: "provider_resource_name" | "exact_provider_url" | "content_fingerprint";
+  identityConfidence: number;
 };
 
 export type NormalizedBusiness = {
@@ -129,6 +132,40 @@ function parseGoogleUrl(rawUrl: string) {
   return { placeId, searchText, bias };
 }
 
+function canonicalUrl(rawUrl: string) {
+  try {
+    const url = new URL(rawUrl);
+    url.hash = "";
+    ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"].forEach((key) =>
+      url.searchParams.delete(key),
+    );
+    return url.toString().replace(/\/$/, "");
+  } catch {
+    return rawUrl.trim();
+  }
+}
+
+function deterministicReviewId(review: {
+  authorAttribution?: { displayName?: string };
+  rating?: number;
+  publishTime?: string;
+  text?: { text?: string };
+  originalText?: { text?: string };
+}) {
+  const value = [
+    review.authorAttribution?.displayName ?? "",
+    review.rating ?? 0,
+    review.publishTime ?? "",
+    review.text?.text ?? review.originalText?.text ?? "",
+  ].join("\u001f");
+  let hash = 2166136261;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return `observed-${(hash >>> 0).toString(16).padStart(8, "0")}`;
+}
+
 const DETAILS_MASK = [
   "id",
   "displayName",
@@ -191,16 +228,29 @@ export async function lookupGooglePlace(rawUrl: string): Promise<PlaceLookup> {
     }>;
   };
 
-  const reviews: NormalizedReview[] = (details.reviews ?? []).map((review, index) => ({
-    id: review.name ?? `review-${index}`,
-    authorName: review.authorAttribution?.displayName ?? "Google user",
-    authorPhoto: review.authorAttribution?.photoUri ?? "",
-    rating: review.rating ?? 0,
-    text: review.text?.text ?? review.originalText?.text ?? "",
-    relativeTime: review.relativePublishTimeDescription ?? "",
-    publishTime: review.publishTime ?? "",
-    reviewUrl: review.googleMapsUri ?? details.googleMapsUri ?? expanded,
-  }));
+  const requestedUrl = canonicalUrl(expanded);
+  const reviews: NormalizedReview[] = (details.reviews ?? []).map((review) => {
+    const reviewUrl = review.googleMapsUri ?? "";
+    const exactUrlMatch = Boolean(reviewUrl) && canonicalUrl(reviewUrl) === requestedUrl;
+    const hasProviderId = Boolean(review.name);
+    return {
+      id: review.name ?? deterministicReviewId(review),
+      authorName: review.authorAttribution?.displayName ?? "Google user",
+      authorPhoto: review.authorAttribution?.photoUri ?? "",
+      rating: review.rating ?? 0,
+      text: review.text?.text ?? review.originalText?.text ?? "",
+      relativeTime: review.relativePublishTimeDescription ?? "",
+      publishTime: review.publishTime ?? "",
+      reviewUrl: reviewUrl || details.googleMapsUri || expanded,
+      identityStatus: exactUrlMatch ? "exact_url_match" : hasProviderId ? "provider_observed" : "unverified",
+      identityMethod: exactUrlMatch
+        ? "exact_provider_url"
+        : hasProviderId
+          ? "provider_resource_name"
+          : "content_fingerprint",
+      identityConfidence: exactUrlMatch ? 100 : hasProviderId ? 80 : 35,
+    };
+  });
 
   return {
     business: {

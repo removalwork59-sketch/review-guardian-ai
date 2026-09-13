@@ -2,6 +2,7 @@ import { ExternalLink, Star } from "lucide-react";
 
 import {
   CASE_STATUSES,
+  CASE_STATUS_TRANSITIONS,
   STATUS_LABELS,
   STATUS_SHORT,
   STATUS_TONE,
@@ -48,6 +49,9 @@ export function CaseCard({
   onStatusChange: (status: CaseStatus) => void;
   busy: boolean;
 }) {
+  const availableStatuses = CASE_STATUSES.filter(
+    (status) => status === item.status || CASE_STATUS_TRANSITIONS[item.status].includes(status),
+  );
   return (
     <article className="surface app-card animate-rise">
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 max-sm:grid-cols-1">
@@ -84,7 +88,7 @@ export function CaseCard({
           onChange={(event) => onStatusChange(event.target.value as CaseStatus)}
           className="app-select"
         >
-          {CASE_STATUSES.map((status) => (
+          {availableStatuses.map((status) => (
             <option key={status} value={status}>
               {STATUS_LABELS[status]}
             </option>

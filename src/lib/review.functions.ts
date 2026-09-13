@@ -38,6 +38,9 @@ const reviewSchema = z.object({
   relativeTime: z.string(),
   publishTime: z.string(),
   reviewUrl: z.string(),
+  identityStatus: z.enum(["provider_observed", "exact_url_match", "unverified"]),
+  identityMethod: z.enum(["provider_resource_name", "exact_provider_url", "content_fingerprint"]),
+  identityConfidence: z.number().int().min(0).max(100),
 });
 
 function toFailure(error: unknown): ScanFailure {
