@@ -369,6 +369,7 @@ function Home() {
                   analysis={analysis}
                   onBack={() => setStage("picking")}
                   onReport={() => window.open(review.reviewUrl, "_blank", "noopener")}
+                  identityVerified={review.identityStatus === "exact_url_match"}
                 />
                 <Note text="We can't remove a review for you. Google decides that. This opens the review on Google so you can flag it there with the reasoning above." />
                 {signedIn ? (

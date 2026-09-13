@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 
 import { CATEGORY_LABELS, type ReviewAnalysis } from "@/lib/analysis-types";
+import { Button } from "@/components/ui/button";
 
 const VERDICTS: Record<
   ReviewAnalysis["verdict"],
@@ -63,13 +64,16 @@ export function AnalysisPanel({
   analysis,
   onBack,
   onReport,
+  identityVerified,
 }: {
   analysis: ReviewAnalysis;
   onBack: () => void;
   onReport: () => void;
+  identityVerified: boolean;
 }) {
   const verdict = VERDICTS[analysis.verdict];
-  const reportable = analysis.verdict !== "not_reportable";
+  const reportable = ["strong_candidate", "possible_candidate"].includes(analysis.verdict);
+  const canReport = reportable && identityVerified;
 
   return (
     <div className="animate-rise space-y-6">
@@ -139,28 +143,26 @@ export function AnalysisPanel({
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row-reverse sm:items-center sm:justify-between">
-        {reportable ? (
-          <button
+        {canReport ? (
+          <Button
             type="button"
             onClick={onReport}
-            className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 text-base font-semibold text-primary-foreground shadow-soft transition hover:brightness-110 sm:w-auto"
+            className="h-12 w-full px-6 text-base sm:w-auto"
           >
             <Flag className="size-4.5" />
-            Report this review
-          </button>
+            Report on Google
+          </Button>
+        ) : reportable ? (
+          <p className="text-sm text-muted-foreground sm:text-right">Confirm the exact review identity before opening Google’s report flow.</p>
         ) : (
           <p className="text-sm text-muted-foreground sm:text-right">
             Nothing to report here — this one looks like a genuine opinion.
           </p>
         )}
-        <button
-          type="button"
-          onClick={onBack}
-          className="inline-flex items-center justify-center gap-2 text-sm font-medium text-muted-foreground transition hover:text-ink"
-        >
+        <Button type="button" variant="ghost" onClick={onBack}>
           <ArrowLeft className="size-4" />
           Check a different review
-        </button>
+        </Button>
       </div>
     </div>
   );

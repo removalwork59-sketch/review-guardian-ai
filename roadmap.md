@@ -1,6 +1,8 @@
 # Roadmap
 
 ## Done
+- Added a durable owner-scoped bulk queue with deduplication, leases, bounded three-item passes, persisted queued/discovering/identified/analyzing/report-ready counts, and exact-identity gating
+- Hardened the Google report handoff so only reportable analyses with an exact verified review identity can open the real Google review
 - Chose a safe portability path: keep the current Lovable backend operational while preserving additive SQL migrations for a later controlled move to the user's own database/VPS; never use credentials exposed in chat
 - Completed a second exhaustive old-versus-new production capability audit with a P0–P3 migration matrix, security/reliability rejection list, dependency blockers, and safe implementation order; no old UI was copied
 - Complete UI finishing pass with unified spacing, containers, grids, cards, controls, typography rhythm, and responsive structure
@@ -17,8 +19,10 @@
 - Desktop and mobile homepage validation with no overflow or console errors
 
 ## Open
+- Connect owner-authorized Google Business Profile OAuth and sync complete listing reviews into the verified review pipeline; preserve the current sampled public lookup as a limited fallback
+- Use the saved `OPENAI_API_KEY` and `ANTHROPIC_API_KEY` only if an explicitly selected production integration needs them; keep the current tested Lovable AI analysis path unchanged
 - Prepare a controlled external-database/VPS migration when the destination is ready: rotate exposed credentials, provision fresh restricted credentials, back up and verify data, apply repository migrations, test RLS/auth/storage, then switch configuration with rollback available
-- Production mission: complete the one-review flow first, then implement platform adapters, verified review identity, multi-stage auditable AI, evidence/report strategy, immutable outcomes/appeals, durable bounded workers, bulk import, analytics and admin configuration without importing old UI
+- Production mission: continue from the verified one-review flow with platform adapters, scheduled queue execution, immutable outcomes/appeals, analytics and admin configuration without importing old UI
 - Integrate the strongest production backend capabilities from the audited old repository without importing its UI: secure Google Business Profile connection/sync, durable review records and case history, reliable bulk jobs, reporting/status workflows, and hardened AI analysis
 - Facebook / Instagram / YouTube scanning — blocked until a Meta/YouTube connection exists
 - Verified removal outcome — Google gives no API for report status; user marks the real outcome

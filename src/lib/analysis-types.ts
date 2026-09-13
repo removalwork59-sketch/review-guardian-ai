@@ -66,4 +66,7 @@ export type ReviewInfo = {
   relativeTime: string;
   publishTime: string;
   reviewUrl: string;
+  identityStatus: "provider_observed" | "exact_url_match" | "unverified";
+  identityMethod: "provider_resource_name" | "exact_provider_url" | "content_fingerprint";
+  identityConfidence: number;
 };
