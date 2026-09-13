@@ -266,9 +266,13 @@ export function ReferenceLanding({
               <div className="store-scene competitor-store" aria-hidden="true">
                 <span className="money money-one">$</span><span className="money money-two">$</span><span className="money money-three">$</span>
                 <div className="customer-line">
-                  {[0, 1, 2, 3, 4, 5].map((person) => <i key={person} style={{ "--person": person } as React.CSSProperties} />)}
+                  {[0, 1, 2, 3, 4, 5].map((person) => (
+                    <i key={person} style={{ "--person": person } as React.CSSProperties}>
+                      <b /><em /><span /><small />
+                    </i>
+                  ))}
                 </div>
-                <div className="store-building"><i className="store-sign" /><i className="store-awning" /><i className="store-window" /><i className="store-door" /></div>
+                <div className="store-building"><i className="store-sign" /><i className="store-roof" /><i className="store-awning" /><i className="store-window" /><i className="store-door" /><i className="store-step" /></div>
               </div>
               <ul className="rating-facts rating-good">
                 <li><span>✓</span>Opened 18 months ago</li>
@@ -285,7 +289,7 @@ export function ReferenceLanding({
               <div className="store-scene quiet-store" aria-hidden="true">
                 <div className="wind-lines"><i /><i /><i /></div>
                 <span className="tumbleweed"><i /><i /><i /></span>
-                <div className="store-building"><i className="store-sign" /><i className="store-awning" /><i className="store-window" /><i className="store-door" /></div>
+                <div className="store-building"><i className="store-sign" /><i className="store-roof" /><i className="store-awning" /><i className="store-window" /><i className="store-door" /><i className="store-step" /></div>
               </div>
               <ul className="rating-facts rating-bad">
                 <li><span>×</span>10+ years in business</li>
