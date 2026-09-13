@@ -25,6 +25,9 @@ const reviewSchema = z.object({
   relativeTime: z.string(),
   publishTime: z.string(),
   reviewUrl: z.string(),
+  identityStatus: z.enum(["provider_observed", "exact_url_match", "unverified"]),
+  identityMethod: z.enum(["provider_resource_name", "exact_provider_url", "content_fingerprint"]),
+  identityConfidence: z.number().int().min(0).max(100),
 });
 
 type Db = { from: (table: string) => any };
@@ -132,6 +135,11 @@ export async function persistCase(
         published_at: input.review.publishTime || null,
         content_fingerprint: contentFingerprint,
         raw_source: input.review,
+        identity_status: input.review.identityStatus,
+        identity_method: input.review.identityMethod,
+        identity_confidence: input.review.identityConfidence,
+        requested_source_url: input.sourceUrl,
+        verified_at: input.review.identityStatus === "exact_url_match" ? new Date().toISOString() : null,
         last_seen_at: new Date().toISOString(),
         observed_absent_at: null,
       },
@@ -172,7 +180,7 @@ export async function persistCase(
     .single();
   if (error) throw error;
 
-  const reportable = input.analysis.verdict !== "not_reportable";
+  const reportable = ["strong_candidate", "possible_candidate"].includes(input.analysis.verdict);
   if (reportable) {
     const reportBody = [
       input.analysis.policyReasoning,
@@ -188,7 +196,12 @@ export async function persistCase(
         report_body: reportBody,
         evidence: input.analysis.evidence,
         counter_evidence: input.analysis.counterEvidence,
-        status: "ready",
+        status:
+          input.analysis.verdict === "strong_candidate" &&
+          input.analysis.confidence >= 70 &&
+          input.review.identityStatus !== "unverified"
+            ? "ready"
+            : "draft",
       },
       { onConflict: "case_id,version" },
     );
@@ -211,6 +224,7 @@ export const saveCase = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }): Promise<{ case: CaseRecord; analysis: ReviewAnalysis }> => {
     const { analyzeReview } = await import("./analysis.server");
+    const startedAt = Date.now();
     const analysis = await analyzeReview(data.business, data.review);
     const saved = await persistCase(context.supabase as unknown as Db, context.userId, {
       platform: data.platform,
@@ -219,6 +233,29 @@ export const saveCase = createServerFn({ method: "POST" })
       review: data.review,
       analysis,
     });
+    const inputHash = await fingerprintReview(data.platform, data.business.placeId, data.review);
+    const { data: persistedReview } = await context.supabase
+      .from("review_records")
+      .select("id")
+      .eq("user_id", context.userId)
+      .eq("platform", data.platform)
+      .eq("external_id", data.review.id)
+      .maybeSingle();
+    const { error: auditError } = await context.supabase.from("ai_runs").insert({
+      user_id: context.userId,
+      review_record_id: persistedReview?.id ?? null,
+      case_id: saved.id,
+      purpose: "review_policy_analysis",
+      model: "openai/gpt-6-astra",
+      prompt_version: "review-policy-adversarial-v2",
+      policy_version: "google-content-policy-2026-09",
+      input_hash: inputHash,
+      output: analysis,
+      confidence: analysis.confidence,
+      duration_ms: Date.now() - startedAt,
+      status: "completed",
+    });
+    if (auditError) throw auditError;
     return { case: saved, analysis };
   });
 
@@ -284,6 +321,25 @@ export const updateCaseStatus = createServerFn({ method: "POST" })
       .parse(input),
   )
   .handler(async ({ data, context }): Promise<CaseRecord> => {
+    const { data: current, error: currentError } = await context.supabase
+      .from("review_cases")
+      .select("status")
+      .eq("id", data.id)
+      .single();
+    if (currentError) throw currentError;
+
+    const transitions: Record<CaseStatus, readonly CaseStatus[]> = {
+      new: ["reported", "ignored"],
+      reported: ["pending", "removed", "rejected"],
+      pending: ["removed", "rejected"],
+      removed: [],
+      rejected: [],
+      ignored: ["new"],
+    };
+    const currentStatus = current.status as CaseStatus;
+    if (data.status !== currentStatus && !transitions[currentStatus].includes(data.status)) {
+      throw new Error(`Invalid case status transition: ${currentStatus} to ${data.status}`);
+    }
     const now = new Date().toISOString();
     const patch = {
       status: data.status,
