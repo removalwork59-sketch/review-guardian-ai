@@ -64,6 +64,7 @@ const ANALYSIS_STEPS = [
 function Home() {
   const scan = useServerFn(scanReviewUrl);
   const analyze = useServerFn(analyzeReviewForPolicy);
+  const save = useServerFn(saveCase);
 
   const [url, setUrl] = useState("");
   const [stage, setStage] = useState<Stage>("idle");
@@ -71,6 +72,18 @@ function Home() {
   const [result, setResult] = useState<ScanResult | null>(null);
   const [review, setReview] = useState<ReviewInfo | null>(null);
   const [analysis, setAnalysis] = useState<ReviewAnalysis | null>(null);
+  const [signedIn, setSignedIn] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSignedIn(Boolean(data.session)));
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" || event === "SIGNED_OUT" || event === "INITIAL_SESSION") {
+        setSignedIn(Boolean(session));
+      }
+    });
+    return () => sub.subscription.unsubscribe();
+  }, []);
 
   async function handleScan(event: React.FormEvent) {
     event.preventDefault();
