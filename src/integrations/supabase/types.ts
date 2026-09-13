@@ -790,6 +790,25 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      claim_google_oauth_state: {
+        Args: { _state_hash: string }
+        Returns: {
+          code_verifier_ciphertext: string
+          created_at: string
+          expires_at: string
+          id: string
+          redirect_origin: string
+          state_hash: string
+          used_at: string | null
+          user_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "google_oauth_states"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       ensure_my_profile: {
         Args: never
         Returns: {
