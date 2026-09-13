@@ -9,7 +9,7 @@ import {
   Sparkles,
 } from "lucide-react";
 
-import { CATEGORY_LABELS, type ReviewAnalysis } from "@/lib/analysis.server";
+import { CATEGORY_LABELS, type ReviewAnalysis } from "@/lib/analysis-types";
 
 const VERDICTS: Record<
   ReviewAnalysis["verdict"],
