@@ -49,6 +49,7 @@ export function CaseCard({
   onStatusChange: (status: CaseStatus) => void;
   busy: boolean;
 }) {
+  const reportable = ["strong_candidate", "possible_candidate"].includes(item.verdict);
   const availableStatuses = CASE_STATUSES.filter(
     (status) => status === item.status || CASE_STATUS_TRANSITIONS[item.status].includes(status),
   );
