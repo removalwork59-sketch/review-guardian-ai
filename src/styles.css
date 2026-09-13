@@ -376,6 +376,42 @@
   .workflow-card:nth-child(n) { transform: none; }
 }
 
+.promise-panel {
+  background:
+    linear-gradient(135deg, oklch(0.62 0.14 163), oklch(0.5 0.12 178) 55%, oklch(0.44 0.1 190));
+  position: relative;
+  overflow: hidden;
+}
+
+.promise-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 32%, oklch(1 0 0 / 0.16) 50%, transparent 68%);
+  transform: translateX(-120%);
+  animation: sweep 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.site-nav {
+  background: color-mix(in oklab, var(--color-background) 78%, transparent);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+.site-nav:hover {
+  border-bottom-color: var(--color-border);
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item[open] {
+  border-color: color-mix(in oklab, var(--color-primary) 32%, transparent);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
