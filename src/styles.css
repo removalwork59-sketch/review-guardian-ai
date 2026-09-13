@@ -1532,6 +1532,18 @@
 .reference-light .rating-owner,
 .reference-light .audit-finale-copy h2,
 .reference-light .audit-chat-panel h3 { color: var(--color-ink); }
+.reference-light .reference-copy h1,
+.reference-light .reference-three-steps > h2,
+.reference-light .three-step-card h3,
+.reference-light .three-step-card p,
+.reference-light .reference-features h3,
+.reference-light .reference-platforms-copy h2,
+.reference-light .reference-platforms-label,
+.reference-light .reference-platforms-grid article b { color: var(--ink); }
+.reference-light .reference-copy > p,
+.reference-light .reference-platforms-copy p,
+.reference-light .reference-features p,
+.reference-light .reference-footer { color: var(--muted-foreground); }
 .reference-light .audit-chat-panel { background: color-mix(in oklab, var(--color-card) 96%, transparent); }
 .reference-light .reference-chat-bubble { border: 1px solid var(--color-border); }
 
