@@ -12,9 +12,9 @@ import { scanAndSaveUrl } from "@/lib/bulk.functions";
 export const Route = createFileRoute("/_authenticated/bulk")({
   head: () => ({
     meta: [
-      { title: "Bulk scan — Review Shield" },
+      { title: "Bulk scan — Removal Work" },
       { name: "description", content: "Paste many review links and check them all in one go." },
-      { property: "og:title", content: "Bulk scan — Review Shield" },
+      { property: "og:title", content: "Bulk scan — Removal Work" },
       {
         property: "og:description",
         content: "Paste many review links and check them all in one go.",
