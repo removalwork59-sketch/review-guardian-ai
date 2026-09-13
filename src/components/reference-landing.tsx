@@ -159,6 +159,17 @@ export function ReferenceLanding({
           <p>Removal Work is not affiliated with Google. Removal outcomes are determined solely by Google after reviewing each report.</p>
         </footer>
       </div>
+
+      {chatOpen ? (
+        <div className="reference-chat">
+          <div className="reference-chat-bubble">
+            <span>Have bad reviews you want to remove?</span>
+            <button type="button" onClick={() => setChatOpen(false)} aria-label="Dismiss"><X className="size-3.5" /></button>
+          </div>
+          <button type="button" onClick={openScanner} className="reference-chat-avatar" aria-label="Start a review audit">RW</button>
+        </div>
+      ) : null}
     </div>
+
   );
 }
