@@ -159,7 +159,7 @@ export function ReferenceLanding({
             <span className="proof-demo-label">Example review analysis</span>
             <div className="proof-business">
               <span className="proof-business-mark"><ShieldCheck /></span>
-              <div><b>Bright Smile Dental</b><p><span>★★★★★</span> <strong className="proof-rating"><i>3.9</i><i>4.6</i><i>5.0</i></strong> <span className="proof-count"><i>29</i><i>28</i><i>27</i></span> Google reviews</p></div>
+              <div><b>Example Dental Practice</b><p><span>★★★★★</span> <strong className="proof-rating"><i>3.9</i><i>4.6</i><i>5.0</i></strong> <span className="proof-count"><i>29</i><i>28</i><i>27</i></span> illustrative reviews</p></div>
             </div>
             <div className="proof-review-stack">
               <article className="proof-row proof-row-one">
@@ -185,8 +185,8 @@ export function ReferenceLanding({
             </div>
             <div className="reference-proof-outcome">
               <div className="big-stars">★★★★★</div>
-              <h3><CheckCircle2 /> Reputation Restored.</h3>
-              <p className="reference-proof-meta">2 policy issues detected · <span>★</span> 5.0 rating context</p>
+              <h3><CheckCircle2 /> Analysis Complete.</h3>
+              <p className="reference-proof-meta">2 possible policy issues · <span>★</span> illustrative rating context</p>
             </div>
           </div>
         </section>
@@ -312,7 +312,7 @@ export function ReferenceLanding({
                   <span className="removal-avatar" />
                   <span className="removal-stars"><b>★</b> ☆ ☆ ☆ ☆</span>
                   <i /><i /><i />
-                  <strong className="removed-label">Removed</strong>
+                  <strong className="removed-label">Outcome recorded</strong>
                 </div>
                 <div className="removal-hammer">
                   <span className="hammer-handle" />
@@ -325,7 +325,7 @@ export function ReferenceLanding({
                 <span className="impact-spark impact-spark-three" />
               </div>
               <h3>Track the Real Outcome</h3>
-              <p>Submit the prepared report to Google, then track every case in your dashboard. Google makes the final decision, and the real result stays visible.</p>
+              <p>Complete the report on Google, then record the action and any outcome you observe. Google makes the final decision.</p>
             </article>
           </div>
         </section>

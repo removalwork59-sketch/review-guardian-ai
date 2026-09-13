@@ -119,6 +119,11 @@ export function CaseCard({
           </Button>
         ) : null}
       </div>
+      {reportable && item.reviewUrl ? (
+        <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+          Opening Google does not confirm submission. After completing the report there, update the status yourself.
+        </p>
+      ) : null}
     </article>
   );
 }
