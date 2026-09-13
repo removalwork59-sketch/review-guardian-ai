@@ -1,6 +1,12 @@
 # Roadmap
 
 ## Done
+- Completed authenticated browser QA across Reviews, Pipeline, Reports, Locations, and Bulk scan against real owner-scoped database records; desktop and mobile had no page errors, failed application responses, or horizontal overflow
+- Verified the real database tables are populated where expected, RLS is enabled, owner policies exist, and an authenticated status write persisted successfully
+- Added the case pipeline dashboard with pending/identified/reported/resolved counts, category and business filters, and bounded bulk status actions
+- Verified the Pipeline reported state appears in Reports as tracked; no external Google submission or outcome was claimed
+- Increased the existing palette's density and richness with restrained filled glow across public and authenticated surfaces, while preserving colors, layout, and product behavior
+- Hardened case status changes and deletion with explicit owner scoping plus optimistic status matching to prevent cross-user access and stale concurrent transitions
 - Added the secure Google Business Profile consent foundation: encrypted token storage, expiring one-time OAuth state, PKCE, owner-scoped connection controls, and a Locations connection panel
 - Added a durable owner-scoped bulk queue with deduplication, leases, bounded three-item passes, persisted queued/discovering/identified/analyzing/report-ready counts, and exact-identity gating
 - Hardened the Google report handoff so only reportable analyses with an exact verified review identity can open the real Google review
@@ -20,8 +26,6 @@
 - Desktop and mobile homepage validation with no overflow or console errors
 
 ## Open
-- Increase existing palette density/richness with restrained filled glow across homepage and dashboards; then verify every authenticated dashboard, real database path, security boundary, and production blocker end to end
-- Case pipeline dashboard with pending/identified/reported/resolved counts, category and business filters, and a bulk action queue — done
 - Enable Connect Google by saving the approved Google Business Profile client ID and secret (secure form; user must supply)
 - Sync the user's own Google Business Profile reviews into review records and show them in Reviews with AI analysis and a report button (code ready; needs the approved Google OAuth client saved)
 - Submit one real report from the user's own listing and track its status updates in Reports (needs live consent plus explicit user confirmation before the irreversible submission)
@@ -34,4 +38,4 @@
 - Integrate the strongest production backend capabilities from the audited old repository without importing its UI: secure Google Business Profile connection/sync, durable review records and case history, reliable bulk jobs, reporting/status workflows, and hardened AI analysis
 - Facebook / Instagram / YouTube scanning — blocked until a Meta/YouTube connection exists
 - Verified removal outcome — Google gives no API for report status; user marks the real outcome
-- Verify end-to-end in Pipeline: mark a case Reported, use Report on Google, and confirm the handoff status appears in Reports
+- Replace the stale `removalwork.online` deployment with this verified build; the live domain currently returns 404 for `/pipeline`, so production cannot be declared ready until safe VPS deployment access is available
