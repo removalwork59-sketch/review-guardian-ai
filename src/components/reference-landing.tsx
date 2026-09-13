@@ -292,10 +292,34 @@ export function ReferenceLanding({
           <div className="reference-features">{features.map((feature, index) => <article key={feature.title}><img src={feature.icon} alt="" style={{ animationDelay: `${index * 310}ms` }} /><h3>{feature.title}</h3><p>{feature.body}</p></article>)}</div>
         </section>
 
-        <section className="reference-final-cta">
-          <h2>Start protecting your rating today</h2>
-          <p>Paste a Google Review or Business URL and run your first real AI scan in minutes.</p>
-          <button type="button" onClick={openScanner} className="reference-gradient-button reference-primary-action">Start review scan <ArrowRight className="size-4" /></button>
+        <section className="audit-finale" aria-labelledby="audit-finale-title">
+          <div className="audit-finale-copy">
+            <p className="audit-finale-kicker">Protect Yourself Now</p>
+            <h2 id="audit-finale-title">Get Your Free<br />Reputation<br />Audit Report</h2>
+            <p className="audit-finale-lede">See exactly which reviews show clear policy issues in 60 seconds. No obligations.</p>
+            <div className="audit-finale-actions">
+              <button type="button" onClick={openScanner} className="audit-main-action">Get Your Free Audit <span><ArrowRight /></span></button>
+              <a href="#how" className="audit-call-action">How It Works <ArrowRight /></a>
+            </div>
+            <p className="audit-finale-note">100% transparent. Real policy evidence, no guaranteed removals, no fake outcomes.</p>
+          </div>
+
+          <div className="audit-shield-stage" aria-hidden="true">
+            <i className="audit-ray audit-ray-one" /><i className="audit-ray audit-ray-two" /><i className="audit-ray audit-ray-three" />
+            <div className="audit-shield-halo" />
+            <div className="audit-shield">
+              <ShieldCheck />
+              <span className="audit-shield-check">✓</span>
+              <span className="audit-shield-star">★</span>
+            </div>
+          </div>
+
+          <div className="audit-chat-panel">
+            <h3>Start with a real review.</h3>
+            <p>Paste the link to the review that is hurting you. Our AI reads the real review and checks the evidence.</p>
+            <button type="button" onClick={openScanner} className="audit-chat-action">Open scanner <ArrowRight /></button>
+            <p className="audit-chat-meta">Google review scanning is live now.</p>
+          </div>
         </section>
 
         <footer className="reference-footer">
