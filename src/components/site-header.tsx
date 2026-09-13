@@ -94,6 +94,8 @@ export function SiteHeader({
     setOpen((current) => (current === key ? null : key));
   }
 
+  const menuProps = { open, onToggle: toggle, onOpen: setOpen, onClose: () => setOpen(null) };
+
   function scan() {
     setMobileOpen(false);
     setOpen(null);
@@ -112,7 +114,7 @@ export function SiteHeader({
             Scan Review
           </button>
 
-          <MenuTrigger label="Reviews" id="reviews" open={open} onToggle={toggle}>
+          <MenuTrigger label="Reviews" id="reviews" {...menuProps}>
             <ul className="rw-menu-list">
               {reviewItems.map((item) => (
                 <li key={item.label}>
@@ -128,7 +130,7 @@ export function SiteHeader({
             </ul>
           </MenuTrigger>
 
-          <MenuTrigger label="Reports" id="reports" open={open} onToggle={toggle}>
+          <MenuTrigger label="Reports" id="reports" {...menuProps}>
             <ul className="rw-menu-list">
               {reportItems.map((item) => (
                 <li key={item.label}>
@@ -144,7 +146,7 @@ export function SiteHeader({
             </ul>
           </MenuTrigger>
 
-          <MenuTrigger label="Platforms" id="platforms" open={open} onToggle={toggle}>
+          <MenuTrigger label="Platforms" id="platforms" {...menuProps}>
             <ul className="rw-menu-list rw-menu-platforms">
               {platformItems.map((item) => (
                 <li key={item.name}>
@@ -163,7 +165,7 @@ export function SiteHeader({
             </ul>
           </MenuTrigger>
 
-          <MenuTrigger label="How It Works" id="how" open={open} onToggle={toggle} wide>
+          <MenuTrigger label="How It Works" id="how" {...menuProps} wide>
             <ol className="rw-flow">
               {howSteps.map((step) => (
                 <li key={step.n}>
@@ -228,6 +230,8 @@ function MenuTrigger({
   id,
   open,
   onToggle,
+  onOpen,
+  onClose,
   children,
   wide,
 }: {
@@ -235,12 +239,14 @@ function MenuTrigger({
   id: MenuKey;
   open: MenuKey | null;
   onToggle: (key: MenuKey) => void;
+  onOpen: (key: MenuKey) => void;
+  onClose: () => void;
   children: React.ReactNode;
   wide?: boolean;
 }) {
   const isOpen = open === id;
   return (
-    <div className="rw-nav-item" onMouseEnter={() => onToggle(isOpen ? id : id)} onMouseLeave={() => isOpen && onToggle(id)}>
+    <div className="rw-nav-item" onMouseEnter={() => onOpen(id)} onMouseLeave={onClose}>
       <button
         type="button"
         className={`rw-nav-link ${isOpen ? "is-open" : ""}`}
