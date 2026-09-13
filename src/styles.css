@@ -711,3 +711,36 @@
   .reference-press-track { gap: 44px; }
   .reference-press-track span { font-size: 20px; }
 }
+
+/* closer reference pass */
+.reference-hero { padding: 66px 0 18px; grid-template-columns: 1fr .78fr; gap: 60px; align-items: start; }
+.reference-copy h1 { margin-top: 0; font-weight: 800; font-size: clamp(44px, 5.2vw, 72px); line-height: 1.04; }
+.reference-copy > p { margin-top: 22px; font-size: 17px; }
+.reference-press { margin-top: 34px; }
+.reference-press-track { gap: 84px; animation-duration: 34s; }
+.reference-press-track span { font-family: ui-serif, Georgia, "Times New Roman", serif; font-size: 27px; font-weight: 700; color: color-mix(in oklab, var(--color-ink) 30%, transparent); }
+.reference-press-track .press-business { font-variant: small-caps; font-size: 20px; letter-spacing: .04em; }
+.reference-press-track .press-ceo { font-variant: small-caps; letter-spacing: .06em; }
+.reference-press-track .press-inc { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.02em; }
+.reference-tilt { margin-top: 52px; gap: 14px; }
+.reference-checks-row { grid-template-columns: repeat(4, auto); justify-content: center; margin-top: 56px; font-size: 12px; }
+
+.reference-chat { position: fixed; right: 22px; bottom: 22px; z-index: 60; display: flex; align-items: center; gap: 12px; }
+.reference-chat-bubble { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 14px; background: oklch(0.98 0.004 175); color: oklch(0.22 0.03 180); font-size: 14px; font-weight: 500; box-shadow: 0 18px 46px oklch(0 0 0 / .35); animation: var(--animate-rise); }
+.reference-chat-bubble button { color: oklch(0.5 0.02 180); }
+.reference-chat-avatar { width: 54px; height: 54px; border-radius: 999px; font-weight: 800; font-size: 15px; color: oklch(0.17 0.05 170); background: linear-gradient(140deg, oklch(0.82 0.17 158), oklch(0.62 0.14 162)); box-shadow: 0 14px 38px color-mix(in oklab, var(--color-primary) 30%, transparent); }
+
+@media (max-width: 760px) {
+  .reference-checks-row { grid-template-columns: 1fr; justify-content: start; }
+  .reference-chat { right: 12px; bottom: 12px; }
+  .reference-chat-bubble { max-width: 210px; font-size: 12px; padding: 11px 13px; }
+  .reference-chat-avatar { width: 46px; height: 46px; }
+}
+
+/* nav fit */
+.reference-nav .reference-wrap { width: min(1320px, calc(100% - 40px)); }
+.reference-nav .reference-wrap > * { flex: 0 0 auto; }
+.reference-navlinks { gap: 22px; }
+.reference-navlinks a, .reference-outline-button, .reference-gradient-button { white-space: nowrap; }
+.reference-nav .reference-outline-button, .reference-nav .reference-gradient-button { min-height: 44px; padding: 0 18px; font-size: 14px; }
+.reference-wrap :where(.reference-copy) h1 { max-width: 12ch; }
