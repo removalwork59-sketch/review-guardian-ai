@@ -27,6 +27,7 @@
 - Desktop and mobile homepage validation with no overflow or console errors
 
 ## Open
+- Run Tests 2–6 using the five supplied real Google links, preserving exact identity checks and verifying each honest AI/database/Reviews/Reports outcome
 - Enable Connect Google by saving the approved Google Business Profile client ID and secret (secure form; user must supply)
 - Sync the user's own Google Business Profile reviews into review records and show them in Reviews with AI analysis and a report button (code ready; needs the approved Google OAuth client saved)
 - Submit one real report from the user's own listing and track its status updates in Reports (needs live consent plus explicit user confirmation before the irreversible submission)
