@@ -632,8 +632,8 @@
 .removal-hammer {
   position: absolute;
   z-index: 6;
-  right: 14%;
-  top: -18px;
+  right: 30%;
+  top: -14px;
   width: 80px;
   height: 108px;
   opacity: 0;
@@ -693,7 +693,7 @@
 .impact-ring {
   position: absolute;
   z-index: 4;
-  right: 24%;
+  right: 42%;
   bottom: 52px;
   width: 26px;
   height: 26px;
@@ -706,7 +706,7 @@
 .impact-spark {
   position: absolute;
   z-index: 5;
-  right: 24%;
+  right: 42%;
   bottom: 58px;
   width: 3px;
   height: 15px;
