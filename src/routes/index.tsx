@@ -131,6 +131,24 @@ function Home() {
 
     setAnalysis(response.analysis);
     setStage("result");
+    setSaved(false);
+
+    if (signedIn && result) {
+      try {
+        await save({
+          data: {
+            platform: result.platform,
+            sourceUrl: result.sourceUrl,
+            business,
+            review: selected,
+            analysis: response.analysis as unknown as Record<string, unknown>,
+          },
+        });
+        setSaved(true);
+      } catch (saveError) {
+        console.error(saveError);
+      }
+    }
   }
 
   function reset() {
@@ -139,6 +157,7 @@ function Home() {
     setReview(null);
     setResult(null);
     setError(null);
+    setSaved(false);
   }
 
   const busy = stage === "scanning" || stage === "analyzing";
@@ -147,10 +166,19 @@ function Home() {
     <main className="min-h-screen bg-background">
       <header className="mx-auto flex max-w-4xl items-center justify-between px-5 py-5">
         <Wordmark />
-        <span className="hidden items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground sm:inline-flex">
-          <ShieldCheck className="size-3.5 text-safe" />
-          Independent tool — not affiliated with Google
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="hidden items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground lg:inline-flex">
+            <ShieldCheck className="size-3.5 text-safe" />
+            Independent tool — not affiliated with Google
+          </span>
+          <Link
+            to={signedIn ? "/dashboard" : "/auth"}
+            className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 text-sm font-medium text-ink transition hover:bg-muted"
+          >
+            <LayoutGrid className="size-4" />
+            {signedIn ? "Dashboard" : "Sign in"}
+          </Link>
+        </div>
       </header>
 
       <div className="mx-auto w-full max-w-4xl px-5 pb-24">
