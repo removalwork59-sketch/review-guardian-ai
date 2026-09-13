@@ -16,6 +16,7 @@
 - Desktop and mobile homepage validation with no overflow or console errors
 
 ## Open
+- Assess the user-provided replacement database safely; migration is blocked until they confirm whether to replace Lovable Cloud and rotate the credentials pasted into chat
 - Production mission: complete the one-review flow first, then implement platform adapters, verified review identity, multi-stage auditable AI, evidence/report strategy, immutable outcomes/appeals, durable bounded workers, bulk import, analytics and admin configuration without importing old UI
 - Integrate the strongest production backend capabilities from the audited old repository without importing its UI: secure Google Business Profile connection/sync, durable review records and case history, reliable bulk jobs, reporting/status workflows, and hardened AI analysis
 - Facebook / Instagram / YouTube scanning — blocked until a Meta/YouTube connection exists
