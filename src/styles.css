@@ -1591,3 +1591,244 @@
 @keyframes auth-beam { 0% { transform: translateX(0) skewX(-14deg); } 100% { transform: translateX(620%) skewX(-14deg); } }
 @media (max-width: 900px) { .auth-page { padding: 0; }.auth-shell { grid-template-columns: 1fr; min-height: 100vh; border: 0; border-radius: 0; }.auth-story { display: none; }.auth-form-side { min-height: 100vh; padding: 28px 20px; }.auth-mobile-brand { display: block; position: absolute; left: 24px; top: 24px; }.auth-form-card { margin-top: 62px; padding: 30px 24px; } }
 @media (prefers-reduced-motion: reduce) { .auth-slide { display: none; animation: none; }.auth-slide:first-child { display: grid; opacity: 1; transform: none; }.auth-scan-beam { animation: none; opacity: .35; } }
+
+/* Premium density pass — color, optical depth and clarity only. */
+:root {
+  --background: oklch(0.205 0.042 225);
+  --foreground: oklch(0.94 0.014 213);
+  --ink: oklch(0.99 0.006 210);
+  --card: oklch(0.225 0.044 218);
+  --card-foreground: oklch(0.97 0.01 210);
+  --popover: oklch(0.215 0.043 220);
+  --popover-foreground: oklch(0.97 0.01 210);
+  --secondary: oklch(0.285 0.047 211);
+  --muted: oklch(0.265 0.041 215);
+  --muted-foreground: oklch(0.79 0.027 210);
+  --border: oklch(0.8 0.15 168 / 22%);
+  --input: oklch(0.8 0.15 168 / 32%);
+  --brand-cyan: oklch(0.84 0.17 166);
+  --brand-violet: oklch(0.76 0.16 174);
+  --brand-magenta: oklch(0.69 0.12 194);
+  --brand-surface: oklch(0.215 0.043 220);
+  --shadow-soft: 0 1px 1px oklch(1 0 0 / .04), 0 18px 45px -20px oklch(0 0 0 / .68);
+  --shadow-lift: 0 1px 1px oklch(1 0 0 / .06), 0 30px 72px -24px oklch(0 0 0 / .82);
+  --shadow-glow: 0 0 0 1px color-mix(in oklab, var(--brand-cyan) 34%, transparent), 0 18px 46px -18px color-mix(in oklab, var(--brand-cyan) 48%, transparent);
+}
+
+.dark {
+  --background: oklch(0.135 0.034 246);
+  --foreground: oklch(0.94 0.012 218);
+  --ink: oklch(0.99 0.005 215);
+  --card: oklch(0.18 0.039 237);
+  --card-foreground: oklch(0.97 0.008 215);
+  --popover: oklch(0.17 0.038 240);
+  --popover-foreground: oklch(0.97 0.008 215);
+  --secondary: oklch(0.235 0.04 228);
+  --muted: oklch(0.22 0.036 230);
+  --muted-foreground: oklch(0.77 0.024 216);
+  --border: oklch(0.78 0.14 178 / 20%);
+  --input: oklch(0.78 0.14 178 / 29%);
+  --brand-surface: oklch(0.155 0.036 242);
+}
+
+body {
+  text-rendering: geometricPrecision;
+  background-image:
+    radial-gradient(900px 520px at 8% -12%, color-mix(in oklab, var(--brand-cyan) 8%, transparent), transparent 70%),
+    linear-gradient(180deg, color-mix(in oklab, var(--color-background) 97%, var(--color-card)), var(--color-background));
+}
+
+.reference-page {
+  --background: oklch(0.108 0.034 249);
+  --foreground: oklch(0.94 0.014 216);
+  --ink: oklch(0.99 0.005 215);
+  --card: oklch(0.16 0.04 238);
+  --muted: oklch(0.205 0.039 231);
+  --muted-foreground: oklch(0.78 0.027 214);
+  --border: oklch(0.76 0.14 188 / 23%);
+  --input: oklch(0.76 0.14 188 / 34%);
+  --primary: oklch(0.79 0.17 166);
+  --brand-surface: oklch(0.135 0.037 245);
+  background:
+    radial-gradient(900px 470px at 7% -3%, oklch(0.56 0.11 202 / .13), transparent 68%),
+    radial-gradient(760px 500px at 97% 6%, oklch(0.61 0.13 173 / .095), transparent 71%),
+    linear-gradient(180deg, oklch(0.13 0.04 240), oklch(0.088 0.03 254) 56%, oklch(0.105 0.034 246));
+}
+
+.reference-page.reference-light {
+  --background: oklch(0.982 0.008 218);
+  --foreground: oklch(0.205 0.042 242);
+  --ink: oklch(0.155 0.046 245);
+  --card: oklch(0.998 0.003 218);
+  --muted: oklch(0.93 0.021 217);
+  --muted-foreground: oklch(0.41 0.043 236);
+  --border: oklch(0.48 0.12 202 / 28%);
+  --input: oklch(0.46 0.11 204 / 38%);
+  background:
+    radial-gradient(860px 430px at 7% -4%, oklch(0.76 0.13 181 / .2), transparent 67%),
+    radial-gradient(760px 400px at 97% 5%, oklch(0.7 0.11 218 / .14), transparent 70%),
+    linear-gradient(180deg, oklch(0.992 0.005 218), oklch(0.945 0.019 220));
+}
+
+.reference-page :where(.reference-proof, .reference-platforms-grid article, .reference-promise, .three-step-card, .reference-features article, .reference-scan-panel, .audit-chat-panel) {
+  border-color: color-mix(in oklab, var(--brand-cyan) 29%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--color-ink) 15%, transparent),
+    inset 0 -1px 0 oklch(0 0 0 / .34),
+    0 1px 0 oklch(0 0 0 / .6),
+    0 28px 62px -31px oklch(0 0 0 / .92),
+    0 0 0 1px color-mix(in oklab, var(--brand-cyan) 7%, transparent),
+    0 0 36px -24px color-mix(in oklab, var(--brand-cyan) 32%, transparent);
+}
+
+.reference-page :where(.reference-proof, .reference-platforms-grid article, .reference-promise, .three-step-card, .reference-features article, .reference-scan-panel, .audit-chat-panel)::before {
+  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--brand-cyan) 88%, var(--color-ink)), transparent);
+  box-shadow: 0 0 24px 4px color-mix(in oklab, var(--brand-cyan) 18%, transparent);
+}
+
+.reference-proof,
+.reference-scan-panel,
+.reference-features article,
+.reference-platforms-grid article,
+.audit-chat-panel {
+  background:
+    radial-gradient(360px 150px at 50% 0%, color-mix(in oklab, var(--brand-cyan) 7%, transparent), transparent 72%),
+    linear-gradient(145deg, color-mix(in oklab, var(--color-card) 99%, transparent), color-mix(in oklab, var(--color-background) 88%, transparent));
+}
+
+.reference-copy h1,
+.reference-three-steps > h2,
+.reference-platforms-copy h2,
+.audit-finale-copy h2 {
+  text-shadow: 0 1px 0 color-mix(in oklab, var(--color-ink) 16%, transparent), 0 18px 52px oklch(0 0 0 / .32);
+}
+
+.reference-copy > p,
+.three-step-card p,
+.reference-platforms-copy p,
+.reference-promise-item p,
+.reference-features p,
+.audit-finale-lede,
+.audit-chat-panel > p {
+  color: color-mix(in oklab, var(--color-ink) 77%, transparent);
+}
+
+.reference-gradient-button,
+.rw-cta,
+.audit-main-action,
+.auth-submit {
+  border-color: color-mix(in oklab, var(--color-ink) 32%, transparent);
+  background: linear-gradient(110deg, oklch(0.65 0.16 178), oklch(0.84 0.18 162) 58%, oklch(0.75 0.14 181));
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / .62),
+    inset 0 -1px 0 oklch(0 0 0 / .24),
+    0 16px 38px -17px color-mix(in oklab, var(--brand-cyan) 82%, transparent),
+    0 0 22px -14px color-mix(in oklab, var(--brand-cyan) 76%, transparent);
+}
+
+.reference-outline-button,
+.rw-ghost-btn,
+.rw-icon-btn,
+.rw-burger,
+.audit-call-action,
+.audit-chat-action,
+.auth-google {
+  border-color: color-mix(in oklab, var(--brand-cyan) 29%, transparent);
+  background: linear-gradient(180deg, color-mix(in oklab, var(--color-card) 94%, transparent), color-mix(in oklab, var(--color-background) 77%, transparent));
+  box-shadow: inset 0 1px 0 color-mix(in oklab, var(--color-ink) 13%, transparent), 0 12px 28px -20px oklch(0 0 0 / .9);
+}
+
+.rw-header {
+  border-bottom-color: color-mix(in oklab, var(--brand-cyan) 12%, transparent);
+  background: color-mix(in oklab, var(--color-background) 84%, transparent);
+  backdrop-filter: blur(20px) saturate(145%);
+  box-shadow: inset 0 -1px 0 color-mix(in oklab, var(--color-ink) 3%, transparent);
+}
+
+.rw-header.is-scrolled {
+  border-bottom-color: color-mix(in oklab, var(--brand-cyan) 23%, transparent);
+  box-shadow: 0 18px 42px -31px oklch(0 0 0 / .96), 0 0 28px -24px color-mix(in oklab, var(--brand-cyan) 38%, transparent);
+}
+
+.rw-menu,
+.rw-mobile {
+  border-color: color-mix(in oklab, var(--brand-cyan) 27%, transparent);
+  background: color-mix(in oklab, var(--color-card) 98%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in oklab, var(--color-ink) 13%, transparent), 0 30px 74px -24px oklch(0 0 0 / .94);
+}
+
+.review-impression {
+  border-block-color: color-mix(in oklab, var(--brand-cyan) 18%, transparent);
+  background:
+    radial-gradient(ellipse at 27% 70%, color-mix(in oklab, var(--brand-cyan) 14%, transparent), transparent 34%),
+    radial-gradient(ellipse at 77% 68%, color-mix(in oklab, var(--color-danger) 6%, transparent), transparent 29%),
+    linear-gradient(180deg, oklch(0.125 0.045 253), oklch(0.095 0.034 258));
+  box-shadow: inset 0 1px 0 color-mix(in oklab, var(--color-ink) 5%, transparent), inset 0 -1px 0 oklch(0 0 0 / .5);
+}
+
+.audit-finale {
+  border-block-color: color-mix(in oklab, var(--brand-cyan) 17%, transparent);
+  background:
+    radial-gradient(ellipse 38% 92% at 55% 52%, color-mix(in oklab, var(--color-star) 14%, transparent), transparent 63%),
+    radial-gradient(ellipse 45% 100% at 100% 100%, color-mix(in oklab, var(--brand-cyan) 14%, transparent), transparent 63%),
+    linear-gradient(180deg, oklch(0.115 0.04 254), oklch(0.085 0.031 258));
+}
+
+.auth-page {
+  background:
+    radial-gradient(760px 470px at 14% 8%, color-mix(in oklab, var(--brand-cyan) 15%, transparent), transparent 68%),
+    radial-gradient(680px 470px at 94% 96%, color-mix(in oklab, var(--brand-violet) 12%, transparent), transparent 70%),
+    linear-gradient(145deg, oklch(0.11 0.037 250), oklch(0.075 0.026 258));
+}
+
+.auth-shell,
+.auth-form-card,
+.auth-slide {
+  border-color: color-mix(in oklab, var(--brand-cyan) 31%, transparent);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / .13),
+    inset 0 -1px 0 oklch(0 0 0 / .32),
+    0 34px 82px -34px oklch(0 0 0 / .96),
+    0 0 42px -25px color-mix(in oklab, var(--brand-cyan) 42%, transparent);
+}
+
+.auth-fields input,
+.reference-scan-panel input {
+  border-color: color-mix(in oklab, var(--brand-cyan) 32%, transparent);
+  background: color-mix(in oklab, var(--color-background) 88%, transparent);
+  box-shadow: inset 0 1px 3px oklch(0 0 0 / .28), 0 1px 0 color-mix(in oklab, var(--color-ink) 5%, transparent);
+}
+
+.reference-page.reference-light :where(.reference-proof, .reference-platforms-grid article, .reference-promise, .three-step-card, .reference-features article, .reference-scan-panel, .audit-chat-panel) {
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / .95),
+    inset 0 -1px 0 color-mix(in oklab, var(--brand-cyan) 9%, transparent),
+    0 24px 58px -32px oklch(0.3 0.06 230 / .35),
+    0 0 0 1px color-mix(in oklab, var(--brand-cyan) 8%, transparent);
+}
+
+.reference-page.reference-light .reference-proof,
+.reference-page.reference-light .reference-scan-panel,
+.reference-page.reference-light .reference-features article,
+.reference-page.reference-light .reference-platforms-grid article,
+.reference-page.reference-light .audit-chat-panel {
+  background: linear-gradient(145deg, var(--card), color-mix(in oklab, var(--muted) 45%, var(--card)));
+}
+
+.reference-page.reference-light .three-step-card {
+  background: linear-gradient(145deg, var(--card), color-mix(in oklab, var(--muted) 52%, var(--card)));
+}
+
+.reference-page.reference-light .reference-promise-right {
+  background: linear-gradient(145deg, var(--card), color-mix(in oklab, var(--muted) 42%, var(--card)));
+}
+
+.reference-page.reference-light :where(.reference-proof-review, .proof-row) {
+  background: color-mix(in oklab, var(--muted) 58%, var(--card));
+}
+
+@media (prefers-contrast: more) {
+  :root { --muted-foreground: oklch(0.84 0.022 215); }
+  .reference-page { --muted-foreground: oklch(0.84 0.022 215); }
+  .reference-page.reference-light { --muted-foreground: oklch(0.34 0.042 238); }
+}
