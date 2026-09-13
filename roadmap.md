@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Done
+- Exact compact reference landing structure from navigation through footer, with matching icon artwork and motion
 - Paste link → real Google lookup → AI policy check (two-pass, real gateway)
 - Sign in (email + Google), saved cases in the database
 - Reviews, Reports, Locations dashboards with real status tracking
