@@ -105,6 +105,19 @@ export function CaseCard({
             <ExternalLink className="size-3.5" />
           </a>
         ) : null}
+        {reportable && item.reviewUrl ? (
+          <Button
+            type="button"
+            size="sm"
+            disabled={busy}
+            onClick={() => {
+              window.open(item.reviewUrl, "_blank", "noopener");
+              if (availableStatuses.includes("reported")) onStatusChange("reported");
+            }}
+          >
+            Report on Google
+          </Button>
+        ) : null}
       </div>
     </article>
   );
