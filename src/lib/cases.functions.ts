@@ -25,8 +25,19 @@ const reviewSchema = z.object({
   relativeTime: z.string(),
   publishTime: z.string(),
   reviewUrl: z.string(),
-  identityStatus: z.enum(["provider_observed", "exact_url_match", "unverified"]),
-  identityMethod: z.enum(["provider_resource_name", "exact_provider_url", "content_fingerprint"]),
+  identityStatus: z.enum([
+    "provider_observed",
+    "exact_url_match",
+    "official_sync_verified",
+    "unverified",
+  ]),
+  identityMethod: z.enum([
+    "provider_resource_name",
+    "exact_provider_url",
+    "provider_review_id",
+    "official_review_id",
+    "content_fingerprint",
+  ]),
   identityConfidence: z.number().int().min(0).max(100),
 });
 
@@ -45,14 +56,25 @@ function canonicalizeSourceUrl(raw: string) {
   }
 }
 
-async function fingerprintReview(platform: string, placeId: string, review: z.infer<typeof reviewSchema>) {
-  const stable = [platform, placeId, review.authorName.trim().toLowerCase(), review.rating, review.publishTime, review.text.trim()].join("\u001f");
+async function fingerprintReview(
+  platform: string,
+  placeId: string,
+  review: z.infer<typeof reviewSchema>,
+) {
+  const stable = [
+    platform,
+    placeId,
+    review.authorName.trim().toLowerCase(),
+    review.rating,
+    review.publishTime,
+    review.text.trim(),
+  ].join("\u001f");
   const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(stable));
   return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
 function toCase(row: any): CaseRecord {
-  const location = row.locations ?? {};
+  const location = row.review_locations ?? {};
   return {
     id: row.id,
     locationId: row.location_id,
@@ -81,7 +103,7 @@ function toCase(row: any): CaseRecord {
   };
 }
 
-const CASE_SELECT = "*, locations ( name, address )";
+const CASE_SELECT = "*, review_locations ( name, address )";
 
 export async function persistCase(
   supabase: Db,
@@ -95,7 +117,7 @@ export async function persistCase(
   },
 ) {
   const { data: location, error: locationError } = await supabase
-    .from("locations")
+    .from("review_locations")
     .upsert(
       {
         user_id: userId,
@@ -116,7 +138,11 @@ export async function persistCase(
   if (locationError) throw locationError;
 
   const canonicalSourceUrl = canonicalizeSourceUrl(input.sourceUrl);
-  const contentFingerprint = await fingerprintReview(input.platform, input.business.placeId, input.review);
+  const contentFingerprint = await fingerprintReview(
+    input.platform,
+    input.business.placeId,
+    input.review,
+  );
   const { data: reviewRecord, error: reviewError } = await supabase
     .from("review_records")
     .upsert(
@@ -139,7 +165,11 @@ export async function persistCase(
         identity_method: input.review.identityMethod,
         identity_confidence: input.review.identityConfidence,
         requested_source_url: input.sourceUrl,
-        verified_at: input.review.identityStatus === "exact_url_match" ? new Date().toISOString() : null,
+        verified_at:
+          input.review.identityStatus === "exact_url_match" ||
+          input.review.identityStatus === "official_sync_verified"
+            ? new Date().toISOString()
+            : null,
         last_seen_at: new Date().toISOString(),
         observed_absent_at: null,
       },
@@ -186,7 +216,9 @@ export async function persistCase(
       input.analysis.policyReasoning,
       ...input.analysis.evidence.map((item) => `Evidence: ${item}`),
       input.analysis.recommendedAction,
-    ].filter(Boolean).join("\n\n");
+    ]
+      .filter(Boolean)
+      .join("\n\n");
     const { error: reportError } = await supabase.from("report_drafts").upsert(
       {
         user_id: userId,
@@ -223,9 +255,29 @@ export const saveCase = createServerFn({ method: "POST" })
       .parse(input),
   )
   .handler(async ({ data, context }): Promise<{ case: CaseRecord; analysis: ReviewAnalysis }> => {
-    const { analyzeReview } = await import("./analysis.server");
+    const { analyzeReviewDetailed, POLICY_VERSION, PROMPT_VERSION } =
+      await import("./analysis.server");
     const startedAt = Date.now();
-    const analysis = await analyzeReview(data.business, data.review);
+    const inputHash = await fingerprintReview(data.platform, data.business.placeId, data.review);
+
+    // Dedup: the same review content already analysed under the same prompt/policy is reused,
+    // so a re-scan returns instantly instead of paying for the full multi-model run again.
+    const { data: previousRun } = await context.supabase
+      .from("ai_runs")
+      .select("output")
+      .eq("user_id", context.userId)
+      .eq("input_hash", inputHash)
+      .eq("prompt_version", PROMPT_VERSION)
+      .eq("policy_version", POLICY_VERSION)
+      .eq("status", "completed")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    const reused = previousRun?.output as ReviewAnalysis | undefined;
+    const run = reused?.verdict ? null : await analyzeReviewDetailed(data.business, data.review);
+    const analysis = run ? run.analysis : (reused as ReviewAnalysis);
+
     const saved = await persistCase(context.supabase as unknown as Db, context.userId, {
       platform: data.platform,
       sourceUrl: data.sourceUrl,
@@ -233,7 +285,8 @@ export const saveCase = createServerFn({ method: "POST" })
       review: data.review,
       analysis,
     });
-    const inputHash = await fingerprintReview(data.platform, data.business.placeId, data.review);
+    if (!run) return { case: saved, analysis };
+
     const { data: persistedReview } = await context.supabase
       .from("review_records")
       .select("id")
@@ -246,13 +299,14 @@ export const saveCase = createServerFn({ method: "POST" })
       review_record_id: persistedReview?.id ?? null,
       case_id: saved.id,
       purpose: "review_policy_analysis",
-      model: "openai/gpt-6-astra",
-      prompt_version: "review-policy-adversarial-v2",
-      policy_version: "google-content-policy-2026-09",
+      model: run.models.join(" + "),
+      prompt_version: PROMPT_VERSION,
+      policy_version: POLICY_VERSION,
       input_hash: inputHash,
       output: analysis,
       confidence: analysis.confidence,
       duration_ms: Date.now() - startedAt,
+      gateway_run_id: `agreement=${run.agreement};dropped_evidence=${run.droppedEvidence}`,
       status: "completed",
     });
     if (auditError) throw auditError;
@@ -275,7 +329,7 @@ export const listLocations = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<LocationRecord[]> => {
     const { data: locations, error } = await context.supabase
-      .from("locations")
+      .from("review_locations")
       .select("*")
       .order("created_at", { ascending: false });
     if (error) throw error;

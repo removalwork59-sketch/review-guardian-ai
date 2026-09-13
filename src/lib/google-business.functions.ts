@@ -21,8 +21,9 @@ export const getGoogleBusinessConnection = createServerFn({ method: "POST" })
       .eq("user_id", context.userId)
       .maybeSingle();
     if (error) throw error;
+    const { isGoogleBusinessConfigured } = await import("./google-business.server");
     return {
-      configured: Boolean(process.env["GOOGLE_BUSINESS_CLIENT_ID"] && process.env["GOOGLE_BUSINESS_CLIENT_SECRET"]),
+      configured: isGoogleBusinessConfigured(),
       connected: data?.status === "connected",
       email: data?.google_account_email ?? null,
       status: data?.status ?? null,
@@ -35,9 +36,15 @@ export const startGoogleBusinessConnection = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ origin: z.string().url() }).parse(input))
   .handler(async ({ data, context }) => {
-    const { assertAllowedOrigin, createGoogleAuthorization, encryptSecret, hashValue } = await import("./google-business.server");
+    const {
+      GOOGLE_CALLBACK_PATH,
+      assertAllowedOrigin,
+      createGoogleAuthorization,
+      encryptSecret,
+      hashValue,
+    } = await import("./google-business.server");
     const origin = assertAllowedOrigin(data.origin);
-    const redirectUri = `${origin}/api/public/google-business/callback`;
+    const redirectUri = `${origin}${GOOGLE_CALLBACK_PATH}`;
     const authorization = createGoogleAuthorization(redirectUri);
     const { error } = await context.supabase.from("google_oauth_states").insert({
       user_id: context.userId,
@@ -53,6 +60,16 @@ export const startGoogleBusinessConnection = createServerFn({ method: "POST" })
 export const disconnectGoogleBusiness = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
+    const { data: connection } = await context.supabase
+      .from("google_business_connections")
+      .select("refresh_token_ciphertext")
+      .eq("user_id", context.userId)
+      .maybeSingle();
+    if (connection?.refresh_token_ciphertext) {
+      const { decryptSecret, revokeGoogleToken } = await import("./google-business.server");
+      const token = await decryptSecret(connection.refresh_token_ciphertext).catch(() => null);
+      if (token) await revokeGoogleToken(token);
+    }
     const { error } = await context.supabase
       .from("google_business_connections")
       .delete()

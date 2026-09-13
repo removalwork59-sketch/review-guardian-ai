@@ -284,7 +284,7 @@ export type Database = {
           },
         ]
       }
-      case_events: {
+      review_case_events: {
         Row: {
           case_id: string
           created_at: string
@@ -400,7 +400,7 @@ export type Database = {
         }
         Relationships: []
       }
-      locations: {
+      review_locations: {
         Row: {
           address: string
           category: string
@@ -630,7 +630,7 @@ export type Database = {
             foreignKeyName: "review_cases_location_id_fkey"
             columns: ["location_id"]
             isOneToOne: false
-            referencedRelation: "locations"
+            referencedRelation: "review_locations"
             referencedColumns: ["id"]
           },
           {
@@ -729,7 +729,7 @@ export type Database = {
             foreignKeyName: "review_records_location_id_fkey"
             columns: ["location_id"]
             isOneToOne: false
-            referencedRelation: "locations"
+            referencedRelation: "review_locations"
             referencedColumns: ["id"]
           },
         ]

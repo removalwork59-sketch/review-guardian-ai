@@ -25,10 +25,7 @@ export const CATEGORY_LABELS: Record<string, string> = {
 };
 
 export type ReviewVerdict =
-  | "strong_candidate"
-  | "possible_candidate"
-  | "needs_human_review"
-  | "not_reportable";
+  "strong_candidate" | "possible_candidate" | "needs_human_review" | "not_reportable";
 
 export type ReviewAnalysis = {
   verdict: ReviewVerdict;
@@ -66,7 +63,12 @@ export type ReviewInfo = {
   relativeTime: string;
   publishTime: string;
   reviewUrl: string;
-  identityStatus: "provider_observed" | "exact_url_match" | "unverified";
-  identityMethod: "provider_resource_name" | "exact_provider_url" | "content_fingerprint";
+  identityStatus: "provider_observed" | "exact_url_match" | "official_sync_verified" | "unverified";
+  identityMethod:
+    | "provider_resource_name"
+    | "exact_provider_url"
+    | "provider_review_id"
+    | "official_review_id"
+    | "content_fingerprint";
   identityConfidence: number;
 };

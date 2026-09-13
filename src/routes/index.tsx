@@ -20,7 +20,6 @@ import {
   Star,
 } from "lucide-react";
 
-
 import { BrandMark, StarRating, Wordmark } from "@/components/brand";
 import { ReferenceLanding } from "@/components/reference-landing";
 import {
@@ -176,7 +175,6 @@ function Home() {
     setAnalysis(response.analysis);
     setStage("result");
     setSaved(false);
-
   }
 
   function reset() {
@@ -193,76 +191,111 @@ function Home() {
   return (
     <main className="premium-home grid-bg relative min-h-screen overflow-hidden bg-background">
       {stage === "idle" ? (
-        <ReferenceLanding signedIn={signedIn} url={url} setUrl={setUrl} onScan={handleScan} busy={busy} />
+        <ReferenceLanding
+          signedIn={signedIn}
+          url={url}
+          setUrl={setUrl}
+          onScan={handleScan}
+          busy={busy}
+        />
       ) : null}
-      {stage !== "idle" ? <header className="site-nav sticky top-0 z-50">
-        <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-5 py-4 sm:px-8 lg:px-10">
-          <Wordmark />
-          <nav className="hidden items-center gap-7 text-sm font-medium text-muted-foreground lg:flex">
-            <a href="#how" className="transition hover:text-ink">How it works</a>
-            <a href="#platforms" className="transition hover:text-ink">Platforms</a>
-            <a href="#faq" className="transition hover:text-ink">FAQ</a>
-          </nav>
-          <div className="flex items-center gap-2">
-            <Link
-              to={signedIn ? "/dashboard" : "/auth"}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-card/70 px-3.5 py-2 text-sm font-medium text-ink backdrop-blur transition hover:border-primary/40 hover:bg-muted"
-            >
-              <LayoutGrid className="size-4 text-primary" />
-              {signedIn ? "Dashboard" : "Client login"}
-            </Link>
-            <a
-              href="#scan"
-              className="cta-glow hidden h-10 items-center gap-2 rounded-xl px-4 text-sm font-semibold sm:inline-flex"
-            >
-              Scan a review
-              <ArrowRight className="size-4" />
-            </a>
+      {stage !== "idle" ? (
+        <header className="site-nav sticky top-0 z-50">
+          <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-5 py-4 sm:px-8 lg:px-10">
+            <Wordmark />
+            <nav className="hidden items-center gap-7 text-sm font-medium text-muted-foreground lg:flex">
+              <a href="#how" className="transition hover:text-ink">
+                How it works
+              </a>
+              <a href="#platforms" className="transition hover:text-ink">
+                Platforms
+              </a>
+              <a href="#faq" className="transition hover:text-ink">
+                FAQ
+              </a>
+            </nav>
+            <div className="flex items-center gap-2">
+              <Link
+                to={signedIn ? "/dashboard" : "/auth"}
+                className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-card/70 px-3.5 py-2 text-sm font-medium text-ink backdrop-blur transition hover:border-primary/40 hover:bg-muted"
+              >
+                <LayoutGrid className="size-4 text-primary" />
+                {signedIn ? "Dashboard" : "Client login"}
+              </Link>
+              <a
+                href="#scan"
+                className="cta-glow hidden h-10 items-center gap-2 rounded-xl px-4 text-sm font-semibold sm:inline-flex"
+              >
+                Scan a review
+                <ArrowRight className="size-4" />
+              </a>
+            </div>
           </div>
-        </div>
-      </header> : null}
+        </header>
+      ) : null}
 
       <div className="mx-auto w-full max-w-[1400px] px-3 pb-24 sm:px-6 lg:px-8">
         {stage === "scanning" ? (
           <>
-            <section id="scan" className="hero-shell animate-rise relative overflow-hidden rounded-[18px] border border-border px-5 pb-24 pt-9 sm:px-10 sm:pb-28 sm:pt-12 lg:px-14 lg:pb-32">
+            <section
+              id="scan"
+              className="hero-shell animate-rise relative overflow-hidden rounded-[18px] border border-border px-5 pb-24 pt-9 sm:px-10 sm:pb-28 sm:pt-12 lg:px-14 lg:pb-32"
+            >
               <div className="hero-grain pointer-events-none absolute inset-0" />
               <div className="relative grid items-center gap-12 lg:grid-cols-[1.04fr_.96fr] lg:gap-16">
                 <div>
-                   <span className="glass-badge inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold text-muted-foreground">
-                     <Sparkles className="blink-star size-4 text-primary" />
-                     AI policy intelligence for Google reviews
+                  <span className="glass-badge inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold text-muted-foreground">
+                    <Sparkles className="blink-star size-4 text-primary" />
+                    AI policy intelligence for Google reviews
                   </span>
                   <h1 className="mt-6 max-w-3xl font-display text-[clamp(2.85rem,6vw,5.65rem)] font-semibold leading-[.98] text-ink">
-                     Remove policy-violating reviews. <span className="text-gradient-brand">Protect the rating you earned.</span>
+                    Remove policy-violating reviews.{" "}
+                    <span className="text-gradient-brand">Protect the rating you earned.</span>
                   </h1>
                   <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-                    Paste a Google review link. AI reads the real content, checks policy, builds the evidence and helps you track the outcome.
+                    Paste a Google review link. AI reads the real content, checks policy, builds the
+                    evidence and helps you track the outcome.
                   </p>
                   <div className="mt-7 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-                    <span className="inline-flex items-center gap-2"><CheckCircle2 className="size-4 text-safe" />Evidence, not guesswork</span>
+                    <span className="inline-flex items-center gap-2">
+                      <CheckCircle2 className="size-4 text-safe" />
+                      Evidence, not guesswork
+                    </span>
                     <span className="hidden h-4 w-px bg-border sm:block" />
-                    <span className="inline-flex items-center gap-2"><Clock className="size-4 text-star" />Track every case</span>
+                    <span className="inline-flex items-center gap-2">
+                      <Clock className="size-4 text-star" />
+                      Track every case
+                    </span>
                   </div>
                 </div>
 
                 <div className="scanner-stage relative mx-auto w-full max-w-xl">
-                   <div className="scanner-orbit" aria-hidden="true" />
-                   <div className="scanner-halo" aria-hidden="true" />
-                   <div className="scanner-panel card-3d relative overflow-hidden rounded-[18px] border border-border bg-background/75 p-4 shadow-2xl backdrop-blur-xl sm:p-6">
+                  <div className="scanner-orbit" aria-hidden="true" />
+                  <div className="scanner-halo" aria-hidden="true" />
+                  <div className="scanner-panel card-3d relative overflow-hidden rounded-[18px] border border-border bg-background/75 p-4 shadow-2xl backdrop-blur-xl sm:p-6">
                     <div className="flex items-center justify-between border-b border-border pb-4">
                       <div className="flex items-center gap-3">
-                        <span className="flex size-10 items-center justify-center rounded-xl bg-primary/15 text-primary"><Radar className="size-5" /></span>
+                        <span className="flex size-10 items-center justify-center rounded-xl bg-primary/15 text-primary">
+                          <Radar className="size-5" />
+                        </span>
                         <div>
                           <p className="text-sm font-semibold text-ink">Review intelligence</p>
                           <p className="text-xs text-muted-foreground">Google review policy scan</p>
                         </div>
                       </div>
-                      <span className="inline-flex items-center gap-1.5 text-xs font-medium text-safe"><span className="status-pulse size-2 rounded-full bg-safe" />Live</span>
+                      <span className="inline-flex items-center gap-1.5 text-xs font-medium text-safe">
+                        <span className="status-pulse size-2 rounded-full bg-safe" />
+                        Live
+                      </span>
                     </div>
 
                     <form onSubmit={handleScan} className="mt-5">
-                      <label htmlFor="review-url" className="text-xs font-semibold uppercase text-muted-foreground">Review URL</label>
+                      <label
+                        htmlFor="review-url"
+                        className="text-xs font-semibold uppercase text-muted-foreground"
+                      >
+                        Review URL
+                      </label>
                       <div className="mt-2 flex min-h-14 items-center gap-3 rounded-xl border border-input bg-card/75 px-4 transition focus-within:border-primary/60 focus-within:ring-4 focus-within:ring-primary/10">
                         <Search className="size-5 shrink-0 text-primary" />
                         <input
@@ -276,7 +309,11 @@ function Home() {
                           className="min-w-0 flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-muted-foreground"
                         />
                       </div>
-                      <Button type="submit" disabled={busy} className="cta-glow mt-3 h-14 w-full rounded-xl text-base font-semibold">
+                      <Button
+                        type="submit"
+                        disabled={busy}
+                        className="cta-glow mt-3 h-14 w-full rounded-xl text-base font-semibold"
+                      >
                         Scan review free <ArrowRight className="size-4.5" />
                       </Button>
                     </form>
@@ -286,13 +323,19 @@ function Home() {
                       <MiniSignal icon={Bot} label="AI check" active />
                       <MiniSignal icon={ShieldCheck} label="Evidence" />
                     </div>
-                    <p className="mt-4 text-center text-[11px] leading-relaxed text-muted-foreground">Independent tool — not affiliated with Google</p>
+                    <p className="mt-4 text-center text-[11px] leading-relaxed text-muted-foreground">
+                      Independent tool — not affiliated with Google
+                    </p>
                   </div>
                 </div>
               </div>
             </section>
             {error ? <ErrorNote {...error} /> : null}
-            {stage === "scanning" ? <div className="mx-auto mt-8 max-w-xl"><ScanProgress steps={SCAN_STEPS} done={false} /></div> : null}
+            {stage === "scanning" ? (
+              <div className="mx-auto mt-8 max-w-xl">
+                <ScanProgress steps={SCAN_STEPS} done={false} />
+              </div>
+            ) : null}
           </>
         ) : null}
 
@@ -369,7 +412,10 @@ function Home() {
                   analysis={analysis}
                   onBack={() => setStage("picking")}
                   onReport={() => window.open(review.reviewUrl, "_blank", "noopener")}
-                  identityVerified={review.identityStatus === "exact_url_match"}
+                  identityVerified={
+                    review.identityStatus === "exact_url_match" ||
+                    review.identityStatus === "official_sync_verified"
+                  }
                 />
                 <Note text="We can't remove a review for you. Google decides that. This opens the review on Google so you can flag it there with the reasoning above." />
                 {signedIn ? (
@@ -478,9 +524,19 @@ function Pill({ label, ready = false }: { label: string; ready?: boolean }) {
   );
 }
 
-function MiniSignal({ icon: Icon, label, active = false }: { icon: typeof Search; label: string; active?: boolean }) {
+function MiniSignal({
+  icon: Icon,
+  label,
+  active = false,
+}: {
+  icon: typeof Search;
+  label: string;
+  active?: boolean;
+}) {
   return (
-    <div className={`signal-tile flex min-h-20 flex-col items-center justify-center gap-2 rounded-xl border px-2 text-center ${active ? "border-primary/35 bg-primary/10" : "border-border bg-card/50"}`}>
+    <div
+      className={`signal-tile flex min-h-20 flex-col items-center justify-center gap-2 rounded-xl border px-2 text-center ${active ? "border-primary/35 bg-primary/10" : "border-border bg-card/50"}`}
+    >
       <Icon className={`size-4 ${active ? "text-primary" : "text-muted-foreground"}`} />
       <span className="text-xs font-medium text-ink">{label}</span>
     </div>
@@ -542,7 +598,9 @@ function Workflow() {
               <step.icon className="size-4" />
             </span>
             <p className="mt-3 text-sm font-semibold text-ink">{step.label}</p>
-            <p className="mt-1 hidden text-[11px] leading-relaxed text-muted-foreground sm:block">{step.body}</p>
+            <p className="mt-1 hidden text-[11px] leading-relaxed text-muted-foreground sm:block">
+              {step.body}
+            </p>
           </li>
         ))}
       </ol>
@@ -554,9 +612,17 @@ function TrustSection() {
   return (
     <section className="mx-auto grid max-w-6xl gap-10 px-3 pb-8 pt-32 sm:pt-36 lg:grid-cols-[.9fr_1.1fr] lg:items-center lg:gap-20 lg:pt-44">
       <div className="animate-rise">
-        <span className="inline-flex items-center gap-2 text-sm font-medium text-primary"><Sparkles className="size-4" />Built for honest reputation work</span>
-        <h2 className="mt-4 max-w-lg font-display text-3xl font-semibold leading-tight text-ink sm:text-5xl">Know what breaks policy before you report it.</h2>
-        <p className="mt-5 max-w-xl leading-relaxed text-muted-foreground">The analysis weighs evidence and counter-evidence, then recommends the strongest legitimate next step. Google always makes the final decision.</p>
+        <span className="inline-flex items-center gap-2 text-sm font-medium text-primary">
+          <Sparkles className="size-4" />
+          Built for honest reputation work
+        </span>
+        <h2 className="mt-4 max-w-lg font-display text-3xl font-semibold leading-tight text-ink sm:text-5xl">
+          Know what breaks policy before you report it.
+        </h2>
+        <p className="mt-5 max-w-xl leading-relaxed text-muted-foreground">
+          The analysis weighs evidence and counter-evidence, then recommends the strongest
+          legitimate next step. Google always makes the final decision.
+        </p>
       </div>
       <div>
         <p className="mb-4 text-sm font-semibold text-ink">One simple workflow</p>
@@ -568,16 +634,30 @@ function TrustSection() {
           <TrustTile icon={Flag} label="Report path" tone="text-warn bg-warn-soft" />
           <TrustTile icon={CheckCircle2} label="Outcome tracking" tone="text-safe bg-safe-soft" />
         </div>
-        <div className="mt-5 flex flex-wrap gap-2"><Pill label="Google connected" ready /><Pill label="Facebook soon" /><Pill label="Instagram soon" /></div>
+        <div className="mt-5 flex flex-wrap gap-2">
+          <Pill label="Google connected" ready />
+          <Pill label="Facebook soon" />
+          <Pill label="Instagram soon" />
+        </div>
       </div>
     </section>
   );
 }
 
-function TrustTile({ icon: Icon, label, tone }: { icon: typeof Search; label: string; tone: string }) {
+function TrustTile({
+  icon: Icon,
+  label,
+  tone,
+}: {
+  icon: typeof Search;
+  label: string;
+  tone: string;
+}) {
   return (
     <div className="surface surface-hover flex min-h-24 items-center gap-3 rounded-xl p-4">
-      <span className={`flex size-9 shrink-0 items-center justify-center rounded-lg ${tone}`}><Icon className="size-4.5" /></span>
+      <span className={`flex size-9 shrink-0 items-center justify-center rounded-lg ${tone}`}>
+        <Icon className="size-4.5" />
+      </span>
       <span className="text-sm font-semibold text-ink">{label}</span>
     </div>
   );

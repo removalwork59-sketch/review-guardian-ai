@@ -5,8 +5,6 @@ import { ArrowRight, Bot, CheckCircle2, FileCheck2, ScanSearch, Sparkles } from 
 import { Wordmark } from "@/components/brand";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
-import "@lovable.dev/cloud-auth-js/styles.css";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -74,46 +72,71 @@ function AuthPage() {
     const { error: profileError } = await supabase.rpc("ensure_my_profile");
     setBusy(false);
     if (profileError) {
-      return setMessage({ tone: "error", text: "Your account is secure, but the workspace could not finish loading. Please try again." });
+      return setMessage({
+        tone: "error",
+        text: "Your account is secure, but the workspace could not finish loading. Please try again.",
+      });
     }
     void navigate({ to: "/dashboard" });
   }
 
   async function handleGoogle() {
     setMessage(null);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}/dashboard` },
     });
-    if (result.error) {
+    if (error) {
       setMessage({ tone: "error", text: "Google sign-in didn't complete. Please try again." });
-      return;
     }
-    if (result.redirected) return;
-    await supabase.rpc("ensure_my_profile");
-    void navigate({ to: "/dashboard" });
   }
 
   return (
     <main className="auth-page">
       <div className="auth-shell">
         <section className="auth-story" aria-label="Removal Work product workflow">
-          <Link to="/" className="auth-brand"><Wordmark /></Link>
+          <Link to="/" className="auth-brand">
+            <Wordmark />
+          </Link>
           <div className="auth-story-copy">
-            <span className="auth-kicker"><Sparkles /> AI review intelligence</span>
+            <span className="auth-kicker">
+              <Sparkles /> AI review intelligence
+            </span>
             <h1>Turn review policy into clear action.</h1>
-            <p>Scan the real review, understand the evidence, prepare the report and track the outcome.</p>
+            <p>
+              Scan the real review, understand the evidence, prepare the report and track the
+              outcome.
+            </p>
           </div>
           <div className="auth-slider" aria-hidden="true">
             <article className="auth-slide auth-slide-scan">
-              <span><ScanSearch /></span><div><b>Review detected</b><small>Reading source and business context</small></div>
+              <span>
+                <ScanSearch />
+              </span>
+              <div>
+                <b>Review detected</b>
+                <small>Reading source and business context</small>
+              </div>
               <i className="auth-scan-beam" />
             </article>
             <article className="auth-slide auth-slide-policy">
-              <span><Bot /></span><div><b>Policy evidence</b><small>AI weighs evidence and counter-evidence</small></div>
+              <span>
+                <Bot />
+              </span>
+              <div>
+                <b>Policy evidence</b>
+                <small>AI weighs evidence and counter-evidence</small>
+              </div>
               <em>Analyzing</em>
             </article>
             <article className="auth-slide auth-slide-report">
-              <span><FileCheck2 /></span><div><b>Case ready</b><small>Legitimate action with honest status</small></div>
+              <span>
+                <FileCheck2 />
+              </span>
+              <div>
+                <b>Case ready</b>
+                <small>Legitimate action with honest status</small>
+              </div>
               <CheckCircle2 />
             </article>
           </div>
@@ -121,7 +144,9 @@ function AuthPage() {
         </section>
 
         <section className="auth-form-side">
-          <Link to="/" className="auth-mobile-brand"><Wordmark /></Link>
+          <Link to="/" className="auth-mobile-brand">
+            <Wordmark />
+          </Link>
           <div className="auth-form-card">
             <span className="auth-form-light" aria-hidden="true" />
             <div className="auth-form-heading">
@@ -134,22 +159,61 @@ function AuthPage() {
               <span className="auth-google-g">G</span> Continue with Google
             </Button>
 
-            <div className="auth-divider"><span />or use email<span /></div>
+            <div className="auth-divider">
+              <span />
+              or use email
+              <span />
+            </div>
 
             <form onSubmit={handleSubmit} className="auth-fields">
               <label htmlFor="email">Email address</label>
-              <input id="email" type="email" required autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@company.com" />
+              <input
+                id="email"
+                type="email"
+                required
+                autoComplete="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                placeholder="you@company.com"
+              />
               <label htmlFor="password">Password</label>
-              <input id="password" type="password" required minLength={6} autoComplete={mode === "signin" ? "current-password" : "new-password"} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="At least 6 characters" />
+              <input
+                id="password"
+                type="password"
+                required
+                minLength={6}
+                autoComplete={mode === "signin" ? "current-password" : "new-password"}
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                placeholder="At least 6 characters"
+              />
               <Button type="submit" disabled={busy} className="auth-submit">
-                {busy ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}<ArrowRight />
+                {busy ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}
+                <ArrowRight />
               </Button>
             </form>
 
-            {message ? <p role="status" className={`auth-message ${message.tone === "error" ? "is-error" : "is-ok"}`}>{message.text}</p> : null}
+            {message ? (
+              <p
+                role="status"
+                className={`auth-message ${message.tone === "error" ? "is-error" : "is-ok"}`}
+              >
+                {message.text}
+              </p>
+            ) : null}
 
-            <Button type="button" variant="ghost" onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setMessage(null); }} className="auth-mode">
-              {mode === "signin" ? "New here? Create an account" : "Already have an account? Sign in"}
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => {
+                setMode(mode === "signin" ? "signup" : "signin");
+                setMessage(null);
+              }}
+              className="auth-mode"
+            >
+              {mode === "signin"
+                ? "New here? Create an account"
+                : "Already have an account? Sign in"}
             </Button>
           </div>
         </section>

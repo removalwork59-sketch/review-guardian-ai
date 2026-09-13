@@ -16,7 +16,8 @@ import { Route as AuthenticatedBulkRouteImport } from './routes/_authenticated/b
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedLocationsRouteImport } from './routes/_authenticated/locations'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
-import { Route as ApiPublicGoogleBusinessCallbackRouteImport } from './routes/api/public/google-business/callback'
+import { Route as ApiPublicVersionRouteImport } from './routes/api/public/version'
+import { Route as ApiPublicGoogleCallbackRouteImport } from './routes/api/public/google/callback'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,12 +53,16 @@ const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
   path: '/reports',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const ApiPublicGoogleBusinessCallbackRoute =
-  ApiPublicGoogleBusinessCallbackRouteImport.update({
-    id: '/api/public/google-business/callback',
-    path: '/api/public/google-business/callback',
-    getParentRoute: () => rootRouteImport,
-  } as any)
+const ApiPublicVersionRoute = ApiPublicVersionRouteImport.update({
+  id: '/api/public/version',
+  path: '/api/public/version',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicGoogleCallbackRoute = ApiPublicGoogleCallbackRouteImport.update({
+  id: '/api/public/google/callback',
+  path: '/api/public/google/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -66,7 +71,8 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/locations': typeof AuthenticatedLocationsRoute
   '/reports': typeof AuthenticatedReportsRoute
-  '/api/public/google-business/callback': typeof ApiPublicGoogleBusinessCallbackRoute
+  '/api/public/version': typeof ApiPublicVersionRoute
+  '/api/public/google/callback': typeof ApiPublicGoogleCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -75,7 +81,8 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/locations': typeof AuthenticatedLocationsRoute
   '/reports': typeof AuthenticatedReportsRoute
-  '/api/public/google-business/callback': typeof ApiPublicGoogleBusinessCallbackRoute
+  '/api/public/version': typeof ApiPublicVersionRoute
+  '/api/public/google/callback': typeof ApiPublicGoogleCallbackRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -86,7 +93,8 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/locations': typeof AuthenticatedLocationsRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
-  '/api/public/google-business/callback': typeof ApiPublicGoogleBusinessCallbackRoute
+  '/api/public/version': typeof ApiPublicVersionRoute
+  '/api/public/google/callback': typeof ApiPublicGoogleCallbackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,7 +105,8 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/locations'
     | '/reports'
-    | '/api/public/google-business/callback'
+    | '/api/public/version'
+    | '/api/public/google/callback'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -106,7 +115,8 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/locations'
     | '/reports'
-    | '/api/public/google-business/callback'
+    | '/api/public/version'
+    | '/api/public/google/callback'
   id:
     | '__root__'
     | '/'
@@ -116,14 +126,16 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/locations'
     | '/_authenticated/reports'
-    | '/api/public/google-business/callback'
+    | '/api/public/version'
+    | '/api/public/google/callback'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
-  ApiPublicGoogleBusinessCallbackRoute: typeof ApiPublicGoogleBusinessCallbackRoute
+  ApiPublicVersionRoute: typeof ApiPublicVersionRoute
+  ApiPublicGoogleCallbackRoute: typeof ApiPublicGoogleCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -177,11 +189,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedReportsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/api/public/google-business/callback': {
-      id: '/api/public/google-business/callback'
-      path: '/api/public/google-business/callback'
-      fullPath: '/api/public/google-business/callback'
-      preLoaderRoute: typeof ApiPublicGoogleBusinessCallbackRouteImport
+    '/api/public/version': {
+      id: '/api/public/version'
+      path: '/api/public/version'
+      fullPath: '/api/public/version'
+      preLoaderRoute: typeof ApiPublicVersionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/google/callback': {
+      id: '/api/public/google/callback'
+      path: '/api/public/google/callback'
+      fullPath: '/api/public/google/callback'
+      preLoaderRoute: typeof ApiPublicGoogleCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -208,7 +227,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
-  ApiPublicGoogleBusinessCallbackRoute: ApiPublicGoogleBusinessCallbackRoute,
+  ApiPublicVersionRoute: ApiPublicVersionRoute,
+  ApiPublicGoogleCallbackRoute: ApiPublicGoogleCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

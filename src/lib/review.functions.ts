@@ -2,10 +2,11 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 import { detectPlatform, PLATFORMS } from "./platforms";
-import { FriendlyError, lookupGooglePlace } from "./google.server";
+import { FriendlyError } from "./google.server";
 import { analyzeReview } from "./analysis.server";
 import type { ReviewAnalysis } from "./analysis.server";
 import type { NormalizedBusiness, NormalizedReview } from "./google.server";
+import type { ReviewSource } from "./review-resolver.server";
 
 export type ScanResult = {
   platform: string;
@@ -14,6 +15,8 @@ export type ScanResult = {
   reviews: NormalizedReview[];
   limitation: string | null;
   sourceUrl: string;
+  source: ReviewSource;
+  exactReviewFound: boolean;
 };
 
 export type ScanFailure = { ok: false; message: string; hint: string };
@@ -38,8 +41,19 @@ const reviewSchema = z.object({
   relativeTime: z.string(),
   publishTime: z.string(),
   reviewUrl: z.string(),
-  identityStatus: z.enum(["provider_observed", "exact_url_match", "unverified"]),
-  identityMethod: z.enum(["provider_resource_name", "exact_provider_url", "content_fingerprint"]),
+  identityStatus: z.enum([
+    "provider_observed",
+    "exact_url_match",
+    "official_sync_verified",
+    "unverified",
+  ]),
+  identityMethod: z.enum([
+    "provider_resource_name",
+    "exact_provider_url",
+    "provider_review_id",
+    "official_review_id",
+    "content_fingerprint",
+  ]),
   identityConfidence: z.number().int().min(0).max(100),
 });
 
@@ -66,16 +80,20 @@ export const scanReviewUrl = createServerFn({ method: "POST" })
     }
 
     try {
-      const lookup = await lookupGooglePlace(data.url);
+      const { getOptionalUserId } = await import("./optional-auth.server");
+      const { resolveGoogleReviews } = await import("./review-resolver.server");
+      const resolved = await resolveGoogleReviews(data.url, await getOptionalUserId());
       return {
         ok: true,
         result: {
           platform,
           platformLabel: info.label,
-          business: lookup.business,
-          reviews: lookup.reviews,
-          limitation: lookup.limitation,
+          business: resolved.business,
+          reviews: resolved.reviews,
+          limitation: resolved.limitation,
           sourceUrl: data.url.trim(),
+          source: resolved.source,
+          exactReviewFound: resolved.exactReviewFound,
         },
       };
     } catch (error) {
