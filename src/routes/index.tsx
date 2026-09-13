@@ -285,25 +285,8 @@ function Home() {
                 </div>
               </div>
             </section>
-            {stage === "idle" ? <Workflow /> : null}
-
             {error ? <ErrorNote {...error} /> : null}
             {stage === "scanning" ? <div className="mx-auto mt-8 max-w-xl"><ScanProgress steps={SCAN_STEPS} done={false} /></div> : null}
-            {stage === "idle" ? (
-              <>
-                <TrustSection />
-                <PlatformsSection />
-                <PromiseSection />
-                <StepsSection />
-                <ImpressionSection />
-                <ProblemsSection />
-                <DashboardSection />
-                <IndustriesSection />
-                <FaqSection />
-                <ClosingSection />
-                <SiteFooter />
-              </>
-            ) : null}
           </>
         ) : null}
 
