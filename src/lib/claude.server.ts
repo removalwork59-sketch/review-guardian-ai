@@ -58,7 +58,11 @@ export async function generateClaudeJson<T>(args: {
       console.error(
         `Claude request failed [${error.status ?? "network"}]: ${error.message.slice(0, 500)}`,
       );
-      throw new FriendlyError(describeAiFailure(error.status), "");
+      const retryable =
+        error.status === undefined || [408, 409, 429].includes(error.status) || error.status >= 500;
+      throw new FriendlyError(describeAiFailure(error.status), "", {
+        code: retryable ? "ai_unavailable" : "ai_configuration",
+      });
     }
     throw error;
   }
@@ -68,10 +72,13 @@ export async function generateClaudeJson<T>(args: {
     throw new FriendlyError(
       "The AI declined to assess this review.",
       "It has been left for a human to check.",
+      { code: "ai_refused" },
     );
   }
   if (message.stop_reason === "max_tokens") {
-    throw new FriendlyError("The AI result came back incomplete.", "Please try again.");
+    throw new FriendlyError("The AI result came back incomplete.", "Please try again.", {
+      code: "ai_invalid_output",
+    });
   }
 
   const text = message.content
@@ -86,6 +93,8 @@ export async function generateClaudeJson<T>(args: {
     return args.validate(JSON.parse(text));
   } catch {
     console.error("Claude returned invalid structured output.");
-    throw new FriendlyError("The AI result came back incomplete.", "Please try again.");
+    throw new FriendlyError("The AI result came back incomplete.", "Please try again.", {
+      code: "ai_invalid_output",
+    });
   }
 }

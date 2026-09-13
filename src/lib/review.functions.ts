@@ -80,9 +80,17 @@ export const scanReviewUrl = createServerFn({ method: "POST" })
     }
 
     try {
-      const { getOptionalUserId } = await import("./optional-auth.server");
+      const { clientAddress, consumeRateLimit } = await import("./rate-limit.server");
+      if (!consumeRateLimit(`public-scan:${clientAddress()}`, 20, 10 * 60_000)) {
+        return {
+          ok: false,
+          message: "You've run a lot of scans in a short time.",
+          hint: "Please wait a few minutes, or sign in to keep going.",
+        };
+      }
+      // Public scans use Google's public data only; signed-in scans run as workspace jobs.
       const { resolveGoogleReviews } = await import("./review-resolver.server");
-      const resolved = await resolveGoogleReviews(data.url, await getOptionalUserId());
+      const resolved = await resolveGoogleReviews(data.url, null);
       return {
         ok: true,
         result: {
@@ -109,6 +117,14 @@ export const analyzeReviewForPolicy = createServerFn({ method: "POST" })
   )
   .handler(async ({ data }): Promise<AnalysisSuccess | ScanFailure> => {
     try {
+      const { clientAddress, consumeRateLimit } = await import("./rate-limit.server");
+      if (!consumeRateLimit(`public-analysis:${clientAddress()}`, 5, 60 * 60_000)) {
+        return {
+          ok: false,
+          message: "Free checks are limited to a few per hour.",
+          hint: "Sign in to check more reviews and keep the results.",
+        };
+      }
       const analysis = await analyzeReview(data.business, data.review);
       return { ok: true, analysis };
     } catch (error) {

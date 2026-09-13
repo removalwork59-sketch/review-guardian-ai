@@ -1,92 +1,110 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { CASE_STATUSES, CASE_STATUS_TRANSITIONS } from "./case-types";
-import type { CaseRecord, CaseStatus, LocationRecord } from "./case-types";
 import type { ReviewAnalysis } from "./analysis-types";
+import type {
+  AiRunSummary,
+  CaseDecision,
+  CaseDetail,
+  CaseRecord,
+  CaseReportSummary,
+  EvidenceItem,
+  LocationRecord,
+  ReportEvent,
+} from "./case-types";
+import { FriendlyError } from "./google.server";
+import { canTransitionReport, GOOGLE_DECISION_SOURCES, REPORT_STATUSES } from "./state-machines";
+import type { ReportStatus } from "./state-machines";
+import { assertWorkspaceRole, ForbiddenError, requireWorkspace } from "./workspace-middleware";
 
-const businessSchema = z.object({
-  placeId: z.string(),
-  name: z.string(),
-  address: z.string(),
-  rating: z.number().nullable(),
-  ratingCount: z.number().nullable(),
-  mapsUri: z.string(),
-  category: z.string(),
-});
+export type ActionResult = { ok: true } | { ok: false; message: string; hint: string };
 
-const reviewSchema = z.object({
-  id: z.string(),
-  authorName: z.string(),
-  authorPhoto: z.string(),
-  rating: z.number(),
-  text: z.string(),
-  relativeTime: z.string(),
-  publishTime: z.string(),
-  reviewUrl: z.string(),
-  identityStatus: z.enum([
-    "provider_observed",
-    "exact_url_match",
-    "official_sync_verified",
-    "unverified",
-  ]),
-  identityMethod: z.enum([
-    "provider_resource_name",
-    "exact_provider_url",
-    "provider_review_id",
-    "official_review_id",
-    "content_fingerprint",
-  ]),
-  identityConfidence: z.number().int().min(0).max(100),
-});
-
-type Db = { from: (table: string) => any };
-
-function canonicalizeSourceUrl(raw: string) {
-  try {
-    const url = new URL(raw.trim());
-    url.hash = "";
-    for (const key of [...url.searchParams.keys()]) {
-      if (key.toLowerCase().startsWith("utm_")) url.searchParams.delete(key);
-    }
-    return url.toString();
-  } catch {
-    return raw.trim();
-  }
+function actionFailure(error: unknown): ActionResult {
+  if (error instanceof FriendlyError)
+    return { ok: false, message: error.message, hint: error.hint };
+  if (error instanceof ForbiddenError) return { ok: false, message: error.message, hint: "" };
+  console.error("[cases]", error);
+  return { ok: false, message: "That didn't work.", hint: "Please try again in a moment." };
 }
 
-async function fingerprintReview(
-  platform: string,
-  placeId: string,
-  review: z.infer<typeof reviewSchema>,
-) {
-  const stable = [
-    platform,
-    placeId,
-    review.authorName.trim().toLowerCase(),
-    review.rating,
-    review.publishTime,
-    review.text.trim(),
-  ].join("\u001f");
-  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(stable));
-  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+const CASE_SELECT = [
+  "id,location_id,decision,verdict,violation_category,headline,plain_summary,confidence,severity,",
+  "rejection_risk,model_agreement,analysis,dismissed_at,created_at,",
+  "review_locations(name,address),",
+  "review_records(platform,review_url,canonical_source_url,author_name,rating,review_text,published_at,identity_status),",
+  "reports(id,status,version,external_reference,submitted_at,decided_at,updated_at)",
+].join("");
+
+type ReportRow = {
+  id: string;
+  status: string;
+  version: number;
+  external_reference: string | null;
+  submitted_at: string | null;
+  decided_at: string | null;
+  updated_at: string;
+};
+
+type CaseRow = {
+  id: string;
+  location_id: string;
+  decision: string;
+  verdict: string;
+  violation_category: string;
+  headline: string;
+  plain_summary: string;
+  confidence: number;
+  severity: string;
+  rejection_risk: string;
+  model_agreement: string;
+  analysis: unknown;
+  dismissed_at: string | null;
+  created_at: string;
+  review_locations: { name: string; address: string } | null;
+  review_records: {
+    platform: string;
+    review_url: string;
+    canonical_source_url: string;
+    author_name: string;
+    rating: number | null;
+    review_text: string;
+    published_at: string | null;
+    identity_status: string;
+  } | null;
+  reports: ReportRow[] | null;
+};
+
+function toReportSummary(row: ReportRow): CaseReportSummary {
+  return {
+    id: row.id,
+    status: row.status as ReportStatus,
+    version: row.version,
+    externalReference: row.external_reference,
+    submittedAt: row.submitted_at,
+    decidedAt: row.decided_at,
+    updatedAt: row.updated_at,
+  };
 }
 
-function toCase(row: any): CaseRecord {
-  const location = row.review_locations ?? {};
+function toCase(row: CaseRow): CaseRecord {
+  const latest = [...(row.reports ?? [])].sort((a, b) => b.version - a.version)[0];
   return {
     id: row.id,
     locationId: row.location_id,
-    locationName: location.name ?? "Unknown business",
-    locationAddress: location.address ?? "",
-    platform: row.platform,
-    sourceUrl: row.source_url,
-    reviewUrl: row.review_url,
-    authorName: row.author_name,
-    reviewRating: row.review_rating === null ? null : Number(row.review_rating),
-    reviewText: row.review_text,
-    reviewRelativeTime: row.review_relative_time,
+    locationName: row.review_locations?.name ?? "Unknown business",
+    locationAddress: row.review_locations?.address ?? "",
+    platform: row.review_records?.platform ?? "google",
+    reviewUrl: row.review_records?.review_url ?? "",
+    sourceUrl: row.review_records?.canonical_source_url ?? "",
+    authorName: row.review_records?.author_name ?? "",
+    reviewRating:
+      row.review_records?.rating === null || row.review_records?.rating === undefined
+        ? null
+        : Number(row.review_records.rating),
+    reviewText: row.review_records?.review_text ?? "",
+    reviewPublishedAt: row.review_records?.published_at ?? null,
+    identityStatus: row.review_records?.identity_status ?? "unverified",
+    decision: row.decision as CaseDecision,
     verdict: row.verdict,
     violationCategory: row.violation_category,
     headline: row.headline,
@@ -94,257 +112,54 @@ function toCase(row: any): CaseRecord {
     confidence: row.confidence,
     severity: row.severity,
     rejectionRisk: row.rejection_risk,
-    status: row.status as CaseStatus,
-    statusNote: row.status_note ?? "",
-    reportedAt: row.reported_at,
-    resolvedAt: row.resolved_at,
+    modelAgreement: row.model_agreement,
+    dismissed: Boolean(row.dismissed_at),
     createdAt: row.created_at,
+    report: latest ? toReportSummary(latest) : null,
     analysis: (row.analysis ?? null) as ReviewAnalysis | null,
   };
 }
 
-const CASE_SELECT = "*, review_locations ( name, address )";
-
-export async function persistCase(
-  supabase: Db,
-  userId: string,
-  input: {
-    platform: string;
-    sourceUrl: string;
-    business: z.infer<typeof businessSchema>;
-    review: z.infer<typeof reviewSchema>;
-    analysis: ReviewAnalysis;
-  },
-) {
-  const { data: location, error: locationError } = await supabase
-    .from("review_locations")
-    .upsert(
-      {
-        user_id: userId,
-        platform: input.platform,
-        place_id: input.business.placeId,
-        name: input.business.name,
-        address: input.business.address,
-        category: input.business.category,
-        maps_uri: input.business.mapsUri,
-        rating: input.business.rating,
-        rating_count: input.business.ratingCount,
-      },
-      { onConflict: "user_id,place_id" },
-    )
-    .select("id")
-    .single();
-
-  if (locationError) throw locationError;
-
-  const canonicalSourceUrl = canonicalizeSourceUrl(input.sourceUrl);
-  const contentFingerprint = await fingerprintReview(
-    input.platform,
-    input.business.placeId,
-    input.review,
-  );
-  const { data: reviewRecord, error: reviewError } = await supabase
-    .from("review_records")
-    .upsert(
-      {
-        user_id: userId,
-        location_id: location.id,
-        platform: input.platform,
-        external_id: input.review.id,
-        canonical_source_url: canonicalSourceUrl,
-        review_url: input.review.reviewUrl,
-        author_name: input.review.authorName,
-        author_photo_url: input.review.authorPhoto,
-        rating: input.review.rating,
-        review_text: input.review.text,
-        relative_time: input.review.relativeTime,
-        published_at: input.review.publishTime || null,
-        content_fingerprint: contentFingerprint,
-        raw_source: input.review,
-        identity_status: input.review.identityStatus,
-        identity_method: input.review.identityMethod,
-        identity_confidence: input.review.identityConfidence,
-        requested_source_url: input.sourceUrl,
-        verified_at:
-          input.review.identityStatus === "exact_url_match" ||
-          input.review.identityStatus === "official_sync_verified"
-            ? new Date().toISOString()
-            : null,
-        last_seen_at: new Date().toISOString(),
-        observed_absent_at: null,
-      },
-      { onConflict: "user_id,platform,external_id" },
-    )
-    .select("id")
-    .single();
-  if (reviewError) throw reviewError;
-
-  const payload = {
-    user_id: userId,
-    location_id: location.id,
-    platform: input.platform,
-    source_url: input.sourceUrl,
-    review_external_id: input.review.id,
-    review_url: input.review.reviewUrl,
-    author_name: input.review.authorName,
-    review_rating: input.review.rating,
-    review_text: input.review.text,
-    review_relative_time: input.review.relativeTime,
-    verdict: input.analysis.verdict,
-    violation_category: input.analysis.violationCategory,
-    headline: input.analysis.headline,
-    plain_summary: input.analysis.plainSummary,
-    confidence: input.analysis.confidence,
-    severity: input.analysis.severity,
-    rejection_risk: input.analysis.rejectionRisk,
-    analysis: input.analysis,
-    review_record_id: reviewRecord.id,
-    canonical_source_url: canonicalSourceUrl,
-    analysis_version: 2,
-  };
-
-  const { data, error } = await supabase
-    .from("review_cases")
-    .upsert(payload, { onConflict: "user_id,review_external_id" })
-    .select(CASE_SELECT)
-    .single();
-  if (error) throw error;
-
-  const reportable = ["strong_candidate", "possible_candidate"].includes(input.analysis.verdict);
-  if (reportable) {
-    const reportBody = [
-      input.analysis.policyReasoning,
-      ...input.analysis.evidence.map((item) => `Evidence: ${item}`),
-      input.analysis.recommendedAction,
-    ]
-      .filter(Boolean)
-      .join("\n\n");
-    const { error: reportError } = await supabase.from("report_drafts").upsert(
-      {
-        user_id: userId,
-        case_id: data.id,
-        version: 1,
-        report_reason: input.analysis.recommendedReportReason,
-        report_body: reportBody,
-        evidence: input.analysis.evidence,
-        counter_evidence: input.analysis.counterEvidence,
-        status:
-          input.analysis.verdict === "strong_candidate" &&
-          input.analysis.confidence >= 70 &&
-          input.review.identityStatus !== "unverified"
-            ? "ready"
-            : "draft",
-      },
-      { onConflict: "case_id,version" },
-    );
-    if (reportError) throw reportError;
-  }
-  return toCase(data);
-}
-
-export const saveCase = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) =>
-    z
-      .object({
-        platform: z.string().default("google"),
-        sourceUrl: z.string().default(""),
-        business: businessSchema,
-        review: reviewSchema,
-      })
-      .parse(input),
-  )
-  .handler(async ({ data, context }): Promise<{ case: CaseRecord; analysis: ReviewAnalysis }> => {
-    const { analyzeReviewDetailed, POLICY_VERSION, PROMPT_VERSION } =
-      await import("./analysis.server");
-    const startedAt = Date.now();
-    const inputHash = await fingerprintReview(data.platform, data.business.placeId, data.review);
-
-    // Dedup: the same review content already analysed under the same prompt/policy is reused,
-    // so a re-scan returns instantly instead of paying for the full multi-model run again.
-    const { data: previousRun } = await context.supabase
-      .from("ai_runs")
-      .select("output")
-      .eq("user_id", context.userId)
-      .eq("input_hash", inputHash)
-      .eq("prompt_version", PROMPT_VERSION)
-      .eq("policy_version", POLICY_VERSION)
-      .eq("status", "completed")
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
-
-    const reused = previousRun?.output as ReviewAnalysis | undefined;
-    const run = reused?.verdict ? null : await analyzeReviewDetailed(data.business, data.review);
-    const analysis = run ? run.analysis : (reused as ReviewAnalysis);
-
-    const saved = await persistCase(context.supabase as unknown as Db, context.userId, {
-      platform: data.platform,
-      sourceUrl: data.sourceUrl,
-      business: data.business,
-      review: data.review,
-      analysis,
-    });
-    if (!run) return { case: saved, analysis };
-
-    const { data: persistedReview } = await context.supabase
-      .from("review_records")
-      .select("id")
-      .eq("user_id", context.userId)
-      .eq("platform", data.platform)
-      .eq("external_id", data.review.id)
-      .maybeSingle();
-    const { error: auditError } = await context.supabase.from("ai_runs").insert({
-      user_id: context.userId,
-      review_record_id: persistedReview?.id ?? null,
-      case_id: saved.id,
-      purpose: "review_policy_analysis",
-      model: run.models.join(" + "),
-      prompt_version: PROMPT_VERSION,
-      policy_version: POLICY_VERSION,
-      input_hash: inputHash,
-      output: analysis,
-      confidence: analysis.confidence,
-      duration_ms: Date.now() - startedAt,
-      gateway_run_id: `agreement=${run.agreement};dropped_evidence=${run.droppedEvidence}`,
-      status: "completed",
-    });
-    if (auditError) throw auditError;
-    return { case: saved, analysis };
-  });
-
 export const listCases = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireWorkspace])
   .handler(async ({ context }): Promise<CaseRecord[]> => {
     const { data, error } = await context.supabase
       .from("review_cases")
       .select(CASE_SELECT)
+      .eq("workspace_id", context.workspaceId)
       .order("created_at", { ascending: false })
       .limit(300);
     if (error) throw error;
-    return (data ?? []).map(toCase);
+    return ((data ?? []) as unknown as CaseRow[]).map(toCase);
   });
 
 export const listLocations = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireWorkspace])
   .handler(async ({ context }): Promise<LocationRecord[]> => {
-    const { data: locations, error } = await context.supabase
-      .from("review_locations")
-      .select("*")
-      .order("created_at", { ascending: false });
+    const [{ data: locations, error }, { data: cases, error: caseError }] = await Promise.all([
+      context.supabase
+        .from("review_locations")
+        .select("*")
+        .eq("workspace_id", context.workspaceId)
+        .order("created_at", { ascending: false }),
+      context.supabase
+        .from("review_cases")
+        .select("location_id,created_at,reports(status,version)")
+        .eq("workspace_id", context.workspaceId),
+    ]);
     if (error) throw error;
-
-    const { data: cases, error: caseError } = await context.supabase
-      .from("review_cases")
-      .select("location_id, status, created_at");
     if (caseError) throw caseError;
 
-    return (locations ?? []).map((location: any): LocationRecord => {
-      const related = (cases ?? []).filter((item: any) => item.location_id === location.id);
-      const last = related
-        .map((item: any) => item.created_at as string)
-        .sort()
-        .at(-1);
+    const rows = (cases ?? []) as unknown as Array<{
+      location_id: string;
+      created_at: string;
+      reports: Array<{ status: string; version: number }> | null;
+    }>;
+    return (locations ?? []).map((location): LocationRecord => {
+      const related = rows.filter((item) => item.location_id === location.id);
+      const latestStatuses = related.map(
+        (item) => [...(item.reports ?? [])].sort((a, b) => b.version - a.version)[0]?.status,
+      );
       return {
         id: location.id,
         name: location.name,
@@ -354,65 +169,289 @@ export const listLocations = createServerFn({ method: "POST" })
         rating: location.rating === null ? null : Number(location.rating),
         ratingCount: location.rating_count,
         caseCount: related.length,
-        reportedCount: related.filter((item: any) =>
-          ["reported", "pending", "removed", "rejected"].includes(item.status),
+        reportedCount: latestStatuses.filter(
+          (status) => status && !["draft", "ready"].includes(status),
         ).length,
-        removedCount: related.filter((item: any) => item.status === "removed").length,
-        lastScanAt: last ?? null,
+        removedCount: latestStatuses.filter((status) => status === "removed").length,
+        lastScanAt:
+          related
+            .map((item) => item.created_at)
+            .sort()
+            .at(-1) ?? null,
       };
     });
   });
 
-export const updateCaseStatus = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+export const getCaseDetail = createServerFn({ method: "POST" })
+  .middleware([requireWorkspace])
+  .inputValidator((input: unknown) => z.object({ caseId: z.string().uuid() }).parse(input))
+  .handler(async ({ data, context }): Promise<CaseDetail | null> => {
+    const { data: row, error } = await context.supabase
+      .from("review_cases")
+      .select(CASE_SELECT)
+      .eq("id", data.caseId)
+      .eq("workspace_id", context.workspaceId)
+      .maybeSingle();
+    if (error) throw error;
+    if (!row) return null;
+
+    const [evidence, reports, runs] = await Promise.all([
+      context.supabase
+        .from("evidence_items")
+        .select("id,kind,content,verified,excerpt_start,excerpt_end,position")
+        .eq("case_id", data.caseId)
+        .order("position", { ascending: true }),
+      context.supabase
+        .from("reports")
+        .select(
+          "id,status,version,route,report_reason,report_body,external_reference,outcome_source,outcome_note,submitted_at,decided_at,updated_at",
+        )
+        .eq("case_id", data.caseId)
+        .order("version", { ascending: false }),
+      context.supabase
+        .from("ai_runs")
+        .select("stage,provider,model,status,duration_ms,confidence,error_code,created_at")
+        .eq("case_id", data.caseId)
+        .order("created_at", { ascending: true }),
+    ]);
+    if (evidence.error) throw evidence.error;
+    if (reports.error) throw reports.error;
+    if (runs.error) throw runs.error;
+
+    const reportIds = (reports.data ?? []).map((report) => report.id);
+    const { data: events, error: eventsError } = reportIds.length
+      ? await context.supabase
+          .from("report_events")
+          .select("id,report_id,from_status,to_status,note,metadata,created_at")
+          .in("report_id", reportIds)
+          .order("created_at", { ascending: true })
+      : { data: [], error: null };
+    if (eventsError) throw eventsError;
+
+    return {
+      ...toCase(row as unknown as CaseRow),
+      evidence: (evidence.data ?? []).map((item): EvidenceItem => ({
+        id: item.id,
+        kind: item.kind as EvidenceItem["kind"],
+        content: item.content,
+        verified: item.verified,
+        excerptStart: item.excerpt_start,
+        excerptEnd: item.excerpt_end,
+      })),
+      reports: (reports.data ?? []).map((report) => ({
+        ...toReportSummary(report as ReportRow),
+        route: report.route,
+        reportReason: report.report_reason,
+        reportBody: report.report_body,
+        outcomeSource: report.outcome_source,
+        outcomeNote: report.outcome_note,
+      })),
+      reportEvents: (events ?? []).map((event): ReportEvent => ({
+        id: event.id,
+        reportId: event.report_id,
+        fromStatus: event.from_status,
+        toStatus: event.to_status,
+        note: event.note,
+        externalReference:
+          (event.metadata as { external_reference?: string | null } | null)?.external_reference ??
+          null,
+        createdAt: event.created_at,
+      })),
+      aiRuns: (runs.data ?? []).map((run): AiRunSummary => ({
+        stage: run.stage,
+        provider: run.provider,
+        model: run.model,
+        status: run.status,
+        durationMs: run.duration_ms,
+        confidence: run.confidence,
+        errorCode: run.error_code,
+        createdAt: run.created_at,
+      })),
+    };
+  });
+
+export const transitionReport = createServerFn({ method: "POST" })
+  .middleware([requireWorkspace])
   .inputValidator((input: unknown) =>
     z
       .object({
-        id: z.string().uuid(),
-        status: z.enum(CASE_STATUSES),
-        note: z.string().max(500).optional(),
+        reportId: z.string().uuid(),
+        to: z.enum(REPORT_STATUSES),
+        note: z.string().trim().max(1000).optional(),
+        externalReference: z.string().trim().max(200).optional(),
+        outcomeSource: z.enum(GOOGLE_DECISION_SOURCES).optional(),
       })
       .parse(input),
   )
-  .handler(async ({ data, context }): Promise<CaseRecord> => {
-    const { data: current, error: currentError } = await context.supabase
-      .from("review_cases")
-      .select("status")
-      .eq("id", data.id)
-      .single();
-    if (currentError) throw currentError;
+  .handler(async ({ data, context }): Promise<ActionResult> => {
+    try {
+      assertWorkspaceRole(context.workspaceRole, "member");
+      const { data: current, error } = await context.supabase
+        .from("reports")
+        .select("id,status,case_id,workspace_id")
+        .eq("id", data.reportId)
+        .eq("workspace_id", context.workspaceId)
+        .maybeSingle();
+      if (error) throw error;
+      if (!current) throw new FriendlyError("That report couldn't be found.");
 
-    const currentStatus = current.status as CaseStatus;
-    if (
-      data.status !== currentStatus &&
-      !CASE_STATUS_TRANSITIONS[currentStatus].includes(data.status)
-    ) {
-      throw new Error(`Invalid case status transition: ${currentStatus} to ${data.status}`);
+      const from = current.status as ReportStatus;
+      if (!canTransitionReport(from, data.to)) {
+        throw new FriendlyError("That step isn't available for this report right now.");
+      }
+      if (data.to === "removed" && !data.outcomeSource) {
+        throw new FriendlyError(
+          "Record where Google confirmed the removal.",
+          "A review is only marked removed after Google's own decision.",
+        );
+      }
+
+      const now = new Date().toISOString();
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data: updated, error: updateError } = await supabaseAdmin
+        .from("reports")
+        .update({
+          status: data.to,
+          updated_by: context.userId,
+          outcome_note: data.note ?? "",
+          ...(data.externalReference ? { external_reference: data.externalReference } : {}),
+          ...(data.to === "submitted" ? { submitted_at: now } : {}),
+          ...(["decision", "removed", "not_removed"].includes(data.to) ? { decided_at: now } : {}),
+          ...(data.outcomeSource ? { outcome_source: data.outcomeSource } : {}),
+        })
+        .eq("id", data.reportId)
+        .eq("workspace_id", context.workspaceId)
+        .eq("status", from)
+        .select("id")
+        .maybeSingle();
+      if (updateError) throw updateError;
+      if (!updated)
+        throw new FriendlyError("This report changed in the meantime.", "Refresh and try again.");
+
+      const { writeAudit } = await import("./audit.server");
+      await writeAudit({
+        workspaceId: context.workspaceId,
+        actorId: context.userId,
+        action: "report.transitioned",
+        entityType: "report",
+        entityId: data.reportId,
+        metadata: { from, to: data.to },
+      });
+      return { ok: true };
+    } catch (error) {
+      return actionFailure(error);
     }
-    const now = new Date().toISOString();
-    const patch = {
-      status: data.status,
-      ...(data.note !== undefined ? { status_note: data.note } : {}),
-      ...(["reported", "pending"].includes(data.status) ? { reported_at: now } : {}),
-      ...(["removed", "rejected"].includes(data.status) ? { resolved_at: now } : {}),
-      ...(data.status === "new" ? { reported_at: null, resolved_at: null } : {}),
-    };
-
-    const { data: row, error } = await context.supabase
-      .from("review_cases")
-      .update(patch)
-      .eq("id", data.id)
-      .select(CASE_SELECT)
-      .single();
-    if (error) throw error;
-    return toCase(row);
   });
 
-export const deleteCase = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
-  .handler(async ({ data, context }) => {
-    const { error } = await context.supabase.from("review_cases").delete().eq("id", data.id);
-    if (error) throw error;
-    return { ok: true as const };
+export const createReportForCase = createServerFn({ method: "POST" })
+  .middleware([requireWorkspace])
+  .inputValidator((input: unknown) => z.object({ caseId: z.string().uuid() }).parse(input))
+  .handler(async ({ data, context }): Promise<ActionResult> => {
+    try {
+      assertWorkspaceRole(context.workspaceRole, "member");
+      const { data: caseRow, error } = await context.supabase
+        .from("review_cases")
+        .select("id,decision,analysis,reports(id)")
+        .eq("id", data.caseId)
+        .eq("workspace_id", context.workspaceId)
+        .maybeSingle();
+      if (error) throw error;
+      if (!caseRow) throw new FriendlyError("That review couldn't be found.");
+      if (caseRow.decision === "not_reportable") {
+        throw new FriendlyError(
+          "The analysis found no policy violation, so there's nothing to report.",
+        );
+      }
+      if (((caseRow as { reports?: unknown[] }).reports ?? []).length > 0) {
+        throw new FriendlyError("This review already has a report.");
+      }
+      const analysis = caseRow.analysis as unknown as ReviewAnalysis | null;
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { error: insertError } = await supabaseAdmin.from("reports").insert({
+        workspace_id: context.workspaceId,
+        case_id: data.caseId,
+        version: 1,
+        report_reason: analysis?.recommendedReportReason ?? "",
+        report_body: analysis?.policyReasoning ?? "",
+        created_by: context.userId,
+        updated_by: context.userId,
+      });
+      if (insertError) throw insertError;
+      return { ok: true };
+    } catch (error) {
+      return actionFailure(error);
+    }
+  });
+
+export const setCaseDismissed = createServerFn({ method: "POST" })
+  .middleware([requireWorkspace])
+  .inputValidator((input: unknown) =>
+    z.object({ caseId: z.string().uuid(), dismissed: z.boolean() }).parse(input),
+  )
+  .handler(async ({ data, context }): Promise<ActionResult> => {
+    try {
+      assertWorkspaceRole(context.workspaceRole, "member");
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data: updated, error } = await supabaseAdmin
+        .from("review_cases")
+        .update({ dismissed_at: data.dismissed ? new Date().toISOString() : null })
+        .eq("id", data.caseId)
+        .eq("workspace_id", context.workspaceId)
+        .select("id")
+        .maybeSingle();
+      if (error) throw error;
+      if (!updated) throw new FriendlyError("That review couldn't be found.");
+      const { writeAudit } = await import("./audit.server");
+      await writeAudit({
+        workspaceId: context.workspaceId,
+        actorId: context.userId,
+        action: data.dismissed ? "case.dismissed" : "case.restored",
+        entityType: "review_case",
+        entityId: data.caseId,
+      });
+      return { ok: true };
+    } catch (error) {
+      return actionFailure(error);
+    }
+  });
+
+export const getWorkspaceSummary = createServerFn({ method: "POST" })
+  .middleware([requireWorkspace])
+  .handler(async ({ context }) => {
+    const [{ data: workspace }, { data: members }, { data: isSuperadmin }] = await Promise.all([
+      context.supabase
+        .from("workspaces")
+        .select("id,name,created_at")
+        .eq("id", context.workspaceId)
+        .single(),
+      context.supabase
+        .from("workspace_members")
+        .select("user_id,role,created_at")
+        .eq("workspace_id", context.workspaceId)
+        .order("created_at", { ascending: true }),
+      context.supabase.rpc("is_superadmin"),
+    ]);
+    const ids = (members ?? []).map((member) => member.user_id);
+    const { data: profiles } = ids.length
+      ? await context.supabase
+          .from("profiles")
+          .select("id,email,display_name,full_name")
+          .in("id", ids)
+      : { data: [] };
+    return {
+      id: context.workspaceId,
+      name: workspace?.name ?? "Workspace",
+      role: context.workspaceRole,
+      isSuperadmin: isSuperadmin === true,
+      members: (members ?? []).map((member) => {
+        const profile = (profiles ?? []).find((item) => item.id === member.user_id);
+        return {
+          userId: member.user_id,
+          role: member.role,
+          email: profile?.email ?? null,
+          name: profile?.display_name || profile?.full_name || "",
+          isYou: member.user_id === context.userId,
+        };
+      }),
+    };
   });

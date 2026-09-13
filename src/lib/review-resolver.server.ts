@@ -56,7 +56,7 @@ function fromBusinessProfile(
 }
 
 async function fromOwnedProfile(
-  userId: string,
+  workspaceId: string,
   pastedUrl: string,
   reference: ReturnType<typeof parseGoogleReference>,
   places: PlaceLookup | null,
@@ -70,7 +70,7 @@ async function fromOwnedProfile(
   } = await import("./google-business-api.server");
 
   try {
-    const accessToken = await getBusinessProfileAccessToken(userId);
+    const accessToken = await getBusinessProfileAccessToken(workspaceId);
     if (!accessToken) {
       return {
         result: null,
@@ -78,7 +78,7 @@ async function fromOwnedProfile(
       };
     }
 
-    const locations = await listOwnedLocations(userId, accessToken);
+    const locations = await listOwnedLocations(workspaceId, accessToken);
     const placeId = places?.business.placeId ?? reference.placeId ?? null;
     const location: OwnedLocation | undefined = locations.find(
       (candidate) =>
@@ -158,7 +158,7 @@ async function fromOwnedProfile(
 
 export async function resolveGoogleReviews(
   rawUrl: string,
-  userId: string | null,
+  workspaceId: string | null,
 ): Promise<ResolvedReviews> {
   const pastedUrl = rawUrl.trim();
   const reference = parseGoogleReference(await expandGoogleUrl(pastedUrl));
@@ -186,8 +186,8 @@ export async function resolveGoogleReviews(
     };
   }
 
-  const owned = userId
-    ? await fromOwnedProfile(userId, pastedUrl, reference, places)
+  const owned = workspaceId
+    ? await fromOwnedProfile(workspaceId, pastedUrl, reference, places)
     : {
         result: null,
         note: "Sign in and connect the business's Google account to read its full, verified reviews.",

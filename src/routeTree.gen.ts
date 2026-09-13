@@ -11,12 +11,31 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AdminRouteRouteImport } from './routes/admin/route'
+import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedBulkRouteImport } from './routes/_authenticated/bulk'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedLocationsRouteImport } from './routes/_authenticated/locations'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminAiRouteImport } from './routes/admin/ai'
+import { Route as AdminAuditRouteImport } from './routes/admin/audit'
+import { Route as AdminJobsRouteImport } from './routes/admin/jobs'
+import { Route as AdminUsersRouteImport } from './routes/admin/users'
+import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as AppBulkRouteImport } from './routes/app/bulk'
+import { Route as AppLocationsRouteImport } from './routes/app/locations'
+import { Route as AppPlatformsRouteImport } from './routes/app/platforms'
+import { Route as AppReportsRouteImport } from './routes/app/reports'
+import { Route as AppSettingsRouteImport } from './routes/app/settings'
+import { Route as ApiInternalWorkerRouteImport } from './routes/api/internal/worker'
+import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
 import { Route as ApiPublicVersionRouteImport } from './routes/api/public/version'
+import { Route as AppReviewsIndexRouteImport } from './routes/app/reviews/index'
+import { Route as AppReviewsCaseIdRouteImport } from './routes/app/reviews/$caseId'
+import { Route as AppReviewsNewRouteImport } from './routes/app/reviews/new'
 import { Route as ApiPublicGoogleCallbackRouteImport } from './routes/api/public/google/callback'
 
 const IndexRoute = IndexRouteImport.update({
@@ -28,9 +47,24 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRouteRoute = AdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRouteRoute = AppRouteRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedBulkRoute = AuthenticatedBulkRouteImport.update({
@@ -53,10 +87,90 @@ const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
   path: '/reports',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminAiRoute = AdminAiRouteImport.update({
+  id: '/ai',
+  path: '/ai',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminAuditRoute = AdminAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminJobsRoute = AdminJobsRouteImport.update({
+  id: '/jobs',
+  path: '/jobs',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppBulkRoute = AppBulkRouteImport.update({
+  id: '/bulk',
+  path: '/bulk',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppLocationsRoute = AppLocationsRouteImport.update({
+  id: '/locations',
+  path: '/locations',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppPlatformsRoute = AppPlatformsRouteImport.update({
+  id: '/platforms',
+  path: '/platforms',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppReportsRoute = AppReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const ApiInternalWorkerRoute = ApiInternalWorkerRouteImport.update({
+  id: '/api/internal/worker',
+  path: '/api/internal/worker',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicHealthRoute = ApiPublicHealthRouteImport.update({
+  id: '/api/public/health',
+  path: '/api/public/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicVersionRoute = ApiPublicVersionRouteImport.update({
   id: '/api/public/version',
   path: '/api/public/version',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppReviewsIndexRoute = AppReviewsIndexRouteImport.update({
+  id: '/reviews/',
+  path: '/reviews/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppReviewsCaseIdRoute = AppReviewsCaseIdRouteImport.update({
+  id: '/reviews/$caseId',
+  path: '/reviews/$caseId',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppReviewsNewRoute = AppReviewsNewRouteImport.update({
+  id: '/reviews/new',
+  path: '/reviews/new',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 const ApiPublicGoogleCallbackRoute = ApiPublicGoogleCallbackRouteImport.update({
   id: '/api/public/google/callback',
@@ -66,74 +180,189 @@ const ApiPublicGoogleCallbackRoute = ApiPublicGoogleCallbackRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
+  '/app': typeof AppRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/login': typeof LoginRoute
   '/bulk': typeof AuthenticatedBulkRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/locations': typeof AuthenticatedLocationsRoute
   '/reports': typeof AuthenticatedReportsRoute
+  '/admin/ai': typeof AdminAiRoute
+  '/admin/audit': typeof AdminAuditRoute
+  '/admin/jobs': typeof AdminJobsRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/app/bulk': typeof AppBulkRoute
+  '/app/locations': typeof AppLocationsRoute
+  '/app/platforms': typeof AppPlatformsRoute
+  '/app/reports': typeof AppReportsRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/admin/': typeof AdminIndexRoute
+  '/app/': typeof AppIndexRoute
+  '/api/internal/worker': typeof ApiInternalWorkerRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/version': typeof ApiPublicVersionRoute
+  '/app/reviews/$caseId': typeof AppReviewsCaseIdRoute
+  '/app/reviews/new': typeof AppReviewsNewRoute
+  '/app/reviews/': typeof AppReviewsIndexRoute
   '/api/public/google/callback': typeof ApiPublicGoogleCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/login': typeof LoginRoute
   '/bulk': typeof AuthenticatedBulkRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/locations': typeof AuthenticatedLocationsRoute
   '/reports': typeof AuthenticatedReportsRoute
+  '/admin/ai': typeof AdminAiRoute
+  '/admin/audit': typeof AdminAuditRoute
+  '/admin/jobs': typeof AdminJobsRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/app/bulk': typeof AppBulkRoute
+  '/app/locations': typeof AppLocationsRoute
+  '/app/platforms': typeof AppPlatformsRoute
+  '/app/reports': typeof AppReportsRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/admin': typeof AdminIndexRoute
+  '/app': typeof AppIndexRoute
+  '/api/internal/worker': typeof ApiInternalWorkerRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/version': typeof ApiPublicVersionRoute
+  '/app/reviews/$caseId': typeof AppReviewsCaseIdRoute
+  '/app/reviews/new': typeof AppReviewsNewRoute
+  '/app/reviews': typeof AppReviewsIndexRoute
   '/api/public/google/callback': typeof ApiPublicGoogleCallbackRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/admin': typeof AdminRouteRouteWithChildren
+  '/app': typeof AppRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/login': typeof LoginRoute
   '/_authenticated/bulk': typeof AuthenticatedBulkRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/locations': typeof AuthenticatedLocationsRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
+  '/admin/ai': typeof AdminAiRoute
+  '/admin/audit': typeof AdminAuditRoute
+  '/admin/jobs': typeof AdminJobsRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/app/bulk': typeof AppBulkRoute
+  '/app/locations': typeof AppLocationsRoute
+  '/app/platforms': typeof AppPlatformsRoute
+  '/app/reports': typeof AppReportsRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/admin/': typeof AdminIndexRoute
+  '/app/': typeof AppIndexRoute
+  '/api/internal/worker': typeof ApiInternalWorkerRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/version': typeof ApiPublicVersionRoute
+  '/app/reviews/$caseId': typeof AppReviewsCaseIdRoute
+  '/app/reviews/new': typeof AppReviewsNewRoute
+  '/app/reviews/': typeof AppReviewsIndexRoute
   '/api/public/google/callback': typeof ApiPublicGoogleCallbackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
+    | '/app'
     | '/auth'
+    | '/login'
     | '/bulk'
     | '/dashboard'
     | '/locations'
     | '/reports'
+    | '/admin/ai'
+    | '/admin/audit'
+    | '/admin/jobs'
+    | '/admin/users'
+    | '/app/bulk'
+    | '/app/locations'
+    | '/app/platforms'
+    | '/app/reports'
+    | '/app/settings'
+    | '/admin/'
+    | '/app/'
+    | '/api/internal/worker'
+    | '/api/public/health'
     | '/api/public/version'
+    | '/app/reviews/$caseId'
+    | '/app/reviews/new'
+    | '/app/reviews/'
     | '/api/public/google/callback'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
+    | '/login'
     | '/bulk'
     | '/dashboard'
     | '/locations'
     | '/reports'
+    | '/admin/ai'
+    | '/admin/audit'
+    | '/admin/jobs'
+    | '/admin/users'
+    | '/app/bulk'
+    | '/app/locations'
+    | '/app/platforms'
+    | '/app/reports'
+    | '/app/settings'
+    | '/admin'
+    | '/app'
+    | '/api/internal/worker'
+    | '/api/public/health'
     | '/api/public/version'
+    | '/app/reviews/$caseId'
+    | '/app/reviews/new'
+    | '/app/reviews'
     | '/api/public/google/callback'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/admin'
+    | '/app'
     | '/auth'
+    | '/login'
     | '/_authenticated/bulk'
     | '/_authenticated/dashboard'
     | '/_authenticated/locations'
     | '/_authenticated/reports'
+    | '/admin/ai'
+    | '/admin/audit'
+    | '/admin/jobs'
+    | '/admin/users'
+    | '/app/bulk'
+    | '/app/locations'
+    | '/app/platforms'
+    | '/app/reports'
+    | '/app/settings'
+    | '/admin/'
+    | '/app/'
+    | '/api/internal/worker'
+    | '/api/public/health'
     | '/api/public/version'
+    | '/app/reviews/$caseId'
+    | '/app/reviews/new'
+    | '/app/reviews/'
     | '/api/public/google/callback'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren
+  AppRouteRoute: typeof AppRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  LoginRoute: typeof LoginRoute
+  ApiInternalWorkerRoute: typeof ApiInternalWorkerRoute
+  ApiPublicHealthRoute: typeof ApiPublicHealthRoute
   ApiPublicVersionRoute: typeof ApiPublicVersionRoute
   ApiPublicGoogleCallbackRoute: typeof ApiPublicGoogleCallbackRoute
 }
@@ -154,11 +383,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/bulk': {
@@ -189,12 +439,124 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedReportsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/ai': {
+      id: '/admin/ai'
+      path: '/ai'
+      fullPath: '/admin/ai'
+      preLoaderRoute: typeof AdminAiRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/audit': {
+      id: '/admin/audit'
+      path: '/audit'
+      fullPath: '/admin/audit'
+      preLoaderRoute: typeof AdminAuditRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/jobs': {
+      id: '/admin/jobs'
+      path: '/jobs'
+      fullPath: '/admin/jobs'
+      preLoaderRoute: typeof AdminJobsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/bulk': {
+      id: '/app/bulk'
+      path: '/bulk'
+      fullPath: '/app/bulk'
+      preLoaderRoute: typeof AppBulkRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/locations': {
+      id: '/app/locations'
+      path: '/locations'
+      fullPath: '/app/locations'
+      preLoaderRoute: typeof AppLocationsRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/platforms': {
+      id: '/app/platforms'
+      path: '/platforms'
+      fullPath: '/app/platforms'
+      preLoaderRoute: typeof AppPlatformsRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/reports': {
+      id: '/app/reports'
+      path: '/reports'
+      fullPath: '/app/reports'
+      preLoaderRoute: typeof AppReportsRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/settings': {
+      id: '/app/settings'
+      path: '/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/api/internal/worker': {
+      id: '/api/internal/worker'
+      path: '/api/internal/worker'
+      fullPath: '/api/internal/worker'
+      preLoaderRoute: typeof ApiInternalWorkerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/health': {
+      id: '/api/public/health'
+      path: '/api/public/health'
+      fullPath: '/api/public/health'
+      preLoaderRoute: typeof ApiPublicHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/version': {
       id: '/api/public/version'
       path: '/api/public/version'
       fullPath: '/api/public/version'
       preLoaderRoute: typeof ApiPublicVersionRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/app/reviews/': {
+      id: '/app/reviews/'
+      path: '/reviews'
+      fullPath: '/app/reviews/'
+      preLoaderRoute: typeof AppReviewsIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/reviews/$caseId': {
+      id: '/app/reviews/$caseId'
+      path: '/reviews/$caseId'
+      fullPath: '/app/reviews/$caseId'
+      preLoaderRoute: typeof AppReviewsCaseIdRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/reviews/new': {
+      id: '/app/reviews/new'
+      path: '/reviews/new'
+      fullPath: '/app/reviews/new'
+      preLoaderRoute: typeof AppReviewsNewRouteImport
+      parentRoute: typeof AppRouteRoute
     }
     '/api/public/google/callback': {
       id: '/api/public/google/callback'
@@ -223,10 +585,63 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface AdminRouteRouteChildren {
+  AdminAiRoute: typeof AdminAiRoute
+  AdminAuditRoute: typeof AdminAuditRoute
+  AdminJobsRoute: typeof AdminJobsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminAiRoute: AdminAiRoute,
+  AdminAuditRoute: AdminAuditRoute,
+  AdminJobsRoute: AdminJobsRoute,
+  AdminUsersRoute: AdminUsersRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+)
+
+interface AppRouteRouteChildren {
+  AppBulkRoute: typeof AppBulkRoute
+  AppLocationsRoute: typeof AppLocationsRoute
+  AppPlatformsRoute: typeof AppPlatformsRoute
+  AppReportsRoute: typeof AppReportsRoute
+  AppSettingsRoute: typeof AppSettingsRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppReviewsCaseIdRoute: typeof AppReviewsCaseIdRoute
+  AppReviewsNewRoute: typeof AppReviewsNewRoute
+  AppReviewsIndexRoute: typeof AppReviewsIndexRoute
+}
+
+const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppBulkRoute: AppBulkRoute,
+  AppLocationsRoute: AppLocationsRoute,
+  AppPlatformsRoute: AppPlatformsRoute,
+  AppReportsRoute: AppReportsRoute,
+  AppSettingsRoute: AppSettingsRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppReviewsCaseIdRoute: AppReviewsCaseIdRoute,
+  AppReviewsNewRoute: AppReviewsNewRoute,
+  AppReviewsIndexRoute: AppReviewsIndexRoute,
+}
+
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
+  AppRouteRoute: AppRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  LoginRoute: LoginRoute,
+  ApiInternalWorkerRoute: ApiInternalWorkerRoute,
+  ApiPublicHealthRoute: ApiPublicHealthRoute,
   ApiPublicVersionRoute: ApiPublicVersionRoute,
   ApiPublicGoogleCallbackRoute: ApiPublicGoogleCallbackRoute,
 }

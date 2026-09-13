@@ -1,50 +1,22 @@
 import type { ReviewAnalysis } from "./analysis-types";
+import type { ReportStatus } from "./state-machines";
 
-export const CASE_STATUSES = [
-  "new",
-  "reported",
-  "pending",
-  "removed",
-  "rejected",
-  "ignored",
-] as const;
+export type CaseDecision = "reportable" | "not_reportable" | "needs_human_review";
 
-export type CaseStatus = (typeof CASE_STATUSES)[number];
-
-export const CASE_STATUS_TRANSITIONS: Record<CaseStatus, readonly CaseStatus[]> = {
-  new: ["reported", "ignored"],
-  reported: ["pending", "removed", "rejected"],
-  pending: ["removed", "rejected"],
-  removed: [],
-  rejected: [],
-  ignored: ["new"],
+export const DECISION_LABELS: Record<CaseDecision, string> = {
+  reportable: "Worth reporting",
+  needs_human_review: "Needs your judgement",
+  not_reportable: "No violation",
 };
 
-export const STATUS_LABELS: Record<CaseStatus, string> = {
-  new: "Not reported yet",
-  reported: "Reported to Google",
-  pending: "Waiting on Google",
-  removed: "Review removed",
-  rejected: "Google said no",
-  ignored: "Left alone",
-};
-
-export const STATUS_SHORT: Record<CaseStatus, string> = {
-  new: "New",
-  reported: "Reported",
-  pending: "Waiting",
-  removed: "Removed",
-  rejected: "Kept",
-  ignored: "Ignored",
-};
-
-export const STATUS_TONE: Record<CaseStatus, "neutral" | "info" | "warning" | "safe" | "danger"> = {
-  new: "neutral",
-  reported: "info",
-  pending: "warning",
-  removed: "safe",
-  rejected: "danger",
-  ignored: "neutral",
+export type CaseReportSummary = {
+  id: string;
+  status: ReportStatus;
+  version: number;
+  externalReference: string | null;
+  submittedAt: string | null;
+  decidedAt: string | null;
+  updatedAt: string;
 };
 
 export type CaseRecord = {
@@ -53,12 +25,14 @@ export type CaseRecord = {
   locationName: string;
   locationAddress: string;
   platform: string;
-  sourceUrl: string;
   reviewUrl: string;
+  sourceUrl: string;
   authorName: string;
   reviewRating: number | null;
   reviewText: string;
-  reviewRelativeTime: string;
+  reviewPublishedAt: string | null;
+  identityStatus: string;
+  decision: CaseDecision;
   verdict: string;
   violationCategory: string;
   headline: string;
@@ -66,12 +40,56 @@ export type CaseRecord = {
   confidence: number;
   severity: string;
   rejectionRisk: string;
-  status: CaseStatus;
-  statusNote: string;
-  reportedAt: string | null;
-  resolvedAt: string | null;
+  modelAgreement: string;
+  dismissed: boolean;
   createdAt: string;
+  report: CaseReportSummary | null;
   analysis: ReviewAnalysis | null;
+};
+
+export type EvidenceItem = {
+  id: string;
+  kind: "supporting" | "counter" | "missing";
+  content: string;
+  verified: boolean;
+  excerptStart: number | null;
+  excerptEnd: number | null;
+};
+
+export type ReportEvent = {
+  id: string;
+  reportId: string;
+  fromStatus: string | null;
+  toStatus: string;
+  note: string;
+  externalReference: string | null;
+  createdAt: string;
+};
+
+export type AiRunSummary = {
+  stage: string;
+  provider: string;
+  model: string;
+  status: string;
+  durationMs: number;
+  confidence: number | null;
+  errorCode: string | null;
+  createdAt: string;
+};
+
+export type CaseDetail = CaseRecord & {
+  evidence: EvidenceItem[];
+  reports: Array<
+    CaseReportSummary & {
+      route: string;
+      reportReason: string;
+      reportBody: string;
+      outcomeSource: string | null;
+      outcomeNote: string;
+    }
+  >;
+  reportEvents: ReportEvent[];
+  aiRuns: AiRunSummary[];
 };
 
 export type LocationRecord = {
@@ -119,7 +137,7 @@ export function parseUrlList(input: string) {
     try {
       const parsed = new URL(value.startsWith("http") ? value : `https://${value}`);
       const host = parsed.hostname.toLowerCase();
-      if (host.includes("google.") || host.includes("goo.gl")) {
+      if (host.includes("google.") || host.includes("goo.gl") || host.endsWith("g.page")) {
         valid = true;
       } else if (host.includes("facebook.") || host.includes("instagram.")) {
         reason = "Facebook and Instagram aren't connected yet";

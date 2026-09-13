@@ -33,3 +33,5 @@ dist-ssr
 
 # Runtime secrets live in /etc/review-guardian-ai.env on the server, never in git.
 .env
+test-results/
+playwright-report/

@@ -21,23 +21,29 @@ type MenuKey = "reviews" | "reports" | "platforms" | "how";
 
 const platformItems = [
   { name: "Google Reviews", note: "Live scanning today", glyph: "G", color: "#4285f4", live: true },
-  { name: "Facebook", note: "Link detected, scanning soon", icon: Facebook, color: "#1877f2", live: false },
+  {
+    name: "Facebook",
+    note: "Link detected, scanning soon",
+    icon: Facebook,
+    color: "#1877f2",
+    live: false,
+  },
   { name: "Instagram", note: "Coming next", icon: Instagram, color: "#e1306c", live: false },
   { name: "YouTube", note: "Coming next", icon: Youtube, color: "#ff0000", live: false },
   { name: "Trustpilot", note: "Coming next", icon: Star, color: "#00b67a", live: false },
 ];
 
 const reviewItems = [
-  { label: "All reviews", to: "/dashboard", hint: "Everything you have scanned" },
-  { label: "Possible violations", to: "/dashboard", hint: "Flagged by the AI policy check" },
-  { label: "Needs a look", to: "/dashboard", hint: "Waiting on your decision" },
-  { label: "Reported", to: "/reports", hint: "Sent to the platform" },
+  { label: "All reviews", to: "/app/reviews", hint: "Everything you have scanned" },
+  { label: "Possible violations", to: "/app/reviews", hint: "Flagged by the AI policy check" },
+  { label: "Needs a look", to: "/app/reviews", hint: "Waiting on your decision" },
+  { label: "Reported", to: "/app/reports", hint: "Sent to the platform" },
 ];
 
 const reportItems = [
-  { label: "Active reports", to: "/reports", hint: "Submitted and in progress" },
-  { label: "Pending", to: "/reports", hint: "Awaiting a platform decision" },
-  { label: "Resolved", to: "/reports", hint: "Outcome recorded" },
+  { label: "Active reports", to: "/app/reports", hint: "Submitted and in progress" },
+  { label: "Pending", to: "/app/reports", hint: "Awaiting a platform decision" },
+  { label: "Resolved", to: "/app/reports", hint: "Outcome recorded" },
 ];
 
 const howSteps = [
@@ -189,8 +195,8 @@ export function SiteHeader({
               {lightMode ? <MoonStar className="size-4" /> : <Sun className="size-4" />}
             </button>
           ) : null}
-          <Link to={signedIn ? "/dashboard" : "/auth"} className="rw-ghost-btn">
-            {signedIn ? "Dashboard" : "Login"}
+          <Link to={signedIn ? "/app/reviews" : "/auth"} className="rw-ghost-btn">
+            {signedIn ? "Workspace" : "Login"}
           </Link>
           <button type="button" className="rw-cta" onClick={scan}>
             Scan a Review <ArrowRight className="size-4" />
@@ -209,13 +215,23 @@ export function SiteHeader({
 
       {mobileOpen ? (
         <div className="rw-mobile">
-          <button type="button" onClick={scan}>Scan Review</button>
-          <Link to="/dashboard" onClick={() => setMobileOpen(false)}>Reviews</Link>
-          <Link to="/reports" onClick={() => setMobileOpen(false)}>Reports</Link>
-          <a href="#platforms" onClick={() => setMobileOpen(false)}>Platforms</a>
-          <a href="#how" onClick={() => setMobileOpen(false)}>How It Works</a>
-          <Link to={signedIn ? "/dashboard" : "/auth"} onClick={() => setMobileOpen(false)}>
-            {signedIn ? "Dashboard" : "Login"}
+          <button type="button" onClick={scan}>
+            Scan Review
+          </button>
+          <Link to="/app/reviews" onClick={() => setMobileOpen(false)}>
+            Reviews
+          </Link>
+          <Link to="/app/reports" onClick={() => setMobileOpen(false)}>
+            Reports
+          </Link>
+          <a href="#platforms" onClick={() => setMobileOpen(false)}>
+            Platforms
+          </a>
+          <a href="#how" onClick={() => setMobileOpen(false)}>
+            How It Works
+          </a>
+          <Link to={signedIn ? "/app/reviews" : "/auth"} onClick={() => setMobileOpen(false)}>
+            {signedIn ? "Workspace" : "Login"}
           </Link>
           <button type="button" className="rw-cta rw-cta-block" onClick={scan}>
             Scan a Review <ArrowRight className="size-4" />

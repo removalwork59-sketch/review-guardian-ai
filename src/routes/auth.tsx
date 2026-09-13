@@ -36,7 +36,7 @@ function AuthPage() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) void navigate({ to: "/dashboard" });
+      if (data.session) void navigate({ to: "/app/reviews" });
     });
   }, [navigate]);
 
@@ -49,7 +49,7 @@ function AuthPage() {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        options: { emailRedirectTo: `${window.location.origin}/dashboard` },
+        options: { emailRedirectTo: `${window.location.origin}/app/reviews` },
       });
       setBusy(false);
       if (error) return setMessage({ tone: "error", text: error.message });
@@ -60,7 +60,7 @@ function AuthPage() {
         });
       }
       await supabase.rpc("ensure_my_profile");
-      void navigate({ to: "/dashboard" });
+      void navigate({ to: "/app/reviews" });
       return;
     }
 
@@ -77,14 +77,14 @@ function AuthPage() {
         text: "Your account is secure, but the workspace could not finish loading. Please try again.",
       });
     }
-    void navigate({ to: "/dashboard" });
+    void navigate({ to: "/app/reviews" });
   }
 
   async function handleGoogle() {
     setMessage(null);
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: `${window.location.origin}/dashboard` },
+      options: { redirectTo: `${window.location.origin}/app/reviews` },
     });
     if (error) {
       setMessage({ tone: "error", text: "Google sign-in didn't complete. Please try again." });

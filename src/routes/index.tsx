@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import {
@@ -38,7 +38,6 @@ import { Button } from "@/components/ui/button";
 import { ScanProgress } from "@/components/scan-progress";
 import { AnalysisPanel } from "@/components/analysis-panel";
 import { analyzeReviewForPolicy, scanReviewUrl } from "@/lib/review.functions";
-import { saveCase } from "@/lib/cases.functions";
 import type { ScanResult } from "@/lib/review.functions";
 import type { BusinessInfo, ReviewAnalysis, ReviewInfo } from "@/lib/analysis-types";
 import { looksLikeUrl } from "@/lib/platforms";
@@ -85,7 +84,7 @@ const ANALYSIS_STEPS = [
 function Home() {
   const scan = useServerFn(scanReviewUrl);
   const analyze = useServerFn(analyzeReviewForPolicy);
-  const save = useServerFn(saveCase);
+  const navigate = useNavigate();
 
   const [url, setUrl] = useState("");
   const [stage, setStage] = useState<Stage>("idle");
@@ -94,7 +93,6 @@ function Home() {
   const [review, setReview] = useState<ReviewInfo | null>(null);
   const [analysis, setAnalysis] = useState<ReviewAnalysis | null>(null);
   const [signedIn, setSignedIn] = useState(false);
-  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setSignedIn(Boolean(data.session)));
@@ -114,6 +112,12 @@ function Home() {
         message: "That doesn't look like a review link yet.",
         hint: "Copy the whole link from your browser's address bar, starting with https://",
       });
+      return;
+    }
+
+    // Signed-in scans run as durable workspace jobs, with results saved and tracked.
+    if (signedIn) {
+      await navigate({ to: "/app/reviews/new", search: { url: value } });
       return;
     }
 
@@ -143,28 +147,6 @@ function Home() {
     setError(null);
     setStage("analyzing");
 
-    if (signedIn && result) {
-      try {
-        const savedResult = await save({
-          data: {
-            platform: result.platform,
-            sourceUrl: result.sourceUrl,
-            business,
-            review: selected,
-          },
-        });
-        setAnalysis(savedResult.analysis);
-        setStage("result");
-        setSaved(true);
-        return;
-      } catch (saveError) {
-        console.error(saveError);
-        setError({ message: "We couldn't save this analysis.", hint: "Please try again." });
-        setStage("picking");
-        return;
-      }
-    }
-
     const response = await analyze({ data: { business, review: selected } });
     if (!response.ok) {
       setError({ message: response.message, hint: response.hint });
@@ -174,7 +156,6 @@ function Home() {
 
     setAnalysis(response.analysis);
     setStage("result");
-    setSaved(false);
   }
 
   function reset() {
@@ -183,7 +164,6 @@ function Home() {
     setReview(null);
     setResult(null);
     setError(null);
-    setSaved(false);
   }
 
   const busy = stage === "scanning" || stage === "analyzing";
@@ -216,11 +196,11 @@ function Home() {
             </nav>
             <div className="flex items-center gap-2">
               <Link
-                to={signedIn ? "/dashboard" : "/auth"}
+                to={signedIn ? "/app/reviews" : "/auth"}
                 className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-card/70 px-3.5 py-2 text-sm font-medium text-ink backdrop-blur transition hover:border-primary/40 hover:bg-muted"
               >
                 <LayoutGrid className="size-4 text-primary" />
-                {signedIn ? "Dashboard" : "Client login"}
+                {signedIn ? "Workspace" : "Client login"}
               </Link>
               <a
                 href="#scan"
@@ -420,8 +400,7 @@ function Home() {
                 <Note text="We can't remove a review for you. Google decides that. This opens the review on Google so you can flag it there with the reasoning above." />
                 {signedIn ? (
                   <p className="text-center text-sm text-muted-foreground">
-                    {saved ? "Saved to your dashboard. " : ""}
-                    <Link to="/dashboard" className="font-medium text-primary hover:underline">
+                    <Link to="/app/reviews" className="font-medium text-primary hover:underline">
                       Open your reviews
                     </Link>
                   </p>

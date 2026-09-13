@@ -1,6 +1,6 @@
 /**
- * Google Business Profile API access for a user's own connected Google account (server only).
- * Reads accounts, locations and reviews the signed-in owner is authorized to manage.
+ * Google Business Profile API access for a workspace's connected Google account (server only).
+ * Reads the accounts, locations and reviews that account is authorized to manage.
  */
 import { TtlCache } from "./google.server";
 
@@ -33,7 +33,7 @@ export function describeBusinessProfileError(error: unknown) {
     return "A required Google Business Profile API is turned off in the app's Google Cloud project.";
   }
   if (error.status === 401) {
-    return "The Google connection has expired. Reconnect Google on the Locations page.";
+    return "The Google connection has expired. Reconnect Google on the Platforms page.";
   }
   if (error.status === 403) {
     return "Google denied access: the connected Google account doesn't manage this Business Profile.";
@@ -44,9 +44,14 @@ export function describeBusinessProfileError(error: unknown) {
   return error.message;
 }
 
-// When Google reports a 0 quota, every call fails the same way; don't slow scans re-asking.
+// When Google reports a 0 quota every call fails the same way; don't slow scans asking again.
 let quotaZeroUntil = 0;
 let quotaZeroError: BusinessProfileError | null = null;
+let lastSuccessAt: string | null = null;
+
+export function businessProfileQuotaState() {
+  return { quotaZero: Boolean(quotaZeroError) && Date.now() < quotaZeroUntil, lastSuccessAt };
+}
 
 async function googleGet<T>(url: string, accessToken: string): Promise<T> {
   if (quotaZeroError && Date.now() < quotaZeroUntil) throw quotaZeroError;
@@ -59,7 +64,11 @@ async function googleGet<T>(url: string, accessToken: string): Promise<T> {
   } catch {
     throw new BusinessProfileError("Google Business Profile could not be reached.", 0, null, false);
   }
-  if (response.ok) return (await response.json()) as T;
+  if (response.ok) {
+    lastSuccessAt = new Date().toISOString();
+    quotaZeroError = null;
+    return (await response.json()) as T;
+  }
 
   const body = (await response.json().catch(() => ({}))) as {
     error?: {
@@ -94,13 +103,13 @@ async function admin(): Promise<Admin> {
   return supabaseAdmin;
 }
 
-/** Returns a valid access token for the user's own connection, refreshing it when needed. */
-export async function getBusinessProfileAccessToken(userId: string): Promise<string | null> {
+/** A valid access token for the workspace's connection, refreshed when needed; null if not connected. */
+export async function getBusinessProfileAccessToken(workspaceId: string): Promise<string | null> {
   const db = await admin();
   const { data: connection, error } = await db
     .from("google_business_connections")
     .select("access_token_ciphertext,refresh_token_ciphertext,token_expires_at,status")
-    .eq("user_id", userId)
+    .eq("workspace_id", workspaceId)
     .maybeSingle();
   if (error) throw error;
   if (!connection || connection.status !== "connected") return null;
@@ -122,7 +131,7 @@ export async function getBusinessProfileAccessToken(userId: string): Promise<str
         token_expires_at: new Date(Date.now() + refreshed.expiresIn * 1000).toISOString(),
         last_error: null,
       })
-      .eq("user_id", userId);
+      .eq("workspace_id", workspaceId);
     return refreshed.accessToken;
   } catch (refreshError) {
     const reauthorize = (refreshError as { reauthorize?: boolean }).reauthorize === true;
@@ -132,9 +141,9 @@ export async function getBusinessProfileAccessToken(userId: string): Promise<str
         ...(reauthorize ? { status: "reauthorization_required" } : {}),
         last_error: refreshError instanceof Error ? refreshError.message : "Token refresh failed",
       })
-      .eq("user_id", userId);
+      .eq("workspace_id", workspaceId);
     throw new BusinessProfileError(
-      "The Google connection has expired. Reconnect Google on the Locations page.",
+      "The Google connection has expired. Reconnect Google on the Platforms page.",
       401,
       reauthorize ? "invalid_grant" : null,
       false,
@@ -162,11 +171,15 @@ type RawLocation = {
   metadata?: { placeId?: string; mapsUri?: string };
 };
 
-const locationsByUser = new TtlCache<OwnedLocation[]>(10 * 60_000, 500);
+const locationsByWorkspace = new TtlCache<OwnedLocation[]>(10 * 60_000, 500);
+
+export function forgetOwnedLocations(workspaceId: string) {
+  locationsByWorkspace.delete(workspaceId);
+}
 
 /** Every Business Profile location the connected account manages (paginated). */
-export async function listOwnedLocations(userId: string, accessToken: string) {
-  const cached = locationsByUser.get(userId);
+export async function listOwnedLocations(workspaceId: string, accessToken: string) {
+  const cached = locationsByWorkspace.get(workspaceId);
   if (cached) return cached;
 
   const accounts: Array<{ name: string }> = [];
@@ -218,7 +231,7 @@ export async function listOwnedLocations(userId: string, accessToken: string) {
   );
 
   const locations = perAccount.flat();
-  locationsByUser.set(userId, locations);
+  locationsByWorkspace.set(workspaceId, locations);
   return locations;
 }
 

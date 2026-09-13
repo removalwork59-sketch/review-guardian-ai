@@ -44,7 +44,10 @@ const PLATFORMS = [
 
 export function PlatformsSection() {
   return (
-    <section id="platforms" className="mx-auto grid max-w-6xl gap-10 px-3 pt-36 sm:pt-44 lg:grid-cols-[.85fr_1.15fr] lg:items-center lg:gap-16">
+    <section
+      id="platforms"
+      className="mx-auto grid max-w-6xl gap-10 px-3 pt-36 sm:pt-44 lg:grid-cols-[.85fr_1.15fr] lg:items-center lg:gap-16"
+    >
       <div className="animate-rise">
         <h2 className="font-display text-4xl font-semibold leading-[1.05] text-ink sm:text-5xl">
           Finally, a way for businesses to{" "}
@@ -93,8 +96,8 @@ export function PromiseSection() {
             If There's No Violation, We Say So.
           </h2>
           <p className="mt-5 max-w-sm leading-relaxed text-ink/85">
-            No invented verdicts, no guaranteed removals. You get an honest read on whether a
-            review actually breaks the rules — and the evidence behind it.
+            No invented verdicts, no guaranteed removals. You get an honest read on whether a review
+            actually breaks the rules — and the evidence behind it.
           </p>
         </div>
         <div className="space-y-8 p-8 sm:p-12">
@@ -104,8 +107,8 @@ export function PromiseSection() {
               Real policy, checked both ways
             </h3>
             <p className="mt-3 leading-relaxed text-muted-foreground">
-              Every review is analysed against the platform's own policy, then argued from the
-              other side too. You see the evidence and the counter-evidence before you act.
+              Every review is analysed against the platform's own policy, then argued from the other
+              side too. You see the evidence and the counter-evidence before you act.
             </p>
           </div>
           <div className="h-px bg-border" />
@@ -184,8 +187,8 @@ export function ImpressionSection() {
       </h2>
       <p className="mt-6 max-w-2xl leading-relaxed text-muted-foreground">
         Someone who has never heard of you judges your whole business by your star rating. Not your
-        website. Not your years of experience. One unfair review can sit at the top of that list
-        for years.
+        website. Not your years of experience. One unfair review can sit at the top of that list for
+        years.
       </p>
 
       <div className="mt-12 grid gap-4 lg:grid-cols-2">
@@ -302,8 +305,7 @@ export function DashboardSection() {
     <section className="mt-32 border-y border-border bg-card/25 py-24">
       <div className="mx-auto max-w-6xl px-3 text-center">
         <h2 className="animate-rise mx-auto max-w-3xl font-display text-4xl font-semibold leading-[1.07] text-ink sm:text-6xl">
-          Every review, every case.{" "}
-          <span className="text-gradient-brand">In one place.</span>
+          Every review, every case. <span className="text-gradient-brand">In one place.</span>
         </h2>
         <p className="mx-auto mt-6 max-w-2xl leading-relaxed text-muted-foreground">
           Sign in and every scan is saved as a case with a real status. Reviews, reports and
@@ -329,11 +331,18 @@ export function DashboardSection() {
 
           <div className="grid gap-3 p-5 sm:grid-cols-3">
             {[
-              { icon: MessageSquareQuote, label: "Reviews scanned", hint: "Saved with the real text" },
+              {
+                icon: MessageSquareQuote,
+                label: "Reviews scanned",
+                hint: "Saved with the real text",
+              },
               { icon: Flag, label: "Reports filed", hint: "Status you control" },
               { icon: MapPin, label: "Locations", hint: "Grouped automatically" },
             ].map((tile) => (
-              <div key={tile.label} className="rounded-2xl border border-border bg-background/50 p-4">
+              <div
+                key={tile.label}
+                className="rounded-2xl border border-border bg-background/50 p-4"
+              >
                 <tile.icon className="size-5 text-primary" />
                 <p className="mt-3 text-sm font-semibold text-ink">{tile.label}</p>
                 <p className="mt-1 text-xs text-muted-foreground">{tile.hint}</p>
@@ -343,9 +352,21 @@ export function DashboardSection() {
 
           <div className="divide-y divide-border border-t border-border">
             {[
-              { icon: Radar, title: "Bulk scanning", body: "Paste up to 25 links and watch each one move through queued, scanning and done." },
-              { icon: ClipboardList, title: "Evidence on file", body: "Quoted lines, counter-evidence and the recommended action stay attached to the case." },
-              { icon: TrendingUp, title: "Honest status", body: "New, reported, pending, removed, rejected or ignored. Nothing is marked resolved for you." },
+              {
+                icon: Radar,
+                title: "Bulk scanning",
+                body: "Paste up to 25 links and watch each one move through queued, scanning and done.",
+              },
+              {
+                icon: ClipboardList,
+                title: "Evidence on file",
+                body: "Quoted lines, counter-evidence and the recommended action stay attached to the case.",
+              },
+              {
+                icon: TrendingUp,
+                title: "Honest status",
+                body: "New, reported, pending, removed, rejected or ignored. Nothing is marked resolved for you.",
+              },
             ].map((row) => (
               <div key={row.title} className="flex items-start gap-3 px-5 py-4">
                 <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/12 text-primary">
@@ -377,14 +398,46 @@ export function DashboardSection() {
 /* -------------------------------- industries -------------------------------- */
 
 const INDUSTRIES = [
-  { icon: Stethoscope, name: "Dentists & Clinics", body: "One unfair review can cost a practice years of patient trust." },
-  { icon: Utensils, name: "Restaurants", body: "A single 1-star moves bookings before anyone reads the menu." },
-  { icon: Car, name: "Auto Shops", body: "Customers compare ratings before they ever call for a quote." },
-  { icon: Wrench, name: "Home Services", body: "Homeowners check reviews before letting anyone in the door." },
-  { icon: Gavel, name: "Law Firms", body: "Credibility is judged by your profile long before the first call." },
-  { icon: Store, name: "Retail & Car Washes", body: "High-volume businesses feel every fraction of a star." },
-  { icon: Building2, name: "Multi-location Brands", body: "Group every case by location and see which site needs help." },
-  { icon: Globe, name: "Any Local Business", body: "If you have a Google Business Profile, you can scan it today." },
+  {
+    icon: Stethoscope,
+    name: "Dentists & Clinics",
+    body: "One unfair review can cost a practice years of patient trust.",
+  },
+  {
+    icon: Utensils,
+    name: "Restaurants",
+    body: "A single 1-star moves bookings before anyone reads the menu.",
+  },
+  {
+    icon: Car,
+    name: "Auto Shops",
+    body: "Customers compare ratings before they ever call for a quote.",
+  },
+  {
+    icon: Wrench,
+    name: "Home Services",
+    body: "Homeowners check reviews before letting anyone in the door.",
+  },
+  {
+    icon: Gavel,
+    name: "Law Firms",
+    body: "Credibility is judged by your profile long before the first call.",
+  },
+  {
+    icon: Store,
+    name: "Retail & Car Washes",
+    body: "High-volume businesses feel every fraction of a star.",
+  },
+  {
+    icon: Building2,
+    name: "Multi-location Brands",
+    body: "Group every case by location and see which site needs help.",
+  },
+  {
+    icon: Globe,
+    name: "Any Local Business",
+    body: "If you have a Google Business Profile, you can scan it today.",
+  },
 ] as const;
 
 export function IndustriesSection() {
@@ -551,10 +604,10 @@ export function SiteFooter() {
         <FooterCol
           title="Workspace"
           links={[
-            { label: "Dashboard", to: "/dashboard" },
-            { label: "Reports", to: "/reports" },
-            { label: "Locations", to: "/locations" },
-            { label: "Bulk scan", to: "/bulk" },
+            { label: "Reviews", to: "/app/reviews" },
+            { label: "Reports", to: "/app/reports" },
+            { label: "Locations", to: "/app/locations" },
+            { label: "Bulk scan", to: "/app/bulk" },
           ]}
         />
         <div>
@@ -573,13 +626,7 @@ export function SiteFooter() {
   );
 }
 
-function FooterCol({
-  title,
-  links,
-}: {
-  title: string;
-  links: { label: string; to: string }[];
-}) {
+function FooterCol({ title, links }: { title: string; links: { label: string; to: string }[] }) {
   return (
     <div>
       <p className="text-sm font-semibold text-ink">{title}</p>

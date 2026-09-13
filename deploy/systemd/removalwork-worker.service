@@ -1,0 +1,10 @@
+[Unit]
+Description=Removal Work background worker pass (retries, crash recovery, expiries)
+After=review-guardian-ai.service
+Requires=review-guardian-ai.service
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/review-guardian-ai.env
+# The secret is written to curl's stdin, so it never appears in the process list.
+ExecStart=/bin/sh -c 'printf "Authorization: Bearer %%s\n" "$CRON_SECRET" | /usr/bin/curl -fsS -X POST -H @- --max-time 280 http://127.0.0.1:3000/api/internal/worker'

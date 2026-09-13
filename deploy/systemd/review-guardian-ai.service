@@ -1,0 +1,19 @@
+[Unit]
+Description=Removal Work (review-guardian-ai) production server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/var/www/review-guardian-ai
+# Runtime secrets live only on the server (root-only), never in git.
+EnvironmentFile=/etc/review-guardian-ai.env
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node .output/server/index.mjs
+Restart=always
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

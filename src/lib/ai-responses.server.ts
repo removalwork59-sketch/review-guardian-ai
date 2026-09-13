@@ -75,11 +75,16 @@ export async function generateStrictJson<T>(args: {
   }
 
   if (!response || !response.ok || !response.body) {
-    if (!response)
-      throw new FriendlyError("The AI service could not be reached.", "Please try again.");
+    if (!response) {
+      throw new FriendlyError("The AI service could not be reached.", "Please try again.", {
+        code: "ai_unavailable",
+      });
+    }
     const body = await response.text().catch(() => "");
     console.error(`OpenAI request failed [${response.status}]: ${body.slice(0, 500)}`);
-    throw new FriendlyError(describeAiFailure(response.status), "");
+    throw new FriendlyError(describeAiFailure(response.status), "", {
+      code: isRetryableStatus(response.status) ? "ai_unavailable" : "ai_configuration",
+    });
   }
 
   const reader = response.body.getReader();
@@ -123,17 +128,21 @@ export async function generateStrictJson<T>(args: {
 
   if (failure) {
     console.error(`OpenAI response failed: ${failure}`);
-    throw new FriendlyError(describeAiFailure(), "");
+    throw new FriendlyError(describeAiFailure(), "", { code: "ai_unavailable" });
   }
   if (!text.trim()) {
-    throw new FriendlyError("The AI didn't return a result for this review.", "Please try again.");
+    throw new FriendlyError("The AI didn't return a result for this review.", "Please try again.", {
+      code: "ai_unavailable",
+    });
   }
 
   try {
     return args.validate(JSON.parse(text));
   } catch {
     console.error("OpenAI returned invalid structured output.");
-    throw new FriendlyError("The AI result came back incomplete.", "Please try again.");
+    throw new FriendlyError("The AI result came back incomplete.", "Please try again.", {
+      code: "ai_invalid_output",
+    });
   }
 }
 

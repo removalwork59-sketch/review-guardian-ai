@@ -54,11 +54,17 @@ export type GoogleReference = {
   reviewId?: string | undefined;
 };
 
+/**
+ * An error whose message is safe to show the user. `code` classifies it for retry handling:
+ * rate_limited / provider_unavailable / ai_unavailable are retried with backoff; others are not.
+ */
 export class FriendlyError extends Error {
   hint: string;
-  constructor(message: string, hint = "") {
+  code: string | undefined;
+  constructor(message: string, hint = "", options: { code?: string } = {}) {
     super(message);
     this.hint = hint;
+    this.code = options.code;
   }
 }
 
@@ -68,6 +74,7 @@ function apiKey() {
     throw new FriendlyError(
       "The Google connection isn't ready yet.",
       "The server's Google Places key is not configured.",
+      { code: "not_configured" },
     );
   }
   return key;
@@ -96,6 +103,9 @@ export class TtlCache<T> {
     }
     this.entries.set(key, { value, expires: Date.now() + this.ttlMs });
   }
+  delete(key: string) {
+    this.entries.delete(key);
+  }
 }
 
 const expandedByUrl = new TtlCache<string>(60 * 60_000, 2000);
@@ -121,6 +131,7 @@ async function places(path: string, init: RequestInit & { fieldMask: string }) {
     throw new FriendlyError(
       "We couldn't reach Google for this review right now.",
       "Please try again in a moment.",
+      { code: "provider_unavailable" },
     );
   }
 
@@ -133,53 +144,76 @@ async function places(path: string, init: RequestInit & { fieldMask: string }) {
       throw new FriendlyError(
         "Google turned down our request for this business.",
         "This is a Google access restriction, not a problem with your link.",
+        { code: "provider_forbidden" },
       );
     }
     if (response.status === 429) {
       throw new FriendlyError(
         "We've reached Google's lookup limit for now.",
         "Please try again in a few minutes.",
+        { code: "rate_limited" },
       );
     }
     if (response.status === 400 || response.status === 404) {
       throw new FriendlyError(
         "Google couldn't find this business from the link.",
         "Try the link from the business's main Google Maps page.",
+        { code: "business_not_found" },
       );
     }
     throw new FriendlyError(
       "We couldn't reach Google for this review right now.",
       "Please try again in a moment.",
+      { code: "provider_unavailable" },
     );
   }
 
   return (await response.json()) as Record<string, unknown>;
 }
 
+const GOOGLE_DOMAIN = /^(?:[a-z0-9-]+\.)*google\.(?:com|[a-z]{2}|co\.[a-z]{2}|com\.[a-z]{2})$/;
+
+/** Google-owned hosts only (google.com, google.co.uk, maps.app.goo.gl, g.page …), never look-alikes. */
 export function isGoogleHost(hostname: string) {
-  const host = hostname.toLowerCase();
+  const host = hostname.toLowerCase().replace(/\.$/, "");
   return (
-    /^(?:[a-z0-9-]+\.)?google\.[a-z.]+$/.test(host) ||
+    GOOGLE_DOMAIN.test(host) ||
     host === "goo.gl" ||
-    host.endsWith(".goo.gl") ||
+    host === "maps.app.goo.gl" ||
     host === "g.page" ||
     host.endsWith(".g.page")
   );
 }
 
-/** Follows a URL's redirects, but only ever returns a Google URL. */
+function isShortLinkHost(hostname: string) {
+  const host = hostname.toLowerCase();
+  return (
+    host === "goo.gl" || host === "maps.app.goo.gl" || host === "g.page" || host.endsWith(".g.page")
+  );
+}
+
+/**
+ * Expands a short link one hop at a time, refusing any hop that leaves Google, so a pasted link
+ * can never make the server fetch an arbitrary or internal address (SSRF).
+ */
 async function followGoogleRedirect(url: URL) {
-  try {
-    const res = await fetch(url, {
-      redirect: "follow",
-      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
-    });
-    await res.body?.cancel().catch(() => undefined);
-    const finalUrl = res.url ? new URL(res.url) : null;
-    return finalUrl && isGoogleHost(finalUrl.hostname) ? finalUrl.toString() : null;
-  } catch {
-    return null;
+  let current = url;
+  for (let hop = 0; hop < 5; hop += 1) {
+    if (current.protocol !== "https:" || !isGoogleHost(current.hostname)) return null;
+    try {
+      const res = await fetch(current, {
+        redirect: "manual",
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+      });
+      await res.body?.cancel().catch(() => undefined);
+      const location = res.headers.get("location");
+      if (res.status < 300 || res.status >= 400 || !location) return current.toString();
+      current = new URL(location, current);
+    } catch {
+      return null;
+    }
   }
+  return isGoogleHost(current.hostname) ? current.toString() : null;
 }
 
 /** Short links hide the real place; follow them, but only to Google hosts. */
@@ -194,7 +228,7 @@ export async function expandGoogleUrl(rawUrl: string) {
   } catch {
     return candidate;
   }
-  const expanded = /goo\.gl$|g\.page$/i.test(url.hostname)
+  const expanded = isShortLinkHost(url.hostname)
     ? ((await followGoogleRedirect(url)) ?? candidate)
     : candidate;
   expandedByUrl.set(candidate, expanded);
