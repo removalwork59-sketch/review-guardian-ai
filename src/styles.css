@@ -1343,16 +1343,18 @@
   --boundary-card-violet: oklch(0.47 0.22 295);
   --boundary-card-text: oklch(0.98 0.008 170);
   --boundary-card-stars: oklch(0.79 0.18 163);
+  --boundary-offset: 110px;
   position: relative;
   isolation: isolate;
-  margin-top: 52px;
-  padding-bottom: 56px;
+  margin-top: 0;
+  padding-top: var(--boundary-offset);
+  padding-bottom: 80px;
 }
 .reference-boundary-stage::before {
   content: "";
   position: absolute;
   z-index: -1;
-  inset: 0 50% 0 50%;
+  inset: var(--boundary-offset) 50% 0 50%;
   width: 100vw;
   transform: translateX(-50%);
   background: linear-gradient(180deg, oklch(0.42 0.09 172), var(--boundary-surface));
@@ -1390,7 +1392,7 @@
   .reference-copy h1 { font-size: 42px; line-height: 1.06; }
   .reference-copy > p { font-size: 16px; }
   .reference-proof { margin-top: 34px; }
-  .reference-boundary-stage { margin-top: 42px; }
+  .reference-boundary-stage { --boundary-offset: 70px; margin-top: 0; padding-bottom: 56px; }
   .reference-tilt { display: grid; grid-template-columns: 1fr; gap: 12px; padding-inline: 0; }
   .reference-tilt article { width: 100%; min-height: 158px; transform: none !important; }
   .reference-tilt article + article { margin-left: 0; }
