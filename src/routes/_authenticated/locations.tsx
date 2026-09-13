@@ -42,6 +42,7 @@ function LocationsPage() {
   const fetchConnection = useServerFn(getGoogleBusinessConnection);
   const startConnection = useServerFn(startGoogleBusinessConnection);
   const disconnect = useServerFn(disconnectGoogleBusiness);
+  const syncReviews = useServerFn(syncGoogleBusinessReviews);
   const [connectionBusy, setConnectionBusy] = useState(false);
   const { data: connection } = useQuery({
     queryKey: ["google-business-connection"],
