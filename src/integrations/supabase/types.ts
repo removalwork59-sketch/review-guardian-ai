@@ -322,6 +322,84 @@ export type Database = {
           },
         ]
       }
+      google_business_connections: {
+        Row: {
+          access_token_ciphertext: string
+          created_at: string
+          google_account_email: string | null
+          id: string
+          last_error: string | null
+          last_synced_at: string | null
+          refresh_token_ciphertext: string
+          scopes: string[]
+          status: string
+          token_expires_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_token_ciphertext: string
+          created_at?: string
+          google_account_email?: string | null
+          id?: string
+          last_error?: string | null
+          last_synced_at?: string | null
+          refresh_token_ciphertext: string
+          scopes?: string[]
+          status?: string
+          token_expires_at: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_token_ciphertext?: string
+          created_at?: string
+          google_account_email?: string | null
+          id?: string
+          last_error?: string | null
+          last_synced_at?: string | null
+          refresh_token_ciphertext?: string
+          scopes?: string[]
+          status?: string
+          token_expires_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      google_oauth_states: {
+        Row: {
+          code_verifier_ciphertext: string
+          created_at: string
+          expires_at: string
+          id: string
+          redirect_origin: string
+          state_hash: string
+          used_at: string | null
+          user_id: string
+        }
+        Insert: {
+          code_verifier_ciphertext: string
+          created_at?: string
+          expires_at: string
+          id?: string
+          redirect_origin: string
+          state_hash: string
+          used_at?: string | null
+          user_id: string
+        }
+        Update: {
+          code_verifier_ciphertext?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          redirect_origin?: string
+          state_hash?: string
+          used_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       locations: {
         Row: {
           address: string
