@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, CheckCircle2, ChevronDown, MoonStar, Sparkles, Sun, X } from "lucide-react";
+import { ArrowRight, CheckCircle2, ChevronDown, Facebook, Instagram, MoonStar, ShieldCheck, Sparkles, Star, Sun, Youtube } from "lucide-react";
+import { X } from "lucide-react";
 import { useState } from "react";
 
 import analyticsIcon from "@/assets/reference-icons/analytics.png";
