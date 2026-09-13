@@ -14,6 +14,78 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_runs: {
+        Row: {
+          case_id: string | null
+          confidence: number | null
+          created_at: string
+          duration_ms: number
+          error_code: string | null
+          gateway_run_id: string | null
+          id: string
+          input_hash: string
+          model: string
+          output: Json
+          policy_version: string
+          prompt_version: string
+          purpose: string
+          review_record_id: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          case_id?: string | null
+          confidence?: number | null
+          created_at?: string
+          duration_ms?: number
+          error_code?: string | null
+          gateway_run_id?: string | null
+          id?: string
+          input_hash: string
+          model: string
+          output?: Json
+          policy_version: string
+          prompt_version: string
+          purpose: string
+          review_record_id?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          case_id?: string | null
+          confidence?: number | null
+          created_at?: string
+          duration_ms?: number
+          error_code?: string | null
+          gateway_run_id?: string | null
+          id?: string
+          input_hash?: string
+          model?: string
+          output?: Json
+          policy_version?: string
+          prompt_version?: string
+          purpose?: string
+          review_record_id?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_runs_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "review_cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_runs_review_record_id_fkey"
+            columns: ["review_record_id"]
+            isOneToOne: false
+            referencedRelation: "review_records"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       case_appeals: {
         Row: {
           case_id: string
@@ -357,6 +429,9 @@ export type Database = {
           external_id: string
           first_seen_at: string
           id: string
+          identity_confidence: number
+          identity_method: string
+          identity_status: string
           last_seen_at: string
           location_id: string
           observed_absent_at: string | null
@@ -365,10 +440,12 @@ export type Database = {
           rating: number | null
           raw_source: Json
           relative_time: string
+          requested_source_url: string
           review_text: string
           review_url: string
           updated_at: string
           user_id: string
+          verified_at: string | null
         }
         Insert: {
           author_name?: string
@@ -379,6 +456,9 @@ export type Database = {
           external_id: string
           first_seen_at?: string
           id?: string
+          identity_confidence?: number
+          identity_method?: string
+          identity_status?: string
           last_seen_at?: string
           location_id: string
           observed_absent_at?: string | null
@@ -387,10 +467,12 @@ export type Database = {
           rating?: number | null
           raw_source?: Json
           relative_time?: string
+          requested_source_url?: string
           review_text?: string
           review_url?: string
           updated_at?: string
           user_id: string
+          verified_at?: string | null
         }
         Update: {
           author_name?: string
@@ -401,6 +483,9 @@ export type Database = {
           external_id?: string
           first_seen_at?: string
           id?: string
+          identity_confidence?: number
+          identity_method?: string
+          identity_status?: string
           last_seen_at?: string
           location_id?: string
           observed_absent_at?: string | null
@@ -409,10 +494,12 @@ export type Database = {
           rating?: number | null
           raw_source?: Json
           relative_time?: string
+          requested_source_url?: string
           review_text?: string
           review_url?: string
           updated_at?: string
           user_id?: string
+          verified_at?: string | null
         }
         Relationships: [
           {
