@@ -1799,7 +1799,7 @@ body {
   box-shadow: inset 0 1px 3px oklch(0 0 0 / .28), 0 1px 0 color-mix(in oklab, var(--color-ink) 5%, transparent);
 }
 
-.reference-light :where(.reference-proof, .reference-platforms-grid article, .reference-promise, .three-step-card, .reference-features article, .reference-scan-panel, .audit-chat-panel) {
+.reference-page.reference-light :where(.reference-proof, .reference-platforms-grid article, .reference-promise, .three-step-card, .reference-features article, .reference-scan-panel, .audit-chat-panel) {
   box-shadow:
     inset 0 1px 0 oklch(1 0 0 / .95),
     inset 0 -1px 0 color-mix(in oklab, var(--brand-cyan) 9%, transparent),
@@ -1807,12 +1807,24 @@ body {
     0 0 0 1px color-mix(in oklab, var(--brand-cyan) 8%, transparent);
 }
 
-.reference-light .reference-proof,
-.reference-light .reference-scan-panel,
-.reference-light .reference-features article,
-.reference-light .reference-platforms-grid article,
-.reference-light .audit-chat-panel {
-  background: linear-gradient(145deg, var(--color-card), color-mix(in oklab, var(--color-muted) 45%, var(--color-card)));
+.reference-page.reference-light .reference-proof,
+.reference-page.reference-light .reference-scan-panel,
+.reference-page.reference-light .reference-features article,
+.reference-page.reference-light .reference-platforms-grid article,
+.reference-page.reference-light .audit-chat-panel {
+  background: linear-gradient(145deg, var(--card), color-mix(in oklab, var(--muted) 45%, var(--card)));
+}
+
+.reference-page.reference-light .three-step-card {
+  background: linear-gradient(145deg, var(--card), color-mix(in oklab, var(--muted) 52%, var(--card)));
+}
+
+.reference-page.reference-light .reference-promise-right {
+  background: linear-gradient(145deg, var(--card), color-mix(in oklab, var(--muted) 42%, var(--card)));
+}
+
+.reference-page.reference-light :where(.reference-proof-review, .proof-row) {
+  background: color-mix(in oklab, var(--muted) 58%, var(--card));
 }
 
 @media (prefers-contrast: more) {
