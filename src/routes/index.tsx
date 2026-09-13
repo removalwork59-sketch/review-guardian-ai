@@ -1,10 +1,15 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowRight,
+  CheckCircle2,
+  ClipboardList,
+  Clock,
   ExternalLink,
+  Flag,
   Info,
+  LayoutGrid,
   MapPin,
   MessageSquareQuote,
   Search,
@@ -12,13 +17,16 @@ import {
   Sparkles,
 } from "lucide-react";
 
+
 import { BrandMark, StarRating, Wordmark } from "@/components/brand";
 import { ScanProgress } from "@/components/scan-progress";
 import { AnalysisPanel } from "@/components/analysis-panel";
 import { analyzeReviewForPolicy, scanReviewUrl } from "@/lib/review.functions";
+import { saveCase } from "@/lib/cases.functions";
 import type { ScanResult } from "@/lib/review.functions";
 import type { BusinessInfo, ReviewAnalysis, ReviewInfo } from "@/lib/analysis-types";
 import { looksLikeUrl } from "@/lib/platforms";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -61,6 +69,7 @@ const ANALYSIS_STEPS = [
 function Home() {
   const scan = useServerFn(scanReviewUrl);
   const analyze = useServerFn(analyzeReviewForPolicy);
+  const save = useServerFn(saveCase);
 
   const [url, setUrl] = useState("");
   const [stage, setStage] = useState<Stage>("idle");
@@ -68,6 +77,18 @@ function Home() {
   const [result, setResult] = useState<ScanResult | null>(null);
   const [review, setReview] = useState<ReviewInfo | null>(null);
   const [analysis, setAnalysis] = useState<ReviewAnalysis | null>(null);
+  const [signedIn, setSignedIn] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSignedIn(Boolean(data.session)));
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" || event === "SIGNED_OUT" || event === "INITIAL_SESSION") {
+        setSignedIn(Boolean(session));
+      }
+    });
+    return () => sub.subscription.unsubscribe();
+  }, []);
 
   async function handleScan(event: React.FormEvent) {
     event.preventDefault();
@@ -115,6 +136,24 @@ function Home() {
 
     setAnalysis(response.analysis);
     setStage("result");
+    setSaved(false);
+
+    if (signedIn && result) {
+      try {
+        await save({
+          data: {
+            platform: result.platform,
+            sourceUrl: result.sourceUrl,
+            business,
+            review: selected,
+            analysis: response.analysis as unknown as Record<string, unknown>,
+          },
+        });
+        setSaved(true);
+      } catch (saveError) {
+        console.error(saveError);
+      }
+    }
   }
 
   function reset() {
@@ -123,6 +162,7 @@ function Home() {
     setReview(null);
     setResult(null);
     setError(null);
+    setSaved(false);
   }
 
   const busy = stage === "scanning" || stage === "analyzing";
@@ -131,10 +171,19 @@ function Home() {
     <main className="min-h-screen bg-background">
       <header className="mx-auto flex max-w-4xl items-center justify-between px-5 py-5">
         <Wordmark />
-        <span className="hidden items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground sm:inline-flex">
-          <ShieldCheck className="size-3.5 text-safe" />
-          Independent tool — not affiliated with Google
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="hidden items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground lg:inline-flex">
+            <ShieldCheck className="size-3.5 text-safe" />
+            Independent tool — not affiliated with Google
+          </span>
+          <Link
+            to={signedIn ? "/dashboard" : "/auth"}
+            className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 text-sm font-medium text-ink transition hover:bg-muted"
+          >
+            <LayoutGrid className="size-4" />
+            {signedIn ? "Dashboard" : "Sign in"}
+          </Link>
+        </div>
       </header>
 
       <div className="mx-auto w-full max-w-4xl px-5 pb-24">
@@ -187,25 +236,7 @@ function Home() {
               </div>
             ) : null}
 
-            {stage === "idle" ? (
-              <div className="mx-auto mt-14 grid max-w-3xl gap-3 text-left sm:grid-cols-3">
-                <Highlight
-                  icon={<MessageSquareQuote className="size-4.5" />}
-                  title="We read the review"
-                  body="We find the business and pull the review straight from the platform."
-                />
-                <Highlight
-                  icon={<Sparkles className="size-4.5" />}
-                  title="AI checks the rules"
-                  body="It weighs both sides before deciding — a harsh review isn't a broken rule."
-                />
-                <Highlight
-                  icon={<ShieldCheck className="size-4.5" />}
-                  title="You get one clear answer"
-                  body="Plain English, with the evidence, the risks and what to do next."
-                />
-              </div>
-            ) : null}
+            {stage === "idle" ? <Workflow /> : null}
           </section>
         ) : null}
 
@@ -284,6 +315,21 @@ function Home() {
                   onReport={() => window.open(review.reviewUrl, "_blank", "noopener")}
                 />
                 <Note text="We can't remove a review for you. Google decides that. This opens the review on Google so you can flag it there with the reasoning above." />
+                {signedIn ? (
+                  <p className="text-center text-sm text-muted-foreground">
+                    {saved ? "Saved to your dashboard. " : ""}
+                    <Link to="/dashboard" className="font-medium text-primary hover:underline">
+                      Open your reviews
+                    </Link>
+                  </p>
+                ) : (
+                  <p className="text-center text-sm text-muted-foreground">
+                    <Link to="/auth" className="font-medium text-primary hover:underline">
+                      Sign in
+                    </Link>{" "}
+                    to save this case and track what happens after you report it.
+                  </p>
+                )}
               </>
             ) : null}
           </section>
@@ -375,22 +421,66 @@ function Pill({ label, ready = false }: { label: string; ready?: boolean }) {
   );
 }
 
-function Highlight({
-  icon,
-  title,
-  body,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  body: string;
-}) {
+const WORKFLOW = [
+  {
+    icon: MessageSquareQuote,
+    label: "The review",
+    body: "Pulled straight from Google",
+    tone: "bg-star-soft text-star",
+  },
+  {
+    icon: Sparkles,
+    label: "AI policy check",
+    body: "Both sides weighed up",
+    tone: "bg-info-soft text-primary",
+  },
+  {
+    icon: ClipboardList,
+    label: "Evidence",
+    body: "The exact lines that matter",
+    tone: "bg-info-soft text-primary",
+  },
+  {
+    icon: Flag,
+    label: "Report",
+    body: "One clear next step",
+    tone: "bg-warn-soft text-warn",
+  },
+  {
+    icon: Clock,
+    label: "Track",
+    body: "Know where it stands",
+    tone: "bg-warn-soft text-warn",
+  },
+  {
+    icon: CheckCircle2,
+    label: "Outcome",
+    body: "Removed, or honestly not",
+    tone: "bg-safe-soft text-safe",
+  },
+] as const;
+
+function Workflow() {
   return (
-    <div className="surface p-4">
-      <span className="inline-flex size-9 items-center justify-center rounded-xl bg-info-soft text-primary">
-        {icon}
-      </span>
-      <p className="mt-3 text-sm font-semibold text-ink">{title}</p>
-      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{body}</p>
+    <div className="mx-auto mt-14 max-w-4xl">
+      <p className="text-sm font-medium text-muted-foreground">How one review moves through</p>
+      <ol className="mt-4 grid grid-cols-2 gap-3 text-left sm:grid-cols-3 lg:grid-cols-6">
+        {WORKFLOW.map((step, index) => (
+          <li
+            key={step.label}
+            className="surface animate-rise p-4"
+            style={{ animationDelay: `${index * 70}ms` }}
+          >
+            <span
+              className={`inline-flex size-9 items-center justify-center rounded-xl ${step.tone}`}
+            >
+              <step.icon className="size-4.5" />
+            </span>
+            <p className="mt-3 text-sm font-semibold text-ink">{step.label}</p>
+            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{step.body}</p>
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }

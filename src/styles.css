@@ -43,6 +43,7 @@
   --color-ring: var(--ring);
 
   --color-star: var(--star);
+  --color-star-soft: var(--star-soft);
   --color-safe: var(--safe);
   --color-safe-soft: var(--safe-soft);
   --color-warn: var(--warn);
@@ -90,6 +91,7 @@
   --ring: oklch(0.62 0.15 262);
 
   --star: oklch(0.79 0.16 76);
+  --star-soft: oklch(0.96 0.05 84);
   --safe: oklch(0.55 0.15 152);
   --safe-soft: oklch(0.95 0.04 152);
   --warn: oklch(0.68 0.16 65);
@@ -119,6 +121,7 @@
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 16%);
   --ring: oklch(0.68 0.16 262);
+  --star-soft: oklch(0.33 0.07 84);
   --safe-soft: oklch(0.3 0.06 152);
   --warn-soft: oklch(0.33 0.07 82);
   --danger-soft: oklch(0.32 0.08 27);
