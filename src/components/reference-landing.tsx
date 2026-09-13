@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, BadgeCheck, CheckCircle2, Facebook, Instagram, Scale, ShieldCheck, Sparkles, Star, Youtube } from "lucide-react";
+import { ArrowRight, BadgeCheck, CheckCircle2, Facebook, Instagram, Mail, MapPin, Phone, Scale, ShieldCheck, Sparkles, Star, Youtube } from "lucide-react";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -411,6 +411,25 @@ export function ReferenceLanding({
                 <Link to={signedIn ? "/dashboard" : "/auth"}>{signedIn ? "Open dashboard" : "Sign in"}</Link>
                 <Link to="/dashboard">Reviews</Link>
                 <Link to="/reports">Reports</Link>
+              </div>
+              <div className="reference-footer-contact">
+                <span>Contact</span>
+                <a href="mailto:removalwork59@gmail.com">
+                  <Mail aria-hidden="true" />
+                  <span>removalwork59@gmail.com</span>
+                </a>
+                <a href="tel:+923448706466">
+                  <Phone aria-hidden="true" />
+                  <span>+92 344 8706466</span>
+                </a>
+                <a href="https://www.facebook.com/share/v/1FcAkYSSMf/" target="_blank" rel="noopener noreferrer">
+                  <Facebook aria-hidden="true" />
+                  <span>Facebook</span>
+                </a>
+                <address>
+                  <MapPin aria-hidden="true" />
+                  <span>Aslam Abad Bakhir Wah<br />Dera Ghazi Khan, 32200</span>
+                </address>
               </div>
             </nav>
           </div>
