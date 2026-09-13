@@ -63,12 +63,27 @@ export async function integrationHealth(force = false): Promise<HealthCheck[]> {
   const checks = await Promise.all([
     probe("Supabase database", async () => {
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-      const { error } = await supabaseAdmin
-        .from("policy_versions")
-        .select("id", { head: true, count: "exact" });
-      return error
-        ? { status: "down", detail: `Schema check failed (${error.code ?? "error"})` }
-        : { status: "ok", detail: "Reachable, Removal Work schema present" };
+      // Real row queries: PostgREST HEAD requests don't report a missing table as an error.
+      const { error: tableError } = await supabaseAdmin.from("review_jobs").select("id").limit(1);
+      if (tableError) {
+        return {
+          status: "down",
+          detail:
+            tableError.code === "PGRST205"
+              ? "Reachable, but the Removal Work schema migration has not been applied to this database"
+              : `Query failed (${tableError.code ?? "error"})`,
+        };
+      }
+      const { error: claimError } = await supabaseAdmin.rpc("claim_review_jobs", {
+        _limit: 1,
+        _lease_seconds: 30,
+      });
+      return claimError
+        ? {
+            status: "degraded",
+            detail: `Worker claim function unavailable (${claimError.code ?? "error"})`,
+          }
+        : { status: "ok", detail: "Reachable; Removal Work schema and worker functions present" };
     }),
     probe("Google Places API", async () => {
       if (!flags.googlePlacesKey)
@@ -140,7 +155,7 @@ export async function integrationHealth(force = false): Promise<HealthCheck[]> {
       if (!tick)
         return {
           status: flags.workerSecret ? "degraded" : "not_configured",
-          detail: "No worker pass since the app started",
+          detail: "No successful worker pass since the app started",
         };
       const ageMs = Date.now() - new Date(tick.at).getTime();
       return ageMs < 5 * 60_000

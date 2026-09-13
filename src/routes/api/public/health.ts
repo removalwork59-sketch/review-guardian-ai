@@ -6,13 +6,12 @@ export const Route = createFileRoute("/api/public/health")({
     handlers: {
       GET: async () => {
         const started = Date.now();
-        let database: "ok" | "unavailable" = "ok";
+        let database: "ok" | "schema_missing" | "unavailable" = "ok";
         try {
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-          const { error } = await supabaseAdmin
-            .from("policy_versions")
-            .select("id", { head: true, count: "exact" });
-          if (error) database = "unavailable";
+          // A real row query: PostgREST HEAD requests don't report a missing table as an error.
+          const { error } = await supabaseAdmin.from("review_jobs").select("id").limit(1);
+          if (error) database = error.code === "PGRST205" ? "schema_missing" : "unavailable";
         } catch {
           database = "unavailable";
         }
