@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Done
+- Ran a real Eiffel Tower Google Maps scan end to end: real lookup, `openai/gpt-6-astra` policy analysis, 99% non-reportable verdict, AI audit persistence, and display in Reviews; Reports correctly created no draft because the evidence did not support reporting
 - Completed authenticated browser QA across Reviews, Pipeline, Reports, Locations, and Bulk scan against real owner-scoped database records; desktop and mobile had no page errors, failed application responses, or horizontal overflow
 - Verified the real database tables are populated where expected, RLS is enabled, owner policies exist, and an authenticated status write persisted successfully
 - Added the case pipeline dashboard with pending/identified/reported/resolved counts, category and business filters, and bounded bulk status actions
@@ -26,7 +27,6 @@
 - Desktop and mobile homepage validation with no overflow or console errors
 
 ## Open
-- Run one real Add Review flow, verify the AI verdict persists, and confirm any legitimately eligible report record appears in Reviews and Reports without fabricating a violation
 - Enable Connect Google by saving the approved Google Business Profile client ID and secret (secure form; user must supply)
 - Sync the user's own Google Business Profile reviews into review records and show them in Reviews with AI analysis and a report button (code ready; needs the approved Google OAuth client saved)
 - Submit one real report from the user's own listing and track its status updates in Reports (needs live consent plus explicit user confirmation before the irreversible submission)
