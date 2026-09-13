@@ -7,6 +7,7 @@ import { AppShell } from "@/components/app-shell";
 import { EmptyState } from "@/components/case-ui";
 import { StarRating } from "@/components/brand";
 import { listLocations } from "@/lib/cases.functions";
+import { StatTile } from "@/components/ui/stat-tile";
 
 export const Route = createFileRoute("/_authenticated/locations")({
   head: () => ({
@@ -47,11 +48,11 @@ function LocationsPage() {
           body="Scan a review link and the business behind it lands here automatically."
         />
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="app-card-grid">
           {locations.map((location) => (
-            <article key={location.id} className="surface animate-rise p-5">
-              <div className="flex items-start justify-between gap-3">
-                <div>
+            <article key={location.id} className="surface app-card flex min-h-full flex-col animate-rise">
+              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
+                <div className="min-w-0">
                   <p className="font-display text-lg font-semibold text-ink">{location.name}</p>
                   {location.address ? (
                     <p className="mt-1 flex items-start gap-1.5 text-sm text-muted-foreground">
@@ -82,24 +83,15 @@ function LocationsPage() {
                 </div>
               ) : null}
 
-              <dl className="mt-4 grid grid-cols-3 gap-2 text-center">
-                <Mini label="Checked" value={location.caseCount} />
-                <Mini label="Reported" value={location.reportedCount} />
-                <Mini label="Removed" value={location.removedCount} tone="text-safe" />
+              <dl className="mt-auto grid grid-cols-3 gap-2 pt-5 text-center">
+                <StatTile compact label="Checked" value={location.caseCount} />
+                <StatTile compact label="Reported" value={location.reportedCount} />
+                <StatTile compact label="Removed" value={location.removedCount} tone="text-safe" />
               </dl>
             </article>
           ))}
         </div>
       )}
     </AppShell>
-  );
-}
-
-function Mini({ label, value, tone = "text-ink" }: { label: string; value: number; tone?: string }) {
-  return (
-    <div className="rounded-xl border border-border bg-muted/40 px-3 py-2">
-      <dt className="text-xs text-muted-foreground">{label}</dt>
-      <dd className={`font-display text-lg font-semibold ${tone}`}>{value}</dd>
-    </div>
   );
 }

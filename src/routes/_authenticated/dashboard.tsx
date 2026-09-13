@@ -7,6 +7,7 @@ import { AppShell } from "@/components/app-shell";
 import { CaseCard, EmptyState } from "@/components/case-ui";
 import { listCases, updateCaseStatus } from "@/lib/cases.functions";
 import type { CaseRecord, CaseStatus } from "@/lib/case-types";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -63,21 +64,18 @@ function ReviewsPage() {
       title="Reviews"
       description="Every review you've checked, newest first."
       actions={
-        <Link
-          to="/bulk"
-          className="rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-soft transition hover:brightness-110"
-        >
-          Bulk scan
-        </Link>
+        <Button asChild><Link to="/bulk">Bulk scan</Link></Button>
       }
     >
-      <div className="mb-5 flex flex-wrap gap-2">
+      <div className="app-filter-row">
         {FILTERS.map((item) => (
-          <button
+          <Button
             key={item.id}
             type="button"
             onClick={() => setFilter(item.id)}
-            className={`rounded-full border px-3.5 py-1.5 text-sm font-medium transition ${
+            variant="outline"
+            size="sm"
+            className={`rounded-full ${
               filter === item.id
                 ? "border-primary bg-info-soft text-primary"
                 : "border-border bg-card text-muted-foreground hover:text-ink"
@@ -89,7 +87,7 @@ function ReviewsPage() {
                 {cases.filter((c) => c.verdict === item.id).length}
               </span>
             ) : null}
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -110,7 +108,7 @@ function ReviewsPage() {
           }
         />
       ) : (
-        <div className="grid gap-4">
+        <div className="app-list-grid">
           {shown.map((item) => (
             <CaseCard
               key={item.id}

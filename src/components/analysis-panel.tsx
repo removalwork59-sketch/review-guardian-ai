@@ -72,7 +72,7 @@ export function AnalysisPanel({
   const reportable = analysis.verdict !== "not_reportable";
 
   return (
-    <div className="animate-rise space-y-5">
+    <div className="animate-rise space-y-6">
       <div className={`surface overflow-hidden`}>
         <div className={`flex items-start gap-3 border-b px-5 py-4 sm:px-6 ${TONE_CLASSES[verdict.tone]}`}>
           {verdict.tone === "safe" ? (
@@ -86,7 +86,7 @@ export function AnalysisPanel({
           </div>
         </div>
 
-        <div className="space-y-5 px-5 py-5 sm:px-6">
+        <div className="space-y-6 p-5 sm:p-6">
           <p className="text-[15px] leading-relaxed text-foreground">{analysis.plainSummary}</p>
 
           <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -143,7 +143,7 @@ export function AnalysisPanel({
           <button
             type="button"
             onClick={onReport}
-            className="inline-flex h-13 w-full items-center justify-center gap-2 rounded-2xl bg-primary px-6 text-base font-semibold text-primary-foreground shadow-soft transition hover:brightness-110 sm:w-auto"
+            className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 text-base font-semibold text-primary-foreground shadow-soft transition hover:brightness-110 sm:w-auto"
           >
             <Flag className="size-4.5" />
             Report this review

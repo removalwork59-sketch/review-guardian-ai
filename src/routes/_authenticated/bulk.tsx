@@ -8,6 +8,7 @@ import { AppShell } from "@/components/app-shell";
 import { VerdictBadge } from "@/components/case-ui";
 import { parseUrlList } from "@/lib/case-types";
 import { scanAndSaveUrl } from "@/lib/bulk.functions";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_authenticated/bulk")({
   head: () => ({
@@ -106,16 +107,11 @@ function BulkPage() {
       description="Paste a list of Google review links — we check them one by one and save each result."
       actions={
         finished ? (
-          <Link
-            to="/dashboard"
-            className="rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-soft transition hover:brightness-110"
-          >
-            See all results
-          </Link>
+          <Button asChild><Link to="/dashboard">See all results</Link></Button>
         ) : null
       }
     >
-      <div className="surface p-5">
+      <div className="surface app-card">
         <label htmlFor="urls" className="text-sm font-medium text-ink">
           Review links
         </label>
@@ -128,7 +124,7 @@ function BulkPage() {
           value={text}
           onChange={(event) => setText(event.target.value)}
           placeholder={"https://www.google.com/maps/place/…\nhttps://maps.app.goo.gl/…"}
-          className="mt-3 w-full resize-y rounded-2xl border border-border bg-card px-4 py-3 font-mono text-sm text-ink outline-none focus:border-primary"
+          className="app-textarea mt-3 font-mono"
         />
 
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
@@ -138,28 +134,28 @@ function BulkPage() {
               : `${validCount} ready · ${preview.length - validCount} can't be used`}
             {overLimit ? ` · only the first ${MAX_URLS} will run` : ""}
           </p>
-          <button
+          <Button
             type="button"
             onClick={start}
             disabled={running || validCount === 0}
-            className="inline-flex items-center gap-2 rounded-2xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-soft transition hover:brightness-110 disabled:opacity-60"
+            className="min-w-32"
           >
             {running ? <Loader2 className="size-4 animate-spin" /> : null}
             {running ? "Checking…" : `Check ${Math.min(validCount, MAX_URLS) || ""} links`.trim()}
-          </button>
+          </Button>
         </div>
       </div>
 
       {rows ? (
-        <div className="mt-6 grid gap-2">
+        <div className="mt-6 grid gap-3">
           {rows.map((row, index) => (
-            <div key={`${row.url}-${index}`} className="surface flex items-start gap-3 p-4">
+            <div key={`${row.url}-${index}`} className="surface grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3 p-4 max-sm:grid-cols-[auto_minmax(0,1fr)]">
               <StateIcon state={row.state} />
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium text-ink">{row.url}</p>
                 <p className="mt-0.5 text-sm text-muted-foreground">{row.detail}</p>
               </div>
-              {row.verdict ? <VerdictBadge verdict={row.verdict} /> : null}
+              {row.verdict ? <span className="max-sm:col-start-2"><VerdictBadge verdict={row.verdict} /></span> : null}
             </div>
           ))}
         </div>

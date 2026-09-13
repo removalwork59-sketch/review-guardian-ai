@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/app-shell";
 import { CaseCard, EmptyState } from "@/components/case-ui";
 import { useCases, useStatusMutation } from "./dashboard";
+import { StatTile } from "@/components/ui/stat-tile";
 
 export const Route = createFileRoute("/_authenticated/reports")({
   head: () => ({
@@ -48,20 +49,20 @@ function ReportsPage() {
       title="Reports"
       description="What you've flagged to Google, and where each one stands."
     >
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <Stat label="Reported" value={counts.reported} />
-        <Stat label="Waiting on Google" value={counts.pending} />
-        <Stat label="Removed" value={counts.removed} tone="text-safe" />
-        <Stat label="Google said no" value={counts.rejected} tone="text-danger" />
-      </div>
+      <dl className="app-stats-grid">
+        <StatTile label="Reported" value={counts.reported} />
+        <StatTile label="Waiting on Google" value={counts.pending} />
+        <StatTile label="Removed" value={counts.removed} tone="text-safe" />
+        <StatTile label="Google said no" value={counts.rejected} tone="text-danger" />
+      </dl>
 
-      <section className="mt-8">
-        <h2 className="font-display text-xl font-semibold text-ink">Ready to report</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
+      <section className="app-section">
+        <h2 className="app-section-title">Ready to report</h2>
+        <p className="app-section-description">
           The AI found a case worth making. Open the review on Google, flag it there, then mark it
           reported here.
         </p>
-        <div className="mt-4 grid gap-4">
+        <div className="app-list-grid mt-5">
           {isPending ? (
             <EmptyState title="Loading…" body="One moment." />
           ) : ready.length === 0 ? (
@@ -82,12 +83,12 @@ function ReportsPage() {
         </div>
       </section>
 
-      <section className="mt-10">
-        <h2 className="font-display text-xl font-semibold text-ink">Being tracked</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
+      <section className="app-section">
+        <h2 className="app-section-title">Being tracked</h2>
+        <p className="app-section-description">
           Google decides the outcome — update the status here when you hear back.
         </p>
-        <div className="mt-4 grid gap-4">
+        <div className="app-list-grid mt-5">
           {tracked.length === 0 ? (
             <EmptyState
               title="Nothing reported yet"
@@ -106,14 +107,5 @@ function ReportsPage() {
         </div>
       </section>
     </AppShell>
-  );
-}
-
-function Stat({ label, value, tone = "text-ink" }: { label: string; value: number; tone?: string }) {
-  return (
-    <div className="surface p-4">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p className={`mt-1 font-display text-2xl font-semibold ${tone}`}>{value}</p>
-    </div>
   );
 }
