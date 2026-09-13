@@ -120,6 +120,14 @@ export function ReferenceLanding({
     const saved = window.localStorage.getItem("removal-work-appearance");
     const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
     setLightMode(saved ? saved === "light" : prefersLight);
+    if (window.location.hash === "#scan") {
+      setScannerOpen(true);
+      window.setTimeout(() => {
+        const input = document.querySelector<HTMLInputElement>("#reference-review-url");
+        input?.scrollIntoView({ behavior: "smooth", block: "center" });
+        input?.focus({ preventScroll: true });
+      }, 100);
+    }
   }, []);
 
   function toggleAppearance() {
@@ -132,7 +140,11 @@ export function ReferenceLanding({
 
   function openScanner() {
     setScannerOpen(true);
-    window.setTimeout(() => document.querySelector<HTMLInputElement>("#reference-review-url")?.focus(), 50);
+    window.setTimeout(() => {
+      const input = document.querySelector<HTMLInputElement>("#reference-review-url");
+      input?.scrollIntoView({ behavior: "smooth", block: "center" });
+      input?.focus({ preventScroll: true });
+    }, 50);
   }
 
   return (
@@ -382,8 +394,30 @@ export function ReferenceLanding({
         </section>
 
         <footer className="reference-footer">
-          <p>© {new Date().getFullYear()} Removal Work. Reputation intelligence for multi-location brands.</p>
-          <p>Removal Work is not affiliated with Google. Google determines outcomes; workspace statuses are recorded by the user.</p>
+          <div className="reference-footer-main">
+            <div className="reference-footer-brand">
+              <strong>Removal Work</strong>
+              <p>Policy-led review intelligence for teams that need evidence before action.</p>
+            </div>
+            <nav aria-label="Footer navigation">
+              <div>
+                <span>Product</span>
+                <button type="button" onClick={openScanner}>Scan a review</button>
+                <a href="#how">How it works</a>
+                <a href="#platforms">Platforms</a>
+              </div>
+              <div>
+                <span>Workspace</span>
+                <Link to={signedIn ? "/dashboard" : "/auth"}>{signedIn ? "Open dashboard" : "Sign in"}</Link>
+                <Link to="/dashboard">Reviews</Link>
+                <Link to="/reports">Reports</Link>
+              </div>
+            </nav>
+          </div>
+          <div className="reference-footer-bottom">
+            <p>© {new Date().getFullYear()} Removal Work. All rights reserved.</p>
+            <p>Not affiliated with Google. Google determines outcomes; workspace statuses are recorded by the user.</p>
+          </div>
         </footer>
       </div>
 

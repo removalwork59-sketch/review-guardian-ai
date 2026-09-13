@@ -155,7 +155,7 @@ function AuthPage() {
           <Link to="/" className="auth-mobile-brand"><Wordmark /></Link>
           <div className="auth-form-card">
             <span className="auth-form-light" aria-hidden="true" />
-            <div className="auth-form-heading">
+            <div className="auth-form-heading" aria-live="polite">
               <span>{mode === "signin" ? "Secure workspace access" : "Create your workspace"}</span>
               <h2>{mode === "signin" ? "Welcome back" : "Create your account"}</h2>
               <p>{mode === "signin" ? "Your scans, reports and locations stay together." : "Create an account only if your access has been approved."}</p>
@@ -169,9 +169,9 @@ function AuthPage() {
 
             <form onSubmit={handleSubmit} className="auth-fields">
               <label htmlFor="email">Email address</label>
-              <input id="email" type="email" required autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@company.com" />
+              <input id="email" type="email" required autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@company.com" disabled={busy || googleBusy} />
               <label htmlFor="password">Password</label>
-              <input id="password" type="password" required minLength={6} autoComplete={mode === "signin" ? "current-password" : "new-password"} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="At least 6 characters" />
+              <input id="password" type="password" required minLength={6} autoComplete={mode === "signin" ? "current-password" : "new-password"} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="At least 6 characters" disabled={busy || googleBusy} />
               {mode === "signin" ? (
                 <Button type="button" variant="ghost" disabled={recoveryBusy || busy} onClick={handlePasswordRecovery} className="auth-recovery">
                   {recoveryBusy ? "Sending reset link…" : "Forgot password?"}
@@ -184,7 +184,7 @@ function AuthPage() {
 
             {message ? <p role="status" className={`auth-message ${message.tone === "error" ? "is-error" : "is-ok"}`}>{message.text}</p> : null}
 
-            <Button type="button" variant="ghost" onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setMessage(null); }} className="auth-mode">
+            <Button type="button" variant="ghost" disabled={busy || googleBusy || recoveryBusy} onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setMessage(null); }} className="auth-mode">
               {mode === "signin" ? "Approved access? Create an account" : "Already have an account? Sign in"}
             </Button>
           </div>
