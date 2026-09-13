@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, CheckCircle2, MoonStar, Sparkles } from "lucide-react";
+import { ArrowRight, CheckCircle2, MoonStar, Sparkles, Sun } from "lucide-react";
 import { useState } from "react";
 
 import analyticsIcon from "@/assets/reference-icons/analytics.png";
@@ -49,6 +49,7 @@ export function ReferenceLanding({
   busy: boolean;
 }) {
   const [scannerOpen, setScannerOpen] = useState(false);
+  const [lightMode, setLightMode] = useState(false);
 
   function openScanner() {
     setScannerOpen(true);
@@ -56,12 +57,12 @@ export function ReferenceLanding({
   }
 
   return (
-    <div className="reference-page">
+    <div className={`reference-page ${lightMode ? "reference-light" : ""}`}>
       <header className="reference-nav">
         <div className="reference-wrap flex h-[66px] items-center justify-between">
           <Wordmark />
           <div className="flex items-center gap-2">
-            <button type="button" className="reference-icon-button" aria-label="Appearance"><MoonStar className="size-4" /></button>
+            <button type="button" onClick={() => setLightMode((value) => !value)} className="reference-icon-button" aria-label="Toggle appearance">{lightMode ? <Sun className="size-4" /> : <MoonStar className="size-4" />}</button>
             <Link to={signedIn ? "/dashboard" : "/auth"} className="reference-outline-button">{signedIn ? "Dashboard" : "Sign in"}</Link>
             <Link to={signedIn ? "/dashboard" : "/auth"} className="reference-gradient-button">Start free</Link>
           </div>

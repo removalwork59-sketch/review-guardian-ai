@@ -496,6 +496,19 @@
   background-size: 44px 44px, 44px 44px, 100% 100%, 100% 100%, 100% 100%;
 }
 
+.reference-page.reference-light {
+  --background: oklch(0.975 0.008 250);
+  --foreground: oklch(0.18 0.035 265);
+  --ink: oklch(0.18 0.035 265);
+  --card: oklch(0.995 0.004 250);
+  --muted: oklch(0.945 0.012 250);
+  --muted-foreground: oklch(0.5 0.03 260);
+  --border: oklch(0.55 0.2 275 / 18%);
+  --input: oklch(0.55 0.2 275 / 24%);
+  --primary-foreground: oklch(0.14 0.028 268);
+  --brand-surface: oklch(0.975 0.008 250);
+}
+
 .reference-wrap { width: min(1110px, calc(100% - 40px)); margin-inline: auto; }
 .reference-nav { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid color-mix(in oklab, var(--color-cyan) 15%, transparent); background: color-mix(in oklab, var(--color-background) 80%, transparent); backdrop-filter: blur(16px); }
 .reference-icon-button, .reference-outline-button, .reference-gradient-button { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; font-size: 12px; font-weight: 600; line-height: 1; transition: transform .2s ease, border-color .2s ease, filter .2s ease; }
