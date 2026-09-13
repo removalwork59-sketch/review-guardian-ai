@@ -1185,7 +1185,7 @@
 @media (max-width: 760px) {
   .reference-checks-row { grid-template-columns: 1fr; justify-content: start; }
   .reference-chat { right: 12px; bottom: 12px; }
-  .reference-chat-bubble { max-width: 210px; font-size: 12px; padding: 11px 13px; }
+  .reference-chat-bubble { display: none; }
   .reference-chat-avatar { width: 46px; height: 46px; }
 }
 
