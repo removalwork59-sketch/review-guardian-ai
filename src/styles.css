@@ -1080,6 +1080,54 @@
 .reference-proof-meta { margin-top: 12px; font-size: 13px; font-weight: 600; color: color-mix(in oklab, var(--color-ink) 78%, transparent); }
 .reference-proof-meta span { color: var(--color-star); }
 
+/* Hero review analysis loop — 19.56s, matched to the supplied recording */
+.reference-proof { position: relative; min-height: 454px; overflow: hidden; }
+.proof-demo-label { position: absolute; right: 16px; top: 10px; z-index: 3; color: color-mix(in oklab, var(--color-ink) 42%, transparent); font-size: 9px; text-transform: uppercase; }
+.proof-business { display: flex; align-items: center; gap: 10px; min-height: 64px; padding: 7px 4px 14px; border-bottom: 1px solid color-mix(in oklab, var(--color-ink) 10%, transparent); }
+.proof-business-mark { display: grid; width: 24px; height: 24px; flex: none; place-items: center; color: var(--brand-cyan); }
+.proof-business-mark svg { width: 18px; }
+.proof-business b { color: var(--color-ink); font-size: 13px; }
+.proof-business p { display: flex; align-items: center; gap: 5px; margin-top: 5px; color: color-mix(in oklab, var(--color-ink) 54%, transparent); font-size: 10px; }
+.proof-business p > span { color: var(--color-star); letter-spacing: 1px; }
+.proof-rating { position: relative; display: inline-block; width: 19px; height: 13px; overflow: hidden; color: var(--brand-cyan); }
+.proof-rating i { position: absolute; inset: 0; font-style: normal; opacity: 0; animation: proof-rating-cycle 19.56s linear infinite; }
+.proof-rating i:nth-child(2) { animation-delay: -19.56s; }
+.proof-rating i:nth-child(3) { animation-delay: -19.56s; }
+.proof-review-stack { position: relative; height: 306px; margin-top: 9px; }
+.proof-row { position: absolute; left: 0; right: 0; height: 91px; padding: 12px 13px; overflow: hidden; border: 1px solid color-mix(in oklab, var(--color-ink) 7%, transparent); border-radius: 8px; background: color-mix(in oklab, var(--color-ink) 5%, transparent); box-shadow: 0 8px 20px oklch(0 0 0 / .1); transition: none; }
+.proof-row > div { display: flex; align-items: center; gap: 7px; }
+.proof-row .reference-avatar { width: 18px; height: 18px; font-size: 6px; }
+.proof-row b { color: var(--color-ink); font-size: 10px; }
+.proof-row time { margin-left: auto; color: color-mix(in oklab, var(--color-ink) 48%, transparent); font-size: 9px; }
+.proof-row-stars { display: block; margin: 7px 0 4px; color: var(--color-star); font-size: 9px; letter-spacing: 1px; }
+.proof-row p { overflow: hidden; color: color-mix(in oklab, var(--color-ink) 69%, transparent); font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+.proof-row-one { top: 0; animation: proof-row-one 19.56s cubic-bezier(.65,0,.35,1) infinite; }
+.proof-row-two { top: 101px; animation: proof-row-two 19.56s cubic-bezier(.65,0,.35,1) infinite; }
+.proof-row-three { top: 202px; animation: proof-row-three 19.56s cubic-bezier(.65,0,.35,1) infinite; }
+.proof-row-four { top: 303px; opacity: 0; animation: proof-row-four 19.56s cubic-bezier(.65,0,.35,1) infinite; }
+.proof-row-bad { border-color: color-mix(in oklab, var(--color-danger) 35%, transparent); }
+.proof-row-bad::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 45%, color-mix(in oklab, var(--color-star) 30%, transparent), color-mix(in oklab, var(--color-danger) 19%, transparent) 58%, transparent 82%); opacity: 0; animation: proof-alert 19.56s ease infinite; }
+.proof-row-four::after { animation-delay: -9.78s; }
+.proof-scan-line { position: absolute; z-index: 2; left: -35%; top: 0; width: 34%; height: 100%; background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--color-star) 35%, transparent), transparent); transform: skewX(-12deg); animation: proof-scan 19.56s ease-in-out infinite; }
+.proof-row-four .proof-scan-line { animation-delay: -9.78s; }
+.reference-proof-outcome { position: absolute; left: 0; right: 0; bottom: 20px; margin: 0; opacity: 0; transform: translateY(16px); animation: proof-result 19.56s cubic-bezier(.22,1,.36,1) infinite; }
+.reference-proof-outcome .big-stars { letter-spacing: 7px; }
+@keyframes proof-rating-cycle {
+  0%, 26% { opacity: 1; transform: translateY(0); }
+  28%, 100% { opacity: 0; transform: translateY(-10px); }
+}
+.proof-rating i:nth-child(2) { animation-name: proof-rating-middle; }
+.proof-rating i:nth-child(3) { animation-name: proof-rating-final; }
+@keyframes proof-rating-middle { 0%, 26% { opacity: 0; } 28%, 52% { opacity: 1; } 54%, 100% { opacity: 0; } }
+@keyframes proof-rating-final { 0%, 52% { opacity: 0; } 54%, 100% { opacity: 1; } }
+@keyframes proof-row-one { 0%, 26% { transform: translateY(0); } 31%, 52% { transform: translateY(0); } 57%, 94% { transform: translateY(0); } 100% { transform: translateY(0); } }
+@keyframes proof-row-two { 0%, 21% { opacity: 1; transform: translateY(0) scale(1); } 23%, 27% { opacity: 1; transform: translateY(0) scale(.985); } 31%, 94% { opacity: 0; transform: translateX(42px) scale(.95); } 98%, 100% { opacity: 1; transform: none; } }
+@keyframes proof-row-three { 0%, 26% { transform: translateY(0); } 31%, 52% { transform: translateY(-101px); } 57%, 94% { transform: translateY(-101px); } 98%, 100% { transform: translateY(0); } }
+@keyframes proof-row-four { 0%, 26% { opacity: 0; transform: translateY(0); } 31%, 47% { opacity: 1; transform: translateY(-101px); } 49%, 53% { opacity: 1; transform: translateY(-101px) scale(.985); } 57%, 94% { opacity: 0; transform: translate(-42px,-101px) scale(.95); } 98%, 100% { opacity: 0; transform: none; } }
+@keyframes proof-alert { 0%, 5%, 22%, 100% { opacity: 0; } 7%, 19% { opacity: 1; } }
+@keyframes proof-scan { 0%, 5% { opacity: 0; transform: translateX(0) skewX(-12deg); } 7% { opacity: 1; } 20% { opacity: 1; transform: translateX(420%) skewX(-12deg); } 22%, 100% { opacity: 0; transform: translateX(420%) skewX(-12deg); } }
+@keyframes proof-result { 0%, 55% { opacity: 0; transform: translateY(16px); } 60%, 92% { opacity: 1; transform: translateY(0); } 97%, 100% { opacity: 0; transform: translateY(10px); } }
+
 /* press marquee */
 .reference-press { overflow: hidden; margin-top: 26px; mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent); }
 .reference-press-track { display: flex; align-items: center; gap: 72px; width: max-content; animation: press-scroll 28s linear infinite; }

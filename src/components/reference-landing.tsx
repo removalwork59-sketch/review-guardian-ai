@@ -80,19 +80,36 @@ export function ReferenceLanding({
             </div>
           </div>
 
-          <div className="reference-proof">
-            <div className="reference-proof-review">
-              <div className="reference-proof-head">
-                <span className="reference-proof-who"><span className="reference-avatar">TW</span> Tom W.</span>
-                <span className="reference-proof-when">2 weeks ago</span>
-              </div>
-              <div className="reference-proof-stars">★★★★★</div>
-              <p>Great with my kids. Very patient and thorough.</p>
+          <div className="reference-proof" aria-label="Illustrative review analysis animation">
+            <span className="proof-demo-label">Example review analysis</span>
+            <div className="proof-business">
+              <span className="proof-business-mark"><ShieldCheck /></span>
+              <div><b>Bright Smile Dental</b><p><span>★★★★★</span> <strong className="proof-rating"><i>3.9</i><i>4.6</i><i>5.0</i></strong> (27 Google reviews)</p></div>
+            </div>
+            <div className="proof-review-stack">
+              <article className="proof-row proof-row-one">
+                <div><span className="reference-avatar">ML</span><b>Maria L.</b><time>1 week ago</time></div>
+                <span className="proof-row-stars">★★★★★</span><p>Best dental experience I&apos;ve ever had. Dr. Chen is incredible.</p>
+              </article>
+              <article className="proof-row proof-row-bad proof-row-two">
+                <div><span className="reference-avatar">JR</span><b>James R.</b><time>3 weeks ago</time></div>
+                <span className="proof-row-stars">★☆☆☆☆</span><p>Wouldn&apos;t recommend. Rude front desk and ended up paying way...</p>
+                <span className="proof-scan-line" />
+              </article>
+              <article className="proof-row proof-row-three">
+                <div><span className="reference-avatar">TW</span><b>Tom W.</b><time>2 weeks ago</time></div>
+                <span className="proof-row-stars">★★★★★</span><p>Great with my kids. Very patient and thorough.</p>
+              </article>
+              <article className="proof-row proof-row-bad proof-row-four">
+                <div><span className="reference-avatar">MK</span><b>Mike T.</b><time>2 months ago</time></div>
+                <span className="proof-row-stars">★☆☆☆☆</span><p>Showed up to my appointment and they had no record of it...</p>
+                <span className="proof-scan-line" />
+              </article>
             </div>
             <div className="reference-proof-outcome">
-              <div className="big-stars">★ ★ ★ ★ ★</div>
+              <div className="big-stars">★★★★★</div>
               <h3><CheckCircle2 /> Reputation Restored.</h3>
-              <p className="reference-proof-meta">Policy violations reported · <span>★</span> rating context tracked</p>
+              <p className="reference-proof-meta">2 policy issues detected · <span>★</span> 5.0 rating context</p>
             </div>
           </div>
         </section>
