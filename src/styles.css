@@ -583,7 +583,8 @@
 .step-visual { position: relative; height: 170px; margin-bottom: 16px; }
 
 .step-link-flight svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.flight-path { fill: none; stroke: var(--brand-cyan); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 6 8; opacity: .95; }
+.flight-path { fill: none; stroke: var(--brand-cyan); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 6 8; opacity: .95; animation: flight-dash 2.6s linear infinite; }
+@keyframes flight-dash { to { stroke-dashoffset: -28; } }
 .flight-link {
   position: absolute;
   left: 0;
@@ -606,7 +607,8 @@
 .flight-dot-one { left: 30%; bottom: 34%; }
 .flight-dot-two { left: 52%; bottom: 54%; animation-delay: .16s; }
 
-.step-envelope { width: min(230px, 88%); margin-inline: auto; perspective: 700px; }
+.step-envelope { width: min(230px, 88%); margin-inline: auto; perspective: 700px; animation: envelope-bob 5.23s ease-in-out infinite; }
+@keyframes envelope-bob { 0%, 100% { transform: translateY(0); } 30% { transform: translateY(-4px); } 70% { transform: translateY(2px); } }
 .envelope-back, .envelope-front, .envelope-flap { position: absolute; left: 8%; width: 84%; }
 .envelope-back { z-index: 1; bottom: 15px; height: 82px; border: 2px solid var(--brand-cyan); border-radius: 7px 7px 12px 12px; background: color-mix(in oklab, var(--brand-cyan) 8%, var(--color-card)); }
 .envelope-front { z-index: 5; bottom: 15px; height: 74px; border: 2px solid var(--brand-cyan); border-top: 0; border-radius: 0 0 12px 12px; background: linear-gradient(32deg, color-mix(in oklab, var(--brand-cyan) 13%, var(--color-card)) 49%, transparent 50%), linear-gradient(-32deg, color-mix(in oklab, var(--brand-cyan) 13%, var(--color-card)) 49%, transparent 50%); clip-path: polygon(0 0, 50% 58%, 100% 0, 100% 100%, 0 100%); }
@@ -619,67 +621,104 @@
 .envelope-check { position: absolute; z-index: 7; right: 10%; bottom: 21px; display: grid; width: 27px; height: 27px; place-items: center; border-radius: 50%; background: var(--brand-cyan); color: var(--color-background); font-weight: 900; opacity: 0; animation: envelope-confirm 5.23s ease-in-out infinite; }
 
 .step-removal { width: min(260px, 94%); margin-inline: auto; }
-.removal-review { position: absolute; left: 8%; bottom: 25px; width: 72%; height: 76px; padding: 17px 16px 12px 48px; border-radius: 13px; background: color-mix(in oklab, var(--color-ink) 96%, var(--brand-cyan)); animation: review-dim 5.23s ease-in-out infinite; transform-origin: center; }
-.removal-avatar { position: absolute; left: 16px; top: 18px; width: 15px; height: 15px; border-radius: 50%; background: color-mix(in oklab, var(--brand-cyan) 14%, var(--color-ink)); }
-.removal-stars { display: block; margin-bottom: 8px; color: color-mix(in oklab, var(--color-muted-foreground) 20%, transparent); font-size: 12px; }
+.removal-review { position: absolute; left: 8%; bottom: 25px; width: 72%; height: 76px; padding: 17px 16px 12px 48px; border-radius: 13px; background: color-mix(in oklab, var(--color-ink) 96%, var(--brand-cyan)); box-shadow: 0 10px 26px color-mix(in oklab, var(--color-background) 45%, transparent); animation: review-dim 5.23s ease-in-out infinite; transform-origin: 50% 100%; }
+
+.removal-avatar { position: absolute; left: 16px; top: 18px; width: 15px; height: 15px; border-radius: 50%; background: oklch(0.66 0.03 250); }
+.removal-stars { display: block; margin-bottom: 8px; color: oklch(0.8 0.02 250); font-size: 12px; letter-spacing: 1px; }
 .removal-stars b { color: var(--color-danger); }
-.removal-review i { display: block; width: 86%; height: 5px; margin-top: 5px; border-radius: 5px; background: color-mix(in oklab, var(--brand-cyan) 8%, var(--color-ink)); }
+.removal-review i { display: block; width: 86%; height: 5px; margin-top: 5px; border-radius: 5px; background: oklch(0.78 0.02 250); }
 .removal-review i:nth-of-type(2) { width: 60%; }
 .removal-review i:nth-of-type(3) { width: 38%; }
 .removal-hammer {
   position: absolute;
-  z-index: 3;
-  right: 0;
-  top: -34px;
-  width: 72px;
-  height: 112px;
+  z-index: 6;
+  right: 30%;
+  top: -14px;
+  width: 80px;
+  height: 108px;
   opacity: 0;
-  transform-origin: 36px 86px;
-  animation: hammer-strike 5.23s cubic-bezier(.55, 0, .2, 1) infinite;
+  transform-origin: 42px 10px;
+  animation: hammer-strike 5.23s cubic-bezier(.42, 0, .18, 1) infinite;
+  filter: drop-shadow(0 10px 14px color-mix(in oklab, var(--color-background) 55%, transparent));
 }
 .hammer-handle {
   position: absolute;
-  left: 33px;
-  top: 3px;
-  width: 7px;
-  height: 79px;
-  border-radius: 4px 4px 2px 2px;
-  background: linear-gradient(90deg, oklch(0.42 0.1 57), oklch(0.65 0.13 61) 48%, oklch(0.47 0.11 55));
-  box-shadow: inset 1px 0 color-mix(in oklab, var(--color-ink) 18%, transparent);
+  left: 38px;
+  top: 5px;
+  width: 9px;
+  height: 70px;
+  border-radius: 6px 6px 3px 3px;
+  background: linear-gradient(90deg, oklch(0.36 0.075 56), oklch(0.62 0.12 62) 42%, oklch(0.44 0.09 54) 78%, oklch(0.3 0.06 52));
+}
+.hammer-handle::after {
+  content: "";
+  position: absolute;
+  inset: 4px 2px auto 2px;
+  height: 26px;
+  border-radius: 5px;
+  background: repeating-linear-gradient(180deg, oklch(0.28 0.05 52) 0 3px, transparent 3px 7px);
+  opacity: .55;
+}
+.hammer-collar {
+  position: absolute;
+  left: 34px;
+  top: 70px;
+  width: 17px;
+  height: 10px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, oklch(0.68 0.12 62), oklch(0.42 0.09 55));
 }
 .hammer-head {
   position: absolute;
-  left: 19px;
-  top: 74px;
-  width: 35px;
-  height: 16px;
+  left: 12px;
+  top: 78px;
+  width: 60px;
+  height: 23px;
+  border-radius: 7px;
+  background: linear-gradient(180deg, oklch(0.6 0.13 58) 0%, oklch(0.46 0.11 55) 46%, oklch(0.31 0.07 52) 100%);
+  box-shadow: inset 0 2px 0 oklch(1 0 0 / .18), inset 0 -3px 0 oklch(0 0 0 / .24);
+}
+.hammer-head i {
+  position: absolute;
+  top: -3px;
+  width: 12px;
+  height: 28px;
+  border-radius: 5px;
+  background: linear-gradient(180deg, oklch(0.52 0.11 55), oklch(0.3 0.07 52));
+  box-shadow: inset 0 2px 0 oklch(1 0 0 / .14);
+}
+.hammer-head i:first-child { left: -5px; }
+.hammer-head i:last-child { right: -5px; }
+.removed-label { position: absolute; z-index: 2; left: 50%; top: 50%; padding: 5px 14px; border-radius: 999px; background: var(--brand-cyan); color: var(--color-background); font-size: 12px; line-height: 1; opacity: 0; transform: translate(-50%, -50%) scale(.75); animation: removed-label 5.23s cubic-bezier(.2, 1.5, .4, 1) infinite; }
+.impact-ring {
+  position: absolute;
+  z-index: 4;
+  right: 42%;
+  bottom: 52px;
+  width: 26px;
+  height: 26px;
+  margin: 0 -13px -13px 0;
+  border: 2px solid var(--brand-cyan);
+  border-radius: 50%;
+  opacity: 0;
+  animation: impact-ring 5.23s cubic-bezier(.2, .7, .3, 1) infinite;
+}
+.impact-spark {
+  position: absolute;
+  z-index: 5;
+  right: 42%;
+  bottom: 58px;
+  width: 3px;
+  height: 15px;
   border-radius: 3px;
-  background: linear-gradient(180deg, oklch(0.53 0.13 55), oklch(0.36 0.09 52));
-  box-shadow: inset 0 2px color-mix(in oklab, var(--color-ink) 12%, transparent), 0 3px 5px color-mix(in oklab, var(--color-background) 34%, transparent);
+  background: linear-gradient(180deg, var(--brand-cyan), transparent);
+  opacity: 0;
+  animation: impact-spark 5.23s cubic-bezier(.15, .8, .3, 1) infinite;
 }
-.hammer-head::before,
-.hammer-head::after {
-  content: "";
-  position: absolute;
-  top: -2px;
-  width: 7px;
-  height: 20px;
-  border-radius: 2px;
-  background: oklch(0.42 0.1 52);
-}
-.hammer-head::before { left: -3px; }
-.hammer-head::after { right: -3px; }
-.hammer-collar {
-  position: absolute;
-  left: 29px;
-  top: 69px;
-  width: 15px;
-  height: 10px;
-  border-radius: 2px;
-  background: oklch(0.58 0.13 58);
-}
-.removed-label { position: absolute; z-index: 2; left: 50%; top: 50%; padding: 5px 14px; border-radius: 999px; background: var(--brand-cyan); color: var(--color-background); font-size: 12px; line-height: 1; opacity: 0; transform: translate(-50%, -50%) scale(.75); animation: removed-label 5.23s ease-in-out infinite; }
-.removal-burst { position: absolute; right: 24%; bottom: 56px; color: var(--brand-cyan); font-size: 26px; opacity: 0; animation: removal-burst 5.23s ease-out infinite; }
+.impact-spark-one { --spark-angle: -42deg; }
+.impact-spark-two { --spark-angle: 0deg; animation-delay: .02s; }
+.impact-spark-three { --spark-angle: 42deg; animation-delay: .04s; }
+
 
 @keyframes link-travel {
   0% { opacity: 1; transform: translate(10px, 102px) scale(.94); }
@@ -704,16 +743,37 @@
 }
 @keyframes envelope-confirm { 0%, 17% { opacity: 1; transform: scale(1); } 23%, 86% { opacity: 0; transform: scale(.55); } 93%, 100% { opacity: 1; transform: scale(1); } }
 @keyframes hammer-strike {
-  0%, 7% { opacity: 0; transform: translate(10px, -24px) rotate(-4deg); }
-  11% { opacity: 1; transform: translate(2px, -12px) rotate(-3deg); }
-  20% { opacity: 1; transform: translate(-2px, -4px) rotate(-5deg); }
-  28% { opacity: 1; transform: translate(-39px, 35px) rotate(42deg); }
-  31% { opacity: 1; transform: translate(-34px, 29px) rotate(37deg); }
-  35%, 100% { opacity: 0; transform: translate(-34px, 29px) rotate(37deg); }
+  0%, 8% { opacity: 0; transform: translate(16px, -26px) rotate(-74deg); }
+  14% { opacity: 1; transform: translate(0, 0) rotate(-58deg); }
+  22% { opacity: 1; transform: translate(0, 0) rotate(-66deg); }
+  26% { opacity: 1; transform: translate(0, 0) rotate(-62deg); }
+  29.5% { opacity: 1; transform: translate(0, 0) rotate(8deg); }
+  31.5% { opacity: 1; transform: translate(0, 0) rotate(-9deg); }
+  34% { opacity: 1; transform: translate(0, 0) rotate(3deg); }
+  36.5% { opacity: 1; transform: translate(0, 0) rotate(-3deg); }
+  39% { opacity: 1; transform: translate(0, 0) rotate(0deg); }
+  48% { opacity: 1; transform: translate(6px, -12px) rotate(-46deg); }
+  56%, 100% { opacity: 0; transform: translate(16px, -26px) rotate(-74deg); }
 }
-@keyframes review-dim { 0%, 30% { opacity: 1; filter: brightness(1); transform: scale(1); } 38%, 84% { opacity: .3; filter: brightness(.48); transform: scale(.98); } 94%, 100% { opacity: 1; filter: brightness(1); transform: scale(1); } }
-@keyframes removed-label { 0%, 36% { opacity: 0; transform: translate(-50%, -50%) scale(.72); } 43%, 84% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 94%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(.8); } }
-@keyframes removal-burst { 0%, 26% { opacity: 0; transform: scale(.2) rotate(0); } 30% { opacity: 1; transform: scale(1.05) rotate(35deg); } 38%, 100% { opacity: 0; transform: scale(1.8) rotate(80deg); } }
+@keyframes review-dim {
+  0%, 29% { opacity: 1; filter: brightness(1); transform: translateY(0) scale(1); }
+  30% { opacity: 1; filter: brightness(1.25); transform: translateY(4px) scale(.985, .94); }
+  32% { opacity: .9; filter: brightness(.9); transform: translateY(-2px) scale(1.005, 1.02); }
+  34% { opacity: .75; transform: translateY(1px) scale(1); }
+  42%, 84% { opacity: .28; filter: brightness(.45); transform: translateY(0) scale(.975); }
+  94%, 100% { opacity: 1; filter: brightness(1); transform: translateY(0) scale(1); }
+}
+@keyframes removed-label { 0%, 33% { opacity: 0; transform: translate(-50%, -50%) scale(.6); } 41%, 84% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 93%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(.8); } }
+@keyframes impact-ring {
+  0%, 29% { opacity: 0; transform: scale(.2); }
+  30.5% { opacity: .85; transform: scale(1); }
+  40%, 100% { opacity: 0; transform: scale(2.6); }
+}
+@keyframes impact-spark {
+  0%, 29% { opacity: 0; transform: rotate(var(--spark-angle)) translateY(0) scaleY(.4); }
+  31% { opacity: 1; transform: rotate(var(--spark-angle)) translateY(-16px) scaleY(1); }
+  38%, 100% { opacity: 0; transform: rotate(var(--spark-angle)) translateY(-30px) scaleY(.5); }
+}
 
 @media (max-width: 900px) {
   .reference-three-steps { padding: 70px 0; }
@@ -723,7 +783,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .flight-link, .flight-link span, .flight-dot, .envelope-flap, .case-note, .envelope-check, .removal-hammer, .removal-review, .removed-label, .removal-burst { animation: none; }
+  .flight-link, .flight-link span, .flight-dot, .flight-path, .envelope-flap, .step-envelope, .case-note, .envelope-check, .removal-hammer, .removal-review, .removed-label, .impact-ring, .impact-spark { animation: none; }
+  .removal-hammer { opacity: 1; transform: rotate(0deg); }
+  .impact-ring, .impact-spark { opacity: 0; }
   .flight-link { left: auto; right: 13%; bottom: 76%; opacity: 1; }
   .envelope-flap { transform: rotateX(172deg); }
   .case-note { transform: translateY(-42px); opacity: 1; }

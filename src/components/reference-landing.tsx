@@ -222,10 +222,13 @@ export function ReferenceLanding({
                 </div>
                 <div className="removal-hammer">
                   <span className="hammer-handle" />
-                  <b className="hammer-head" />
-                  <i className="hammer-collar" />
+                  <span className="hammer-collar" />
+                  <span className="hammer-head"><i /><i /></span>
                 </div>
-                <span className="removal-burst">✦</span>
+                <span className="impact-ring" />
+                <span className="impact-spark impact-spark-one" />
+                <span className="impact-spark impact-spark-two" />
+                <span className="impact-spark impact-spark-three" />
               </div>
               <h3>Track the Real Outcome</h3>
               <p>Submit the prepared report to Google, then track every case in your dashboard. Google makes the final decision, and the real result stays visible.</p>
