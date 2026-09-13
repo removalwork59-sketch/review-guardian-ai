@@ -229,14 +229,13 @@ export const updateCaseStatus = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }): Promise<CaseRecord> => {
     const now = new Date().toISOString();
-    const patch: Record<string, unknown> = { status: data.status };
-    if (data.note !== undefined) patch["status_note"] = data.note;
-    if (["reported", "pending"].includes(data.status)) patch["reported_at"] = now;
-    if (["removed", "rejected"].includes(data.status)) patch["resolved_at"] = now;
-    if (data.status === "new") {
-      patch["reported_at"] = null;
-      patch["resolved_at"] = null;
-    }
+    const patch = {
+      status: data.status,
+      ...(data.note !== undefined ? { status_note: data.note } : {}),
+      ...(["reported", "pending"].includes(data.status) ? { reported_at: now } : {}),
+      ...(["removed", "rejected"].includes(data.status) ? { resolved_at: now } : {}),
+      ...(data.status === "new" ? { reported_at: null, resolved_at: null } : {}),
+    };
 
     const { data: row, error } = await context.supabase
       .from("review_cases")
