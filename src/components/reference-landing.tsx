@@ -40,15 +40,17 @@ const features = [
 
 function WalkingClient({ x, delay, leaving = false }: { x: number; delay: number; leaving?: boolean }) {
   return (
-    <g className={`vector-client ${leaving ? "vector-client-leaving" : ""}`} style={{ "--walk-delay": `${delay}s` } as React.CSSProperties} transform={`translate(${x} 0)`}>
-      <ellipse className="client-shadow" cx="0" cy="274" rx="22" ry="5" />
-      <g className="client-body">
-        <circle className="client-head" cx="0" cy="197" r="11" />
-        <path className="client-torso" d="M-7 211 Q0 205 7 211 L11 242 Q0 249 -11 242Z" />
-        <path className="client-limb client-arm-a" d="M-7 216 Q-18 228 -20 239" />
-        <path className="client-limb client-arm-b" d="M7 216 Q18 227 23 234" />
-        <path className="client-limb client-leg-a" d="M-5 242 Q-11 258 -18 272" />
-        <path className="client-limb client-leg-b" d="M5 242 Q13 257 20 270" />
+    <g className="client-position" transform={`translate(${x} 0)`}>
+      <g className={`vector-client ${leaving ? "vector-client-leaving" : ""}`} style={{ "--walk-delay": `${delay}s` } as React.CSSProperties}>
+        <ellipse className="client-shadow" cx="0" cy="274" rx="22" ry="5" />
+        <g className="client-body">
+          <circle className="client-head" cx="0" cy="197" r="11" />
+          <path className="client-torso" d="M-7 211 Q0 205 7 211 L11 242 Q0 249 -11 242Z" />
+          <path className="client-limb client-arm-a" d="M-7 216 Q-18 228 -20 239" />
+          <path className="client-limb client-arm-b" d="M7 216 Q18 227 23 234" />
+          <path className="client-limb client-leg-a" d="M-5 242 Q-11 258 -18 272" />
+          <path className="client-limb client-leg-b" d="M5 242 Q13 257 20 270" />
+        </g>
       </g>
     </g>
   );
