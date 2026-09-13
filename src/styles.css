@@ -605,3 +605,109 @@
     transition-duration: 0.001ms !important;
   }
 }
+
+/* Reference brand composition — dark teal / emerald */
+.reference-nav {
+  background: color-mix(in oklab, oklch(0.19 0.032 180) 92%, transparent);
+  border-bottom: 1px solid color-mix(in oklab, var(--color-primary) 10%, transparent);
+}
+.reference-nav .reference-wrap { height: 88px; }
+.reference-navlinks { display: flex; align-items: center; gap: 26px; }
+.reference-navlinks a {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: color-mix(in oklab, var(--color-ink) 86%, transparent);
+  font-size: 15px; font-weight: 500; transition: color .2s ease;
+}
+.reference-navlinks a:hover { color: var(--color-primary); }
+.reference-navlinks svg { width: 14px; height: 14px; opacity: .7; }
+
+.reference-outline-button {
+  min-height: 46px; padding: 0 22px; font-size: 15px; font-weight: 600;
+  border: 1px solid color-mix(in oklab, var(--color-ink) 30%, transparent);
+  background: transparent; color: var(--color-ink);
+}
+.reference-outline-button:hover { border-color: var(--color-primary); color: var(--color-primary); transform: none; }
+.reference-gradient-button {
+  min-height: 46px; padding: 0 22px; font-size: 15px; font-weight: 700;
+  background: linear-gradient(96deg, oklch(0.62 0.14 162), oklch(0.82 0.17 158));
+  color: oklch(0.17 0.05 170);
+  box-shadow: 0 12px 34px color-mix(in oklab, var(--color-primary) 26%, transparent);
+}
+.reference-gradient-button .arrow-dot {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 999px;
+  background: oklch(0.17 0.05 170 / .9); color: oklch(0.9 0.14 160);
+}
+.reference-icon-button { border-color: color-mix(in oklab, var(--color-ink) 22%, transparent); background: transparent; }
+
+.reference-hero { min-height: auto; padding: 74px 0 34px; grid-template-columns: 1fr .86fr; gap: 56px; align-items: start; }
+.reference-copy h1 {
+  font-size: clamp(46px, 5.4vw, 78px); line-height: 1.02; letter-spacing: -0.02em;
+  color: oklch(0.84 0.17 158);
+}
+.reference-copy h1 span { background: none; color: oklch(0.84 0.17 158); }
+.reference-copy > p { margin-top: 26px; font-size: 18px; line-height: 1.6; color: color-mix(in oklab, var(--color-ink) 72%, transparent); }
+.reference-actions { margin-top: 32px; gap: 14px; }
+.reference-primary-action, .reference-secondary-action { min-height: 56px; padding-inline: 28px; font-size: 17px; border-radius: 999px; }
+.reference-checks { margin-top: 30px; font-size: 13px; }
+
+/* hero proof card */
+.reference-proof {
+  padding: 24px; border-radius: 22px;
+  border: 1px solid color-mix(in oklab, var(--color-primary) 14%, transparent);
+  background: oklch(0.185 0.03 182);
+  box-shadow: 0 30px 80px oklch(0 0 0 / .35);
+}
+.reference-proof-review {
+  border-radius: 14px; padding: 16px 18px;
+  background: oklch(0.225 0.032 182);
+  border: 1px solid color-mix(in oklab, var(--color-ink) 8%, transparent);
+}
+.reference-proof-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.reference-proof-who { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: var(--color-ink); }
+.reference-avatar { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 999px; background: oklch(0.32 0.05 178); font-size: 11px; font-weight: 700; color: var(--color-ink); }
+.reference-proof-when { font-size: 12px; color: color-mix(in oklab, var(--color-ink) 55%, transparent); }
+.reference-proof-review p { margin-top: 10px; font-size: 14px; color: color-mix(in oklab, var(--color-ink) 82%, transparent); }
+.reference-proof-stars { margin-top: 8px; color: var(--color-star); letter-spacing: 2px; font-size: 12px; }
+.reference-proof-outcome { margin-top: 34px; text-align: center; }
+.reference-proof-outcome .big-stars { color: var(--color-star); font-size: 24px; letter-spacing: 6px; }
+.reference-proof-outcome h3 { margin-top: 14px; display: inline-flex; align-items: center; gap: 10px; font-size: 25px; font-weight: 700; color: oklch(0.84 0.17 158); }
+.reference-proof-outcome h3 svg { width: 24px; height: 24px; }
+.reference-proof-meta { margin-top: 12px; font-size: 13px; font-weight: 600; color: color-mix(in oklab, var(--color-ink) 78%, transparent); }
+.reference-proof-meta span { color: var(--color-star); }
+
+/* press marquee */
+.reference-press { overflow: hidden; margin-top: 26px; mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent); }
+.reference-press-track { display: flex; align-items: center; gap: 72px; width: max-content; animation: press-scroll 28s linear infinite; }
+.reference-press-track span {
+  font-family: var(--font-display); font-size: 26px; font-weight: 800; letter-spacing: -0.01em;
+  color: color-mix(in oklab, var(--color-ink) 34%, transparent); white-space: nowrap;
+}
+@keyframes press-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* tilted testimonial strip */
+.reference-tilt { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 62px; }
+.reference-tilt article {
+  width: 232px; padding: 18px; border-radius: 16px; font-size: 13px; line-height: 1.5;
+  box-shadow: 0 24px 60px oklch(0 0 0 / .32); transition: transform .3s cubic-bezier(.22,1,.36,1);
+}
+.reference-tilt article b { display: block; margin-top: 10px; font-size: 12px; opacity: .8; }
+.reference-tilt .t-stars { letter-spacing: 2px; font-size: 12px; }
+.reference-tilt article:nth-child(1) { transform: rotate(-6deg) translateY(14px); background: oklch(0.24 0.04 182); color: var(--color-ink); }
+.reference-tilt article:nth-child(2) { transform: rotate(3deg); background: oklch(0.62 0.14 160); color: oklch(0.17 0.05 170); }
+.reference-tilt article:nth-child(3) { transform: rotate(-2deg) translateY(10px); background: oklch(0.78 0.15 82); color: oklch(0.22 0.06 80); }
+.reference-tilt article:nth-child(4) { transform: rotate(5deg); background: oklch(0.21 0.035 182); color: var(--color-ink); }
+.reference-tilt article:nth-child(5) { transform: rotate(-4deg) translateY(8px); background: oklch(0.55 0.2 295); color: oklch(0.97 0.01 300); }
+.reference-tilt article:hover { transform: translateY(-8px) rotate(0deg); }
+
+@media (max-width: 760px) {
+  .reference-nav .reference-wrap { height: 72px; }
+  .reference-navlinks { display: none; }
+  .reference-hero { padding: 48px 0 24px; }
+  .reference-copy h1 { font-size: 42px; line-height: 1.06; }
+  .reference-copy > p { font-size: 16px; }
+  .reference-proof { margin-top: 34px; }
+  .reference-tilt article { width: 100%; transform: none !important; }
+  .reference-press-track { gap: 44px; }
+  .reference-press-track span { font-size: 20px; }
+}
