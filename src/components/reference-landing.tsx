@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, BadgeCheck, CheckCircle2, Facebook, Instagram, Scale, ShieldCheck, Sparkles, Star, Youtube } from "lucide-react";
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import analyticsIcon from "@/assets/reference-icons/analytics.png";
 import casesIcon from "@/assets/reference-icons/cases.png";
@@ -116,6 +116,20 @@ export function ReferenceLanding({
   const [lightMode, setLightMode] = useState(false);
   const [chatOpen, setChatOpen] = useState(true);
 
+  useEffect(() => {
+    const saved = window.localStorage.getItem("removal-work-appearance");
+    const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+    setLightMode(saved ? saved === "light" : prefersLight);
+  }, []);
+
+  function toggleAppearance() {
+    setLightMode((current) => {
+      const next = !current;
+      window.localStorage.setItem("removal-work-appearance", next ? "light" : "dark");
+      return next;
+    });
+  }
+
   function openScanner() {
     setScannerOpen(true);
     window.setTimeout(() => document.querySelector<HTMLInputElement>("#reference-review-url")?.focus(), 50);
@@ -127,7 +141,7 @@ export function ReferenceLanding({
         signedIn={signedIn}
         onScanClick={openScanner}
         lightMode={lightMode}
-        onToggleAppearance={() => setLightMode((value) => !value)}
+        onToggleAppearance={toggleAppearance}
       />
 
       <div className="reference-wrap">

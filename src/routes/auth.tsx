@@ -1,7 +1,9 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { ArrowRight, Bot, CheckCircle2, FileCheck2, ScanSearch, Sparkles } from "lucide-react";
 
 import { Wordmark } from "@/components/brand";
+import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import "@lovable.dev/cloud-auth-js/styles.css";
@@ -83,94 +85,65 @@ function AuthPage() {
   }
 
   return (
-    <main className="grid-bg flex min-h-screen flex-col items-center justify-center bg-background px-5 py-12">
-      <Link to="/">
-        <Wordmark />
-      </Link>
-
-      <div className="surface mt-8 w-full max-w-md p-7">
-        <h1 className="font-display text-2xl font-semibold text-ink">
-          {mode === "signin" ? "Welcome back" : "Create your account"}
-        </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Your scans, reports and locations stay saved here.
-        </p>
-
-        <button
-          type="button"
-          onClick={handleGoogle}
-          className="mt-6 w-full rounded-2xl border border-border bg-card px-4 py-3 text-sm font-semibold text-ink transition hover:bg-muted"
-        >
-          Continue with Google
-        </button>
-
-        <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
-          <span className="h-px flex-1 bg-border" />
-          or use email
-          <span className="h-px flex-1 bg-border" />
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <div>
-            <label htmlFor="email" className="text-sm font-medium text-ink">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              required
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              className="mt-1 w-full rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-ink outline-none focus:border-primary"
-            />
+    <main className="auth-page">
+      <div className="auth-shell">
+        <section className="auth-story" aria-label="Removal Work product workflow">
+          <Link to="/" className="auth-brand"><Wordmark /></Link>
+          <div className="auth-story-copy">
+            <span className="auth-kicker"><Sparkles /> AI review intelligence</span>
+            <h1>Turn review policy into clear action.</h1>
+            <p>Scan the real review, understand the evidence, prepare the report and track the outcome.</p>
           </div>
-          <div>
-            <label htmlFor="password" className="text-sm font-medium text-ink">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              required
-              minLength={6}
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              className="mt-1 w-full rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-ink outline-none focus:border-primary"
-            />
+          <div className="auth-slider" aria-hidden="true">
+            <article className="auth-slide auth-slide-scan">
+              <span><ScanSearch /></span><div><b>Review detected</b><small>Reading source and business context</small></div>
+              <i className="auth-scan-beam" />
+            </article>
+            <article className="auth-slide auth-slide-policy">
+              <span><Bot /></span><div><b>Policy evidence</b><small>AI weighs evidence and counter-evidence</small></div>
+              <em>Analyzing</em>
+            </article>
+            <article className="auth-slide auth-slide-report">
+              <span><FileCheck2 /></span><div><b>Case ready</b><small>Legitimate action with honest status</small></div>
+              <CheckCircle2 />
+            </article>
           </div>
-          <button
-            type="submit"
-            disabled={busy}
-            className="w-full rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition hover:brightness-110 disabled:opacity-60"
-          >
-            {mode === "signin" ? "Sign in" : "Create account"}
-          </button>
-        </form>
+          <p className="auth-story-note">Real scans. Real AI analysis. No guaranteed removals.</p>
+        </section>
 
-        {message ? (
-          <p
-            className={`mt-4 rounded-xl px-3 py-2 text-sm ${
-              message.tone === "error"
-                ? "bg-danger-soft text-danger"
-                : "bg-safe-soft text-safe"
-            }`}
-          >
-            {message.text}
-          </p>
-        ) : null}
+        <section className="auth-form-side">
+          <Link to="/" className="auth-mobile-brand"><Wordmark /></Link>
+          <div className="auth-form-card">
+            <span className="auth-form-light" aria-hidden="true" />
+            <div className="auth-form-heading">
+              <span>{mode === "signin" ? "Secure workspace access" : "Create your workspace"}</span>
+              <h2>{mode === "signin" ? "Welcome back" : "Create your account"}</h2>
+              <p>Your scans, reports and locations stay together.</p>
+            </div>
 
-        <button
-          type="button"
-          onClick={() => {
-            setMode(mode === "signin" ? "signup" : "signin");
-            setMessage(null);
-          }}
-          className="mt-5 w-full text-sm text-muted-foreground transition hover:text-ink"
-        >
-          {mode === "signin"
-            ? "New here? Create an account"
-            : "Already have an account? Sign in"}
-        </button>
+            <Button type="button" variant="outline" onClick={handleGoogle} className="auth-google">
+              <span className="auth-google-g">G</span> Continue with Google
+            </Button>
+
+            <div className="auth-divider"><span />or use email<span /></div>
+
+            <form onSubmit={handleSubmit} className="auth-fields">
+              <label htmlFor="email">Email address</label>
+              <input id="email" type="email" required autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@company.com" />
+              <label htmlFor="password">Password</label>
+              <input id="password" type="password" required minLength={6} autoComplete={mode === "signin" ? "current-password" : "new-password"} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="At least 6 characters" />
+              <Button type="submit" disabled={busy} className="auth-submit">
+                {busy ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}<ArrowRight />
+              </Button>
+            </form>
+
+            {message ? <p role="status" className={`auth-message ${message.tone === "error" ? "is-error" : "is-ok"}`}>{message.text}</p> : null}
+
+            <Button type="button" variant="ghost" onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setMessage(null); }} className="auth-mode">
+              {mode === "signin" ? "New here? Create an account" : "Already have an account? Sign in"}
+            </Button>
+          </div>
+        </section>
       </div>
     </main>
   );
