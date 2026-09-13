@@ -142,6 +142,34 @@ export function ReferenceLanding({
           {["Policy-aligned AI classification", "Submission-ready evidence packages", "Multi-location workspaces", "Client-ready reporting"].map((item) => <li key={item}><CheckCircle2 />{item}</li>)}
         </ul>
 
+        <section id="platforms" className="reference-platforms">
+          <div className="reference-platforms-copy">
+            <h2>Finally, a way for businesses to protect themselves and <span>fight back.</span></h2>
+            <div className="reference-platforms-shield" aria-hidden="true">
+              <ShieldCheck />
+              <i className="shield-spark shield-spark-a" />
+              <i className="shield-spark shield-spark-b" />
+            </div>
+            <p>Google review scanning is live today — every other platform joins the same simple paste → AI check → report → track flow as it rolls out.</p>
+          </div>
+          <div className="reference-platforms-grid-wrap">
+            <span className="reference-platforms-label">Platforms we cover</span>
+            <div className="reference-platforms-grid">
+              {platforms.map((platform, index) => {
+                const Icon = platform.icon;
+                return (
+                  <article key={platform.name} style={{ animationDelay: `${index * 90}ms` }}>
+                    <span className="platform-glyph" style={{ color: platform.color }}>
+                      {Icon ? <Icon className="size-6" fill={platform.icon === Star || platform.icon === Youtube ? platform.color : "none"} /> : platform.glyph}
+                    </span>
+                    <b>{platform.name}</b>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
 
 
         {scannerOpen ? (
