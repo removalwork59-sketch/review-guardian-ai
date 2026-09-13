@@ -1324,7 +1324,7 @@
 @keyframes proof-result { 0%, 55% { opacity: 0; transform: translateY(16px); } 60%, 92% { opacity: 1; transform: translateY(0); } 97%, 100% { opacity: 0; transform: translateY(10px); } }
 
 /* press marquee */
-.reference-press { overflow: hidden; margin-top: 8px; mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent); }
+.reference-press { overflow: hidden; margin-top: -24px; mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent); }
 .reference-press-track { display: flex; align-items: center; gap: 72px; width: max-content; animation: press-scroll 28s linear infinite; }
 .reference-press-track span {
   font-family: var(--font-display); font-size: 26px; font-weight: 800; letter-spacing: -0.01em;
@@ -1410,7 +1410,7 @@
 .reference-hero { padding: 66px 0 18px; grid-template-columns: 1fr .78fr; gap: 60px; align-items: start; }
 .reference-copy h1 { margin-top: 0; font-weight: 800; font-size: clamp(44px, 5.2vw, 72px); line-height: 1.04; }
 .reference-copy > p { margin-top: 22px; font-size: 17px; }
-.reference-press { margin-top: 10px; }
+.reference-press { margin-top: -28px; }
 .reference-press-track { gap: 84px; animation-duration: 34s; }
 .reference-press-track span { font-family: ui-serif, Georgia, "Times New Roman", serif; font-size: 27px; font-weight: 700; color: color-mix(in oklab, var(--color-ink) 30%, transparent); }
 .reference-press-track .press-business { font-variant: small-caps; font-size: 20px; letter-spacing: .04em; }
