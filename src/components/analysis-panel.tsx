@@ -91,7 +91,7 @@ export function AnalysisPanel({
 
           <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <Stat label="Problem type" value={CATEGORY_LABELS[analysis.violationCategory] ?? "—"} />
-            <Stat label="Chance it breaks the rules" value={`${analysis.confidence}%`} />
+            <Stat label="How sure the AI is" value={`${analysis.confidence}%`} />
             <Stat label="How serious" value={capitalize(analysis.severity)} />
             {reportable ? (
               <Stat label="Chance Google says no" value={capitalize(analysis.rejectionRisk)} />
