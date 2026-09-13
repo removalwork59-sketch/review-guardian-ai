@@ -19,6 +19,7 @@
 - Desktop and mobile homepage validation with no overflow or console errors
 
 ## Open
+- Deploy the Removal Work application backend to the Hostinger VPS and verify its live URL; blocked until a fresh non-root SSH private key is securely available and the matching public key is installed on the server
 - Connect owner-authorized Google Business Profile OAuth and sync complete listing reviews into the verified review pipeline; preserve the current sampled public lookup as a limited fallback
 - Use the saved `OPENAI_API_KEY` and `ANTHROPIC_API_KEY` only if an explicitly selected production integration needs them; keep the current tested Lovable AI analysis path unchanged
 - Prepare a controlled external-database/VPS migration when the destination is ready: rotate exposed credentials, provision fresh restricted credentials, back up and verify data, apply repository migrations, test RLS/auth/storage, then switch configuration with rollback available
