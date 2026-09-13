@@ -71,7 +71,7 @@ export function CaseCard({
 
       <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-foreground">{item.reviewText}</p>
       <p className="mt-3 text-sm font-medium text-ink">{item.headline}</p>
-      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.plainSummary}</p>
+      <p className="mt-1 line-clamp-3 text-sm leading-relaxed text-muted-foreground">{item.plainSummary}</p>
 
       <div className="mt-5 flex flex-wrap items-center gap-2">
         <label className="text-xs text-muted-foreground" htmlFor={`status-${item.id}`}>

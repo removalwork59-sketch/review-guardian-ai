@@ -149,13 +149,13 @@ function BulkPage() {
       {rows ? (
         <div className="mt-6 grid gap-3">
           {rows.map((row, index) => (
-            <div key={`${row.url}-${index}`} className="surface grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3 p-4 max-sm:grid-cols-[auto_minmax(0,1fr)]">
+            <div key={`${row.url}-${index}`} className="surface bulk-result-row grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3 p-4">
               <StateIcon state={row.state} />
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium text-ink">{row.url}</p>
                 <p className="mt-0.5 text-sm text-muted-foreground">{row.detail}</p>
               </div>
-              {row.verdict ? <span className="max-sm:col-start-2"><VerdictBadge verdict={row.verdict} /></span> : null}
+              {row.verdict ? <span className="bulk-result-verdict"><VerdictBadge verdict={row.verdict} /></span> : null}
             </div>
           ))}
         </div>
