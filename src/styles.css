@@ -833,7 +833,7 @@
 .store-door::after { content: ""; position: absolute; right: 5px; top: 27px; width: 3px; height: 3px; border-radius: 50%; background: color-mix(in oklab, var(--color-ink) 55%, transparent); }
 .store-step { position: absolute; right: 7px; bottom: -3px; width: 44px; height: 5px; background: color-mix(in oklab, var(--color-ink) 25%, transparent); }
 .customer-line { position: absolute; z-index: 2; left: 2%; bottom: 0; width: 65%; height: 75px; }
-.customer-line i { position: absolute; left: calc(var(--person) * 17%); bottom: -1px; width: 24px; height: 61px; transform-origin: 50% 100%; }
+.customer-line i { --delay: calc(var(--person) * -.18s); position: absolute; left: calc(var(--person) * 17%); bottom: -1px; width: 24px; height: 61px; transform-origin: 50% 100%; animation: customer-walk 1.15s ease-in-out var(--delay) infinite; }
 .customer-line i b { position: absolute; left: 7px; top: 0; width: 11px; height: 11px; border: 2px solid color-mix(in oklab, var(--color-ink) 88%, transparent); border-radius: 50%; }
 .customer-line i em { position: absolute; left: 11px; top: 12px; width: 2px; height: 27px; background: color-mix(in oklab, var(--color-ink) 88%, transparent); transform: rotate(calc((var(--person) - 2) * .8deg)); }
 .customer-line i span, .customer-line i small { position: absolute; left: 11px; top: 19px; width: 2px; height: 23px; background: color-mix(in oklab, var(--color-ink) 88%, transparent); transform-origin: top; }
@@ -871,8 +871,9 @@
 .rating-change-cta:hover { transform: translateY(-2px); filter: brightness(1.06); }
 .rating-change-cta:hover svg { transform: translateX(2px); }
 @keyframes money-float { 0% { opacity: 0; transform: translateY(9px); } 12% { opacity: .88; } 68% { opacity: .88; } 100% { opacity: 0; transform: translateY(-40px); } }
+@keyframes customer-walk { 0%, 100% { transform: translateY(0) rotate(-.7deg); } 50% { transform: translateY(-2px) rotate(.7deg); } }
 @keyframes wind-drift { from { transform: translateX(0); } to { transform: translateX(25px); } }
-@keyframes tumble-roll { 0%, 3% { opacity: 0; transform: translateX(0) translateY(0) rotate(0); } 8% { opacity: .76; } 25% { transform: translateX(112px) translateY(-8px) rotate(290deg); } 48% { transform: translateX(242px) translateY(0) rotate(630deg); } 69% { opacity: .76; transform: translateX(360px) translateY(-7px) rotate(940deg); } 79%, 100% { opacity: 0; transform: translateX(458px) translateY(0) rotate(1190deg); } }
+@keyframes tumble-roll { 0%, 5% { opacity: 0; transform: translateX(0) translateY(0) rotate(0); } 11% { opacity: .76; } 28% { transform: translateX(42px) translateY(-7px) rotate(150deg); } 48% { transform: translateX(82px) translateY(0) rotate(310deg); } 66% { transform: translateX(118px) translateY(-6px) rotate(455deg); } 79% { opacity: .76; transform: translateX(148px) translateY(0) rotate(570deg); } 88%, 100% { opacity: 0; transform: translateX(170px) translateY(-3px) rotate(650deg); } }
 
 @media (max-width: 760px) {
   .review-impression { padding: 68px 20px 64px; }
@@ -888,7 +889,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .money, .wind-lines i, .tumbleweed { animation: none; }
+  .customer-line i, .money, .wind-lines i, .tumbleweed { animation: none; }
   .money { opacity: .8; }
   .tumbleweed { left: 20%; opacity: .65; }
 }
