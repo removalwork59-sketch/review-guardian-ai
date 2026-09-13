@@ -902,3 +902,5 @@
   .rw-ghost-btn, .rw-icon-btn { display: none; }
   .rw-cta { height: 40px; padding: 0 14px; font-size: 13px; }
 }
+.rw-logo span { white-space: nowrap; }
+@media (max-width: 640px) { .rw-logo .font-display { font-size: 14px; } }
