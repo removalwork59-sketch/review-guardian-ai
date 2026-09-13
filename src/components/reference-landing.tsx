@@ -60,9 +60,10 @@ export function ReferenceLanding({
             <a href="#features">Brand Protection <ChevronDown /></a>
             <a href="#scan">Resources <ChevronDown /></a>
           </nav>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <button type="button" onClick={() => setLightMode((value) => !value)} className="reference-icon-button" aria-label="Toggle appearance">{lightMode ? <Sun className="size-4" /> : <MoonStar className="size-4" />}</button>
             <Link to={signedIn ? "/dashboard" : "/auth"} className="reference-outline-button">{signedIn ? "Dashboard" : "Client Login"}</Link>
+            <a href="#how" className="reference-outline-button">Book a Call</a>
             <button type="button" onClick={openScanner} className="reference-gradient-button">Get a Free Review Audit <span className="arrow-dot"><ArrowRight className="size-3.5" /></span></button>
           </div>
         </div>
@@ -71,16 +72,12 @@ export function ReferenceLanding({
       <div className="reference-wrap">
         <section className="reference-hero">
           <div className="reference-copy">
-            <div className="reference-kicker"><Sparkles className="blink-star size-3.5" /> AI policy analysis for Google reviews</div>
-            <h1>Only Report<br />What Breaks<br />The Rules</h1>
-            <p>Scanned against Google's published review policies — spam, fake content, off-topic, conflict of interest and harassment. Evidence-backed cases, tracked to the real outcome.</p>
+            <h1>Report Only<br />What Breaks The Rules</h1>
+            <p>Checked against Google, Facebook, Yelp and 20+ more platform policies.<br />No policy violation, no report. It&apos;s that simple.</p>
             <div className="reference-actions">
               <button type="button" onClick={openScanner} className="reference-gradient-button reference-primary-action">Get Your Free Review Audit <span className="arrow-dot"><ArrowRight className="size-3.5" /></span></button>
-              <a href="#how" className="reference-outline-button reference-secondary-action">See how it works</a>
+              <a href="#how" className="reference-outline-button reference-secondary-action">Book a Call <ArrowRight className="size-4" /></a>
             </div>
-            <ul className="reference-checks">
-              {["Policy-aligned AI classification", "Submission-ready evidence packages", "Multi-location workspaces", "Client-ready reporting"].map((item) => <li key={item}><CheckCircle2 />{item}</li>)}
-            </ul>
           </div>
 
           <div className="reference-proof">
@@ -93,7 +90,7 @@ export function ReferenceLanding({
               <p>Great with my kids. Very patient and thorough.</p>
             </div>
             <div className="reference-proof-outcome">
-              <div className="big-stars">★★★★★</div>
+              <div className="big-stars">★ ★ ★ ★ ★</div>
               <h3><CheckCircle2 /> Reputation Restored.</h3>
               <p className="reference-proof-meta">Policy violations reported · <span>★</span> rating context tracked</p>
             </div>
@@ -102,7 +99,9 @@ export function ReferenceLanding({
 
         <div className="reference-press" aria-hidden="true">
           <div className="reference-press-track">
-            {["Forbes", "BUSINESS INSIDER", "CEO", "Inc.", "Forbes", "BUSINESS INSIDER", "CEO", "Inc."].map((name, index) => <span key={`${name}-${index}`}>{name}</span>)}
+            {["Forbes", "Business Insider", "CEO", "Inc.", "Forbes", "Business Insider", "CEO", "Inc."].map((name, index) => (
+              <span key={`${name}-${index}`} className={`press-${name.toLowerCase().split(" ")[0]}`}>{name}</span>
+            ))}
           </div>
         </div>
 
@@ -121,6 +120,11 @@ export function ReferenceLanding({
             </article>
           ))}
         </div>
+
+        <ul className="reference-checks reference-checks-row">
+          {["Policy-aligned AI classification", "Submission-ready evidence packages", "Multi-location workspaces", "Client-ready reporting"].map((item) => <li key={item}><CheckCircle2 />{item}</li>)}
+        </ul>
+
 
 
         {scannerOpen ? (
