@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, BadgeCheck, CheckCircle2, ChevronDown, Facebook, Instagram, MoonStar, Scale, ShieldCheck, Sparkles, Star, Sun, Youtube } from "lucide-react";
+import { ArrowRight, BadgeCheck, CheckCircle2, Facebook, Instagram, Scale, ShieldCheck, Sparkles, Star, Youtube } from "lucide-react";
 import { X } from "lucide-react";
 import { useState } from "react";
 
@@ -9,7 +9,7 @@ import locationsIcon from "@/assets/reference-icons/locations.png";
 import reportsIcon from "@/assets/reference-icons/reports.png";
 import reviewsIcon from "@/assets/reference-icons/reviews.png";
 import scannerIcon from "@/assets/reference-icons/scanner.png";
-import { Wordmark } from "@/components/brand";
+import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 
 
@@ -69,22 +69,12 @@ export function ReferenceLanding({
 
   return (
     <div className={`reference-page ${lightMode ? "reference-light" : ""}`}>
-      <header className="reference-nav">
-        <div className="reference-wrap flex items-center justify-between gap-6">
-          <Wordmark />
-          <nav className="reference-navlinks">
-            <a href="#how">Review Removal <ChevronDown /></a>
-            <a href="#features">Brand Protection <ChevronDown /></a>
-            <a href="#scan">Resources <ChevronDown /></a>
-          </nav>
-          <div className="flex items-center gap-2.5">
-            <button type="button" onClick={() => setLightMode((value) => !value)} className="reference-icon-button" aria-label="Toggle appearance">{lightMode ? <Sun className="size-4" /> : <MoonStar className="size-4" />}</button>
-            <Link to={signedIn ? "/dashboard" : "/auth"} className="reference-outline-button">{signedIn ? "Dashboard" : "Client Login"}</Link>
-            <a href="#how" className="reference-outline-button">Book a Call</a>
-            <button type="button" onClick={openScanner} className="reference-gradient-button">Get a Free Review Audit <span className="arrow-dot"><ArrowRight className="size-3.5" /></span></button>
-          </div>
-        </div>
-      </header>
+      <SiteHeader
+        signedIn={signedIn}
+        onScanClick={openScanner}
+        lightMode={lightMode}
+        onToggleAppearance={() => setLightMode((value) => !value)}
+      />
 
       <div className="reference-wrap">
         <section className="reference-hero">
