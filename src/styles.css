@@ -632,8 +632,8 @@
 .removal-hammer {
   position: absolute;
   z-index: 6;
-  right: 10%;
-  top: -32px;
+  right: 14%;
+  top: -18px;
   width: 80px;
   height: 108px;
   opacity: 0;
