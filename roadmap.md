@@ -33,3 +33,4 @@
 - Integrate the strongest production backend capabilities from the audited old repository without importing its UI: secure Google Business Profile connection/sync, durable review records and case history, reliable bulk jobs, reporting/status workflows, and hardened AI analysis
 - Facebook / Instagram / YouTube scanning — blocked until a Meta/YouTube connection exists
 - Verified removal outcome — Google gives no API for report status; user marks the real outcome
+- Verify end-to-end in Pipeline: mark a case Reported, use Report on Google, and confirm the handoff status appears in Reports
