@@ -281,7 +281,7 @@ function Home() {
                           key={item.id}
                           type="button"
                           onClick={() => handleAnalyze(item, result.business)}
-                          className="surface animate-rise group w-full p-4 text-left transition hover:shadow-lift sm:p-5"
+                          className="surface surface-hover animate-rise group w-full p-4 text-left sm:p-5"
                           style={{ animationDelay: `${index * 60}ms` }}
                         >
                           <div className="flex items-center justify-between gap-3">
@@ -476,7 +476,7 @@ function Workflow() {
         {WORKFLOW.map((step, index) => (
           <li
             key={step.label}
-            className="surface animate-rise p-4"
+            className="surface surface-hover animate-rise p-4"
             style={{ animationDelay: `${index * 70}ms` }}
           >
             <span
