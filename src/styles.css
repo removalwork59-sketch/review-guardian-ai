@@ -1107,6 +1107,10 @@
 .proof-rating i { position: absolute; inset: 0; font-style: normal; opacity: 0; animation: proof-rating-cycle 19.56s linear infinite; }
 .proof-rating i:nth-child(2) { animation-delay: -19.56s; }
 .proof-rating i:nth-child(3) { animation-delay: -19.56s; }
+.proof-count { position: relative; display: inline-block; width: 14px; height: 13px; overflow: hidden; color: color-mix(in oklab, var(--color-ink) 54%, transparent); }
+.proof-count i { position: absolute; inset: 0; font-style: normal; opacity: 0; animation: proof-rating-cycle 19.56s linear infinite; }
+.proof-count i:nth-child(2) { animation-name: proof-rating-middle; }
+.proof-count i:nth-child(3) { animation-name: proof-rating-final; }
 .proof-review-stack { position: relative; height: 306px; margin-top: 9px; }
 .proof-row { position: absolute; left: 0; right: 0; height: 91px; padding: 12px 13px; overflow: hidden; border: 1px solid color-mix(in oklab, var(--color-ink) 7%, transparent); border-radius: 8px; background: color-mix(in oklab, var(--color-ink) 5%, transparent); box-shadow: 0 8px 20px oklch(0 0 0 / .1); transition: none; }
 .proof-row > div { display: flex; align-items: center; gap: 7px; }
@@ -1119,9 +1123,12 @@
 .proof-row-two { top: 101px; animation: proof-row-two 19.56s cubic-bezier(.65,0,.35,1) infinite; }
 .proof-row-three { top: 202px; animation: proof-row-three 19.56s cubic-bezier(.65,0,.35,1) infinite; }
 .proof-row-four { top: 303px; opacity: 0; animation: proof-row-four 19.56s cubic-bezier(.65,0,.35,1) infinite; }
-.proof-row-bad { border-color: color-mix(in oklab, var(--color-danger) 35%, transparent); }
+.proof-row-bad { border-color: color-mix(in oklab, var(--color-danger) 62%, transparent); background: color-mix(in oklab, var(--color-danger) 10%, oklch(0.225 0.032 182)); }
+.proof-row-bad .proof-row-stars { color: var(--color-danger); }
 .proof-row-bad::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 45%, color-mix(in oklab, var(--color-star) 30%, transparent), color-mix(in oklab, var(--color-danger) 19%, transparent) 58%, transparent 82%); opacity: 0; animation: proof-alert 19.56s ease infinite; }
 .proof-row-four::after { animation-delay: -9.78s; }
+.proof-issue-badge { position: absolute; z-index: 3; right: 9px; bottom: 8px; padding: 3px 6px; border-radius: 999px; background: color-mix(in oklab, var(--color-danger) 84%, transparent); color: var(--color-ink); font-size: 7px; line-height: 1; opacity: 0; transform: translateY(3px); animation: proof-issue 19.56s ease infinite; }
+.proof-row-four .proof-issue-badge { animation-delay: -9.78s; }
 .proof-scan-line { position: absolute; z-index: 2; left: -35%; top: 0; width: 34%; height: 100%; background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--color-star) 35%, transparent), transparent); transform: skewX(-12deg); animation: proof-scan 19.56s ease-in-out infinite; }
 .proof-row-four .proof-scan-line { animation-delay: -9.78s; }
 .reference-proof-outcome { position: absolute; left: 0; right: 0; bottom: 20px; margin: 0; opacity: 0; transform: translateY(16px); animation: proof-result 19.56s cubic-bezier(.22,1,.36,1) infinite; }
@@ -1135,10 +1142,11 @@
 @keyframes proof-rating-middle { 0%, 26% { opacity: 0; } 28%, 52% { opacity: 1; } 54%, 100% { opacity: 0; } }
 @keyframes proof-rating-final { 0%, 52% { opacity: 0; } 54%, 100% { opacity: 1; } }
 @keyframes proof-row-one { 0%, 26% { transform: translateY(0); } 31%, 52% { transform: translateY(0); } 57%, 94% { transform: translateY(0); } 100% { transform: translateY(0); } }
-@keyframes proof-row-two { 0%, 21% { opacity: 1; transform: translateY(0) scale(1); } 23%, 27% { opacity: 1; transform: translateY(0) scale(.985); } 31%, 94% { opacity: 0; transform: translateX(42px) scale(.95); } 98%, 100% { opacity: 1; transform: none; } }
+@keyframes proof-row-two { 0%, 21% { opacity: 1; transform: translateY(0) scale(1); filter: none; } 23%, 27% { opacity: 1; transform: translateY(0) scale(.985); filter: saturate(1.2); } 31%, 94% { opacity: 0; transform: translateX(115%) rotate(1.5deg) scale(.96); filter: blur(2px); } 98%, 100% { opacity: 1; transform: none; filter: none; } }
 @keyframes proof-row-three { 0%, 26% { transform: translateY(0); } 31%, 52% { transform: translateY(-101px); } 57%, 94% { transform: translateY(-101px); } 98%, 100% { transform: translateY(0); } }
-@keyframes proof-row-four { 0%, 26% { opacity: 0; transform: translateY(0); } 31%, 47% { opacity: 1; transform: translateY(-101px); } 49%, 53% { opacity: 1; transform: translateY(-101px) scale(.985); } 57%, 94% { opacity: 0; transform: translate(-42px,-101px) scale(.95); } 98%, 100% { opacity: 0; transform: none; } }
+@keyframes proof-row-four { 0%, 26% { opacity: 0; transform: translateY(0); filter: none; } 31%, 47% { opacity: 1; transform: translateY(-101px); filter: none; } 49%, 53% { opacity: 1; transform: translateY(-101px) scale(.985); filter: saturate(1.2); } 57%, 94% { opacity: 0; transform: translate(-115%,-101px) rotate(-1.5deg) scale(.96); filter: blur(2px); } 98%, 100% { opacity: 0; transform: none; filter: none; } }
 @keyframes proof-alert { 0%, 5%, 22%, 100% { opacity: 0; } 7%, 19% { opacity: 1; } }
+@keyframes proof-issue { 0%, 10%, 22%, 100% { opacity: 0; transform: translateY(3px); } 12%, 20% { opacity: 1; transform: translateY(0); } }
 @keyframes proof-scan { 0%, 5% { opacity: 0; transform: translateX(0) skewX(-12deg); } 7% { opacity: 1; } 20% { opacity: 1; transform: translateX(420%) skewX(-12deg); } 22%, 100% { opacity: 0; transform: translateX(420%) skewX(-12deg); } }
 @keyframes proof-result { 0%, 55% { opacity: 0; transform: translateY(16px); } 60%, 92% { opacity: 1; transform: translateY(0); } 97%, 100% { opacity: 0; transform: translateY(10px); } }
 

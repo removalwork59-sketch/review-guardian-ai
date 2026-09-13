@@ -84,7 +84,7 @@ export function ReferenceLanding({
             <span className="proof-demo-label">Example review analysis</span>
             <div className="proof-business">
               <span className="proof-business-mark"><ShieldCheck /></span>
-              <div><b>Bright Smile Dental</b><p><span>★★★★★</span> <strong className="proof-rating"><i>3.9</i><i>4.6</i><i>5.0</i></strong> (27 Google reviews)</p></div>
+              <div><b>Bright Smile Dental</b><p><span>★★★★★</span> <strong className="proof-rating"><i>3.9</i><i>4.6</i><i>5.0</i></strong> <span className="proof-count"><i>29</i><i>28</i><i>27</i></span> Google reviews</p></div>
             </div>
             <div className="proof-review-stack">
               <article className="proof-row proof-row-one">
@@ -94,6 +94,7 @@ export function ReferenceLanding({
               <article className="proof-row proof-row-bad proof-row-two">
                 <div><span className="reference-avatar">JR</span><b>James R.</b><time>3 weeks ago</time></div>
                 <span className="proof-row-stars">★☆☆☆☆</span><p>Wouldn&apos;t recommend. Rude front desk and ended up paying way...</p>
+                <strong className="proof-issue-badge">Policy issue detected</strong>
                 <span className="proof-scan-line" />
               </article>
               <article className="proof-row proof-row-three">
@@ -103,6 +104,7 @@ export function ReferenceLanding({
               <article className="proof-row proof-row-bad proof-row-four">
                 <div><span className="reference-avatar">MK</span><b>Mike T.</b><time>2 months ago</time></div>
                 <span className="proof-row-stars">★☆☆☆☆</span><p>Showed up to my appointment and they had no record of it...</p>
+                <strong className="proof-issue-badge">Policy issue detected</strong>
                 <span className="proof-scan-line" />
               </article>
             </div>
