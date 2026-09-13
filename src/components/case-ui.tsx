@@ -49,6 +49,7 @@ export function CaseCard({
   onStatusChange: (status: CaseStatus) => void;
   busy: boolean;
 }) {
+  const reportable = ["strong_candidate", "possible_candidate"].includes(item.verdict);
   const availableStatuses = CASE_STATUSES.filter(
     (status) => status === item.status || CASE_STATUS_TRANSITIONS[item.status].includes(status),
   );
@@ -104,6 +105,19 @@ export function CaseCard({
             Open on Google
             <ExternalLink className="size-3.5" />
           </a>
+        ) : null}
+        {reportable && item.reviewUrl ? (
+          <Button
+            type="button"
+            size="sm"
+            disabled={busy}
+            onClick={() => {
+              window.open(item.reviewUrl, "_blank", "noopener");
+              if (availableStatuses.includes("reported")) onStatusChange("reported");
+            }}
+          >
+            Report on Google
+          </Button>
         ) : null}
       </div>
     </article>

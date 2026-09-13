@@ -20,6 +20,8 @@
 - Desktop and mobile homepage validation with no overflow or console errors
 
 ## Open
+- Sync the user's own Google Business Profile reviews into review records and show them in Reviews with AI analysis and a report button (code ready; needs the approved Google OAuth client saved)
+- Submit one real report from the user's own listing and track its status updates in Reports (needs live consent plus explicit user confirmation before the irreversible submission)
 - Put the Google Business Profile consent callback live on the Hostinger VPS with the user's approved OAuth client, sync owner-authorized reviews, then submit and record one real report from the user's own listing; blocked by safe VPS access, an HTTPS hostname, approved Google OAuth credentials, and the user's final confirmation before the irreversible report submission
 - Deploy the Removal Work application backend to the Hostinger VPS and verify its live URL; blocked until a fresh non-root SSH private key is securely available and the matching public key is installed on the server
 - Activate owner-authorized Google Business Profile OAuth after its client ID/secret are saved, then add paginated account/location/review sync; preserve the current sampled public lookup as a limited fallback
