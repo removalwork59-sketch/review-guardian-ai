@@ -183,9 +183,10 @@ export function SiteHeader({
               type="button"
               className="rw-icon-btn"
               onClick={onToggleAppearance}
-              aria-label="Toggle appearance"
+              aria-label={lightMode ? "Use dark appearance" : "Use light appearance"}
+              title={lightMode ? "Dark mode" : "Light mode"}
             >
-              {lightMode ? <Sun className="size-4" /> : <MoonStar className="size-4" />}
+              {lightMode ? <MoonStar className="size-4" /> : <Sun className="size-4" />}
             </button>
           ) : null}
           <Link to={signedIn ? "/dashboard" : "/auth"} className="rw-ghost-btn">
