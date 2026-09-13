@@ -83,9 +83,14 @@ function LocationsPage() {
           {!connection?.configured ? <p className="mt-2 text-sm text-warning">Google OAuth credentials are required before connection can begin.</p> : null}
         </div>
         {connection?.connected ? (
-          <Button type="button" variant="outline" onClick={disconnectGoogle} disabled={connectionBusy}>
-            {connectionBusy ? <Loader2 className="animate-spin" /> : <Unlink />} Disconnect
-          </Button>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button type="button" onClick={syncGoogle} disabled={connectionBusy}>
+              {connectionBusy ? <Loader2 className="animate-spin" /> : <RefreshCw />} Sync my reviews
+            </Button>
+            <Button type="button" variant="outline" onClick={disconnectGoogle} disabled={connectionBusy}>
+              <Unlink /> Disconnect
+            </Button>
+          </div>
         ) : (
           <Button type="button" onClick={connectGoogle} disabled={connectionBusy || !connection?.configured}>
             {connectionBusy ? <Loader2 className="animate-spin" /> : <Link2 />} Connect Google
