@@ -30,6 +30,7 @@ import {
   IndustriesSection,
   PlatformsSection,
   ProblemsSection,
+  PromiseSection,
   SiteFooter,
   StepsSection,
 } from "@/components/landing";
