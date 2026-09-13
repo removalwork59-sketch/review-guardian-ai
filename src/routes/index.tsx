@@ -3,7 +3,11 @@ import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import {
   ArrowRight,
+  CheckCircle2,
+  ClipboardList,
+  Clock,
   ExternalLink,
+  Flag,
   Info,
   LayoutGrid,
   MapPin,
@@ -12,6 +16,7 @@ import {
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
+
 
 import { BrandMark, StarRating, Wordmark } from "@/components/brand";
 import { ScanProgress } from "@/components/scan-progress";
@@ -416,22 +421,66 @@ function Pill({ label, ready = false }: { label: string; ready?: boolean }) {
   );
 }
 
-function Highlight({
-  icon,
-  title,
-  body,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  body: string;
-}) {
+const WORKFLOW = [
+  {
+    icon: MessageSquareQuote,
+    label: "The review",
+    body: "Pulled straight from Google",
+    tone: "bg-star-soft text-star",
+  },
+  {
+    icon: Sparkles,
+    label: "AI policy check",
+    body: "Both sides weighed up",
+    tone: "bg-info-soft text-primary",
+  },
+  {
+    icon: ClipboardList,
+    label: "Evidence",
+    body: "The exact lines that matter",
+    tone: "bg-info-soft text-primary",
+  },
+  {
+    icon: Flag,
+    label: "Report",
+    body: "One clear next step",
+    tone: "bg-warning-soft text-warning",
+  },
+  {
+    icon: Clock,
+    label: "Track",
+    body: "Know where it stands",
+    tone: "bg-warning-soft text-warning",
+  },
+  {
+    icon: CheckCircle2,
+    label: "Outcome",
+    body: "Removed, or honestly not",
+    tone: "bg-safe-soft text-safe",
+  },
+] as const;
+
+function Workflow() {
   return (
-    <div className="surface p-4">
-      <span className="inline-flex size-9 items-center justify-center rounded-xl bg-info-soft text-primary">
-        {icon}
-      </span>
-      <p className="mt-3 text-sm font-semibold text-ink">{title}</p>
-      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{body}</p>
+    <div className="mx-auto mt-14 max-w-4xl">
+      <p className="text-sm font-medium text-muted-foreground">How one review moves through</p>
+      <ol className="mt-4 grid grid-cols-2 gap-3 text-left sm:grid-cols-3 lg:grid-cols-6">
+        {WORKFLOW.map((step, index) => (
+          <li
+            key={step.label}
+            className="surface animate-rise p-4"
+            style={{ animationDelay: `${index * 70}ms` }}
+          >
+            <span
+              className={`inline-flex size-9 items-center justify-center rounded-xl ${step.tone}`}
+            >
+              <step.icon className="size-4.5" />
+            </span>
+            <p className="mt-3 text-sm font-semibold text-ink">{step.label}</p>
+            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{step.body}</p>
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }
