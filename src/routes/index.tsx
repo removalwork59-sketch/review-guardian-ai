@@ -22,6 +22,18 @@ import {
 
 
 import { BrandMark, StarRating, Wordmark } from "@/components/brand";
+import {
+  ClosingSection,
+  DashboardSection,
+  FaqSection,
+  ImpressionSection,
+  IndustriesSection,
+  PlatformsSection,
+  ProblemsSection,
+  PromiseSection,
+  SiteFooter,
+  StepsSection,
+} from "@/components/landing";
 import { Button } from "@/components/ui/button";
 import { ScanProgress } from "@/components/scan-progress";
 import { AnalysisPanel } from "@/components/analysis-panel";
@@ -173,27 +185,37 @@ function Home() {
 
   return (
     <main className="premium-home relative min-h-screen overflow-hidden bg-background">
-      <header className="mx-auto flex max-w-[1400px] items-center justify-between px-5 py-5 sm:px-8 lg:px-10">
-        <Wordmark />
-        <div className="flex items-center gap-2">
-          <span className="hidden items-center gap-1.5 rounded-full border border-border bg-card/60 px-3 py-1.5 text-xs text-muted-foreground backdrop-blur lg:inline-flex">
-            <ShieldCheck className="size-3.5 text-safe" />
-            Independent tool — not affiliated with Google
-          </span>
-          <Link
-            to={signedIn ? "/dashboard" : "/auth"}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-card/70 px-3 py-2 text-sm font-medium text-ink backdrop-blur transition hover:border-primary/40 hover:bg-muted"
-          >
-            <LayoutGrid className="size-4" />
-            {signedIn ? "Dashboard" : "Sign in"}
-          </Link>
+      <header className="site-nav sticky top-0 z-50">
+        <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-5 py-4 sm:px-8 lg:px-10">
+          <Wordmark />
+          <nav className="hidden items-center gap-7 text-sm font-medium text-muted-foreground lg:flex">
+            <a href="#how" className="transition hover:text-ink">How it works</a>
+            <a href="#platforms" className="transition hover:text-ink">Platforms</a>
+            <a href="#faq" className="transition hover:text-ink">FAQ</a>
+          </nav>
+          <div className="flex items-center gap-2">
+            <Link
+              to={signedIn ? "/dashboard" : "/auth"}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-card/70 px-3.5 py-2 text-sm font-medium text-ink backdrop-blur transition hover:border-primary/40 hover:bg-muted"
+            >
+              <LayoutGrid className="size-4" />
+              {signedIn ? "Dashboard" : "Client login"}
+            </Link>
+            <a
+              href="#scan"
+              className="cta-glow hidden h-10 items-center gap-2 rounded-xl px-4 text-sm font-semibold sm:inline-flex"
+            >
+              Scan a review
+              <ArrowRight className="size-4" />
+            </a>
+          </div>
         </div>
       </header>
 
       <div className="mx-auto w-full max-w-[1400px] px-3 pb-24 sm:px-6 lg:px-8">
         {stage === "idle" || stage === "scanning" ? (
           <>
-            <section className="hero-shell animate-rise relative overflow-hidden rounded-[18px] border border-border px-5 pb-24 pt-9 sm:px-10 sm:pb-28 sm:pt-12 lg:px-14 lg:pb-32">
+            <section id="scan" className="hero-shell animate-rise relative overflow-hidden rounded-[18px] border border-border px-5 pb-24 pt-9 sm:px-10 sm:pb-28 sm:pt-12 lg:px-14 lg:pb-32">
               <div className="hero-grain pointer-events-none absolute inset-0" />
               <div className="relative grid items-center gap-12 lg:grid-cols-[1.04fr_.96fr] lg:gap-16">
                 <div>
@@ -257,12 +279,26 @@ function Home() {
                   </div>
                 </div>
               </div>
-              {stage === "idle" ? <Workflow /> : null}
             </section>
+            {stage === "idle" ? <Workflow /> : null}
 
             {error ? <ErrorNote {...error} /> : null}
             {stage === "scanning" ? <div className="mx-auto mt-8 max-w-xl"><ScanProgress steps={SCAN_STEPS} done={false} /></div> : null}
-            {stage === "idle" ? <TrustSection /> : null}
+            {stage === "idle" ? (
+              <>
+                <TrustSection />
+                <PlatformsSection />
+                <PromiseSection />
+                <StepsSection />
+                <ImpressionSection />
+                <ProblemsSection />
+                <DashboardSection />
+                <IndustriesSection />
+                <FaqSection />
+                <ClosingSection />
+                <SiteFooter />
+              </>
+            ) : null}
           </>
         ) : null}
 
@@ -497,7 +533,7 @@ const WORKFLOW = [
 
 function Workflow() {
   return (
-    <div className="absolute inset-x-4 bottom-0 z-10 translate-y-1/2 sm:inset-x-8 lg:inset-x-14">
+    <div className="relative z-10 -mt-16 px-1 sm:-mt-20 sm:px-6 lg:px-10">
       <ol className="workflow-ribbon mx-auto grid max-w-5xl grid-cols-3 gap-2 sm:grid-cols-6 sm:gap-3">
         {WORKFLOW.map((step, index) => (
           <li
