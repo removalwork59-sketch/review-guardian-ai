@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Done
+- Arranged the five workflow cards as the selected overlapping fan deck across a light-to-dark section boundary, preserving the existing upper section and all original workflow copy
 - Completed the existing footer with the provided verified email, phone, address, postal code, and Facebook link; all contact actions are accessible and the existing design remains unchanged
 - Finished the current UI without redesigning it: completed the footer with working destinations, clarified disabled planned-platform controls, refined CTA/focus/press states, text wrapping, animation stability, and mobile action alignment; desktop/mobile checks passed without overflow, page errors, or failed responses
 - Fixed the top five Home/Login UI audit blockers without changing the interface: strengthened light-mode readability, replaced unsupported claims, made report statuses explicitly user-recorded, clarified approved-access signup, and added password recovery plus Google sign-in loading feedback

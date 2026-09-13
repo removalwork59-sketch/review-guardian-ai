@@ -1335,6 +1335,8 @@
 /* tilted testimonial strip */
 .reference-boundary-stage {
   --boundary-surface: oklch(0.105 0.035 256);
+  --boundary-foreground: oklch(0.96 0.012 210);
+  --boundary-muted: oklch(0.72 0.025 210);
   --boundary-card-dark: oklch(0.18 0.04 190);
   --boundary-card-green: oklch(0.64 0.17 164);
   --boundary-card-gold: oklch(0.8 0.16 84);
@@ -1405,6 +1407,7 @@
 .reference-press-track .press-inc { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.02em; }
 .reference-tilt { margin-top: 0; }
 .reference-checks-row { grid-template-columns: repeat(4, auto); justify-content: center; margin-top: 64px; font-size: 12px; color: color-mix(in oklab, var(--color-ink) 76%, transparent); }
+.reference-boundary-stage .reference-checks-row { color: var(--boundary-muted); }
 
 .reference-chat { position: fixed; right: 22px; bottom: 22px; z-index: 60; display: flex; align-items: center; gap: 12px; }
 .reference-chat-bubble { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 14px; background: oklch(0.98 0.004 175); color: oklch(0.22 0.03 180); font-size: 14px; font-weight: 500; box-shadow: 0 18px 46px oklch(0 0 0 / .35); animation: var(--animate-rise); }
@@ -2094,6 +2097,12 @@ body {
 .reference-page.reference-light .reference-footer :where(strong, nav span) { color: var(--ink); }
 .reference-page.reference-light .reference-footer nav :where(a, button) { color: var(--muted-foreground); }
 .reference-page.reference-light .reference-footer nav :where(a, button):hover { color: oklch(0.38 0.14 178); }
+.reference-page.reference-light .reference-boundary-stage .reference-tilt article:nth-child(1),
+.reference-page.reference-light .reference-boundary-stage .reference-tilt article:nth-child(4) { color: var(--boundary-foreground); }
+.reference-page.reference-light .reference-boundary-stage .reference-platforms-copy h2,
+.reference-page.reference-light .reference-boundary-stage .reference-platforms-label { color: var(--boundary-foreground); }
+.reference-page.reference-light .reference-boundary-stage .reference-platforms-copy p { color: var(--boundary-muted); }
+.reference-page.reference-light .reference-boundary-stage .reference-checks-row { color: var(--boundary-muted); }
 
 /* UI finishing authority — existing composition, refined rhythm and interaction. */
 .reference-page :where(button, a, input):focus-visible {
