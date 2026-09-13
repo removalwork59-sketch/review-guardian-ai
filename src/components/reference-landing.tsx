@@ -220,7 +220,11 @@ export function ReferenceLanding({
                   <i /><i /><i />
                   <strong className="removed-label">Removed</strong>
                 </div>
-                <div className="removal-hammer"><span /><b /></div>
+                <div className="removal-hammer">
+                  <span className="hammer-handle" />
+                  <b className="hammer-head" />
+                  <i className="hammer-collar" />
+                </div>
                 <span className="removal-burst">✦</span>
               </div>
               <h3>Track the Real Outcome</h3>
