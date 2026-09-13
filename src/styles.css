@@ -315,6 +315,7 @@
   padding-bottom: .625rem;
   scrollbar-width: none;
   overscroll-behavior-inline: contain;
+  mask-image: linear-gradient(to right, black 0, black calc(100% - 1.5rem), transparent 100%);
 }
 .app-nav::-webkit-scrollbar { display: none; }
 .app-nav-link { flex: 0 0 auto; padding-inline: .75rem; color: var(--color-muted-foreground); }

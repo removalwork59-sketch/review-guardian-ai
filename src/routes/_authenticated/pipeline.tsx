@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { ExternalLink, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { AppShell } from "@/components/app-shell";
@@ -278,6 +278,17 @@ function PipelinePage() {
               <span className="rounded-full border border-border px-2.5 py-1 text-xs font-medium text-muted-foreground">
                 {STATUS_SHORT[item.status]}
               </span>
+              {item.reviewUrl ? (
+                <a
+                  href={item.reviewUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Open review for ${item.locationName} on Google`}
+                  className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-ink"
+                >
+                  <ExternalLink className="size-3.5" />
+                </a>
+              ) : null}
             </article>
           ))}
         </div>

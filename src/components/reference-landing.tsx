@@ -120,6 +120,14 @@ export function ReferenceLanding({
     const saved = window.localStorage.getItem("removal-work-appearance");
     const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
     setLightMode(saved ? saved === "light" : prefersLight);
+    if (window.location.hash === "#scan") {
+      setScannerOpen(true);
+      window.setTimeout(() => {
+        const input = document.querySelector<HTMLInputElement>("#reference-review-url");
+        input?.scrollIntoView({ behavior: "smooth", block: "center" });
+        input?.focus({ preventScroll: true });
+      }, 100);
+    }
   }, []);
 
   function toggleAppearance() {

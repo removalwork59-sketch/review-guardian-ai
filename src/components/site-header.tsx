@@ -29,8 +29,8 @@ const platformItems = [
 
 const reviewItems = [
   { label: "All reviews", to: "/dashboard", hint: "Everything you have scanned" },
-  { label: "Possible violations", to: "/dashboard", hint: "Flagged by the AI policy check" },
-  { label: "Needs a look", to: "/dashboard", hint: "Waiting on your decision" },
+  { label: "Case pipeline", to: "/pipeline", hint: "Filter and act on identified cases" },
+  { label: "Needs a look", to: "/dashboard", hint: "Review your saved AI findings" },
   { label: "Submitted", to: "/reports", hint: "Marked submitted by you" },
 ];
 

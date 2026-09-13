@@ -40,14 +40,14 @@ export function AppShell({
             <Wordmark />
           </Link>
           <div className="flex shrink-0 items-center gap-2">
-            <Link
-              to="/"
+            <a
+              href="/#scan"
               aria-label="Start a new review scan"
               className="app-secondary-action"
             >
               <Search className="size-4" />
               New scan
-            </Link>
+            </a>
             <Button
               type="button"
               variant="ghost"
