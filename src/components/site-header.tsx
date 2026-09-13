@@ -247,13 +247,28 @@ function MenuTrigger({
 }) {
   const isOpen = open === id;
   return (
-    <div className="rw-nav-item" onMouseEnter={() => onOpen(id)} onMouseLeave={onClose}>
+    <div
+      className="rw-nav-item"
+      onPointerEnter={(event) => {
+        if (event.pointerType === "mouse") onOpen(id);
+      }}
+      onPointerLeave={(event) => {
+        if (event.pointerType === "mouse") onClose();
+      }}
+    >
       <button
         type="button"
         className={`rw-nav-link ${isOpen ? "is-open" : ""}`}
         aria-expanded={isOpen}
         aria-haspopup="true"
-        onClick={() => onToggle(id)}
+        onPointerDown={(event) => {
+          // Mouse users already opened the menu on hover; a click must not close it again.
+          if (event.pointerType === "mouse") onOpen(id);
+        }}
+        onClick={(event) => {
+          if ((event as unknown as { nativeEvent: PointerEvent }).nativeEvent.pointerType === "mouse") return;
+          onToggle(id);
+        }}
       >
         {label} <ChevronDown className="size-3.5" />
       </button>
