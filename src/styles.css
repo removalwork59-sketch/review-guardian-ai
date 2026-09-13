@@ -1391,8 +1391,6 @@
   .reference-copy > p { font-size: 16px; }
   .reference-proof { margin-top: 34px; }
   .reference-boundary-stage { margin-top: 42px; }
-  .reference-boundary-stage { background: linear-gradient(to bottom, var(--boundary-upper) 0 76px, transparent 76px); }
-  .reference-boundary-stage::before { top: 76px; }
   .reference-tilt { display: grid; grid-template-columns: 1fr; gap: 12px; padding-inline: 0; }
   .reference-tilt article { width: 100%; min-height: 158px; transform: none !important; }
   .reference-tilt article + article { margin-left: 0; }
