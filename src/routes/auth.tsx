@@ -37,6 +37,8 @@ function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const [googleBusy, setGoogleBusy] = useState(false);
+  const [recoveryBusy, setRecoveryBusy] = useState(false);
   const [ready, setReady] = useState(false);
   const [message, setMessage] = useState<{ tone: "error" | "ok"; text: string } | null>(null);
 
@@ -86,16 +88,40 @@ function AuthPage() {
 
   async function handleGoogle() {
     setMessage(null);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
-    });
-    if (result.error) {
-      setMessage({ tone: "error", text: "Google sign-in didn't complete. Please try again." });
+    setGoogleBusy(true);
+    try {
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin,
+      });
+      if (result.error) {
+        setMessage({ tone: "error", text: "Google sign-in didn't complete. Please try again." });
+        return;
+      }
+      if (result.redirected) return;
+      await supabase.rpc("ensure_my_profile");
+      void navigate({ to: "/dashboard" });
+    } finally {
+      setGoogleBusy(false);
+    }
+  }
+
+  async function handlePasswordRecovery() {
+    setMessage(null);
+    const normalizedEmail = email.trim();
+    if (!normalizedEmail) {
+      setMessage({ tone: "error", text: "Enter your email address first." });
       return;
     }
-    if (result.redirected) return;
-    await supabase.rpc("ensure_my_profile");
-    void navigate({ to: "/dashboard" });
+    setRecoveryBusy(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(normalizedEmail, {
+      redirectTo: `${window.location.origin}/auth`,
+    });
+    setRecoveryBusy(false);
+    setMessage(
+      error
+        ? { tone: "error", text: "We couldn't send the reset email. Please try again." }
+        : { tone: "ok", text: "If that account exists, a password reset link is on its way." },
+    );
   }
 
   return (
@@ -132,11 +158,11 @@ function AuthPage() {
             <div className="auth-form-heading">
               <span>{mode === "signin" ? "Secure workspace access" : "Create your workspace"}</span>
               <h2>{mode === "signin" ? "Welcome back" : "Create your account"}</h2>
-              <p>Your scans, reports and locations stay together.</p>
+              <p>{mode === "signin" ? "Your scans, reports and locations stay together." : "Create an account only if your access has been approved."}</p>
             </div>
 
-            <Button type="button" variant="outline" onClick={handleGoogle} className="auth-google">
-              <span className="auth-google-g">G</span> Continue with Google
+            <Button type="button" variant="outline" onClick={handleGoogle} disabled={googleBusy || busy} className="auth-google">
+              <span className="auth-google-g">G</span> {googleBusy ? "Connecting…" : "Continue with Google"}
             </Button>
 
             <div className="auth-divider"><span />or use email<span /></div>
@@ -146,15 +172,20 @@ function AuthPage() {
               <input id="email" type="email" required autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@company.com" />
               <label htmlFor="password">Password</label>
               <input id="password" type="password" required minLength={6} autoComplete={mode === "signin" ? "current-password" : "new-password"} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="At least 6 characters" />
+              {mode === "signin" ? (
+                <Button type="button" variant="ghost" disabled={recoveryBusy || busy} onClick={handlePasswordRecovery} className="auth-recovery">
+                  {recoveryBusy ? "Sending reset link…" : "Forgot password?"}
+                </Button>
+              ) : null}
               <Button type="submit" disabled={busy || !ready} className="auth-submit">
-                {busy || !ready ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}<ArrowRight />
+                {busy || !ready ? "Please wait…" : mode === "signin" ? "Sign in" : "Create approved account"}<ArrowRight />
               </Button>
             </form>
 
             {message ? <p role="status" className={`auth-message ${message.tone === "error" ? "is-error" : "is-ok"}`}>{message.text}</p> : null}
 
             <Button type="button" variant="ghost" onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setMessage(null); }} className="auth-mode">
-              {mode === "signin" ? "New here? Create an account" : "Already have an account? Sign in"}
+              {mode === "signin" ? "Approved access? Create an account" : "Already have an account? Sign in"}
             </Button>
           </div>
         </section>

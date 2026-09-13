@@ -21,20 +21,20 @@ export const CASE_STATUS_TRANSITIONS: Record<CaseStatus, readonly CaseStatus[]> 
 };
 
 export const STATUS_LABELS: Record<CaseStatus, string> = {
-  new: "Not reported yet",
-  reported: "Reported to Google",
-  pending: "Waiting on Google",
-  removed: "Review removed",
-  rejected: "Google said no",
+  new: "Prepared — not submitted",
+  reported: "User marked submitted",
+  pending: "User marked awaiting outcome",
+  removed: "User confirmed removed",
+  rejected: "User confirmed kept",
   ignored: "Left alone",
 };
 
 export const STATUS_SHORT: Record<CaseStatus, string> = {
   new: "New",
-  reported: "Reported",
-  pending: "Waiting",
-  removed: "Removed",
-  rejected: "Kept",
+  reported: "Marked submitted",
+  pending: "Awaiting outcome",
+  removed: "Confirmed removed",
+  rejected: "Confirmed kept",
   ignored: "Ignored",
 };
 

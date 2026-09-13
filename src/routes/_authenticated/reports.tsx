@@ -11,12 +11,12 @@ export const Route = createFileRoute("/_authenticated/reports")({
       { title: "Reports — Removal Work" },
       {
         name: "description",
-        content: "Track what you reported to Google and what actually happened.",
+        content: "Track report handoffs and the outcomes you record.",
       },
       { property: "og:title", content: "Reports — Removal Work" },
       {
         property: "og:description",
-        content: "Track what you reported to Google and what actually happened.",
+        content: "Track report handoffs and the outcomes you record.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -47,20 +47,20 @@ function ReportsPage() {
   return (
     <AppShell
       title="Reports"
-      description="What you've flagged to Google, and where each one stands."
+      description="Your saved report handoffs and manually confirmed outcomes."
     >
       <dl className="app-stats-grid">
-        <StatTile label="Reported" value={counts.reported} />
-        <StatTile label="Waiting on Google" value={counts.pending} />
-        <StatTile label="Removed" value={counts.removed} tone="text-safe" />
-        <StatTile label="Google said no" value={counts.rejected} tone="text-danger" />
+        <StatTile label="Marked submitted" value={counts.reported} />
+        <StatTile label="Awaiting outcome" value={counts.pending} />
+        <StatTile label="Confirmed removed" value={counts.removed} tone="text-safe" />
+        <StatTile label="Confirmed kept" value={counts.rejected} tone="text-danger" />
       </dl>
 
       <section className="app-section">
         <h2 className="app-section-title">Ready to report</h2>
         <p className="app-section-description">
-          The AI found a case worth making. Open the review on Google, flag it there, then mark it
-          reported here.
+          The AI found a case worth making. Open the review on Google, complete the report there,
+          then record your action here.
         </p>
         <div className="app-section-list app-list-grid">
           {isPending ? (
@@ -86,13 +86,13 @@ function ReportsPage() {
       <section className="app-section">
         <h2 className="app-section-title">Being tracked</h2>
         <p className="app-section-description">
-          Google decides the outcome — update the status here when you hear back.
+          Google decides the outcome. Update this status only when you have observed the result.
         </p>
         <div className="app-section-list app-list-grid">
           {tracked.length === 0 ? (
             <EmptyState
-              title="Nothing reported yet"
-              body="Once you mark a review as reported, you can follow it here."
+              title="No report handoffs recorded"
+              body="After you complete a report on Google, mark it submitted to track it here."
             />
           ) : (
             tracked.map((item) => (

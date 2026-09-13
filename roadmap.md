@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Done
+- Fixed the top five Home/Login UI audit blockers without changing the interface: strengthened light-mode readability, replaced unsupported claims, made report statuses explicitly user-recorded, clarified approved-access signup, and added password recovery plus Google sign-in loading feedback
 - Investigated supplied Tests 2–6: all are direct Google review-share links; added safe `share.google` recognition, bounded Google-only redirect expansion, and an immediate honest limitation instead of a long failed lookup or guessed review identity
 - Ran a real Eiffel Tower Google Maps scan end to end: real lookup, `openai/gpt-6-astra` policy analysis, 99% non-reportable verdict, AI audit persistence, and display in Reviews; Reports correctly created no draft because the evidence did not support reporting
 - Completed authenticated browser QA across Reviews, Pipeline, Reports, Locations, and Bulk scan against real owner-scoped database records; desktop and mobile had no page errors, failed application responses, or horizontal overflow
