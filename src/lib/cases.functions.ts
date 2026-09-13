@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { CASE_STATUSES } from "./case-types";
+import { CASE_STATUSES, CASE_STATUS_TRANSITIONS } from "./case-types";
 import type { CaseRecord, CaseStatus, LocationRecord } from "./case-types";
 import type { ReviewAnalysis } from "./analysis-types";
 
@@ -328,16 +328,11 @@ export const updateCaseStatus = createServerFn({ method: "POST" })
       .single();
     if (currentError) throw currentError;
 
-    const transitions: Record<CaseStatus, readonly CaseStatus[]> = {
-      new: ["reported", "ignored"],
-      reported: ["pending", "removed", "rejected"],
-      pending: ["removed", "rejected"],
-      removed: [],
-      rejected: [],
-      ignored: ["new"],
-    };
     const currentStatus = current.status as CaseStatus;
-    if (data.status !== currentStatus && !transitions[currentStatus].includes(data.status)) {
+    if (
+      data.status !== currentStatus &&
+      !CASE_STATUS_TRANSITIONS[currentStatus].includes(data.status)
+    ) {
       throw new Error(`Invalid case status transition: ${currentStatus} to ${data.status}`);
     }
     const now = new Date().toISOString();

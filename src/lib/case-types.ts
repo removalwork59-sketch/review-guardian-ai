@@ -11,6 +11,15 @@ export const CASE_STATUSES = [
 
 export type CaseStatus = (typeof CASE_STATUSES)[number];
 
+export const CASE_STATUS_TRANSITIONS: Record<CaseStatus, readonly CaseStatus[]> = {
+  new: ["reported", "ignored"],
+  reported: ["pending", "removed", "rejected"],
+  pending: ["removed", "rejected"],
+  removed: [],
+  rejected: [],
+  ignored: ["new"],
+};
+
 export const STATUS_LABELS: Record<CaseStatus, string> = {
   new: "Not reported yet",
   reported: "Reported to Google",
