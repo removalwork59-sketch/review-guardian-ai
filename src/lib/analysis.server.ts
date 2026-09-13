@@ -1,4 +1,5 @@
 import { generateStrictJson, strictObject } from "./ai-responses.server";
+import { z } from "zod";
 import { VIOLATION_CATEGORIES } from "./analysis-types";
 import type { ReviewAnalysis } from "./analysis-types";
 import type { NormalizedBusiness, NormalizedReview } from "./google.server";
@@ -36,6 +37,34 @@ const finalSchema = strictObject({
   challenge: { type: "string" },
 });
 
+const firstPassValidator = z.object({
+  likelyViolation: z.boolean(),
+  violationCategory: z.enum(VIOLATION_CATEGORIES),
+  policyReasoning: z.string(),
+  evidence: z.array(z.string()),
+  counterEvidence: z.array(z.string()),
+  missingEvidence: z.array(z.string()),
+  severity: z.enum(["low", "medium", "high"]),
+  confidence: z.number(),
+});
+
+const finalValidator = z.object({
+  verdict: z.enum(["strong_candidate", "possible_candidate", "needs_human_review", "not_reportable"]),
+  headline: z.string(),
+  plainSummary: z.string(),
+  violationCategory: z.enum(VIOLATION_CATEGORIES),
+  policyReasoning: z.string(),
+  evidence: z.array(z.string()),
+  counterEvidence: z.array(z.string()),
+  missingEvidence: z.array(z.string()),
+  confidence: z.number(),
+  severity: z.enum(["low", "medium", "high"]),
+  rejectionRisk: z.enum(["low", "medium", "high"]),
+  recommendedReportReason: z.string(),
+  recommendedAction: z.string(),
+  challenge: z.string(),
+});
+
 const POLICY_CONTEXT = `You assess public reviews against the kinds of content policies major review platforms publish
 (spam and advertising, fake engagement or content from someone with no real experience, conflicts of interest,
 off-topic content, harassment and hate speech, personal information, obscenity, impersonation, illegal content).
@@ -67,20 +96,12 @@ export async function analyzeReview(
 ): Promise<ReviewAnalysis> {
   const context = reviewContext(business, review);
 
-  const pass1 = await generateStrictJson<{
-    likelyViolation: boolean;
-    violationCategory: string;
-    policyReasoning: string;
-    evidence: string[];
-    counterEvidence: string[];
-    missingEvidence: string[];
-    severity: string;
-    confidence: number;
-  }>({
+  const pass1 = await generateStrictJson({
     instructions: `${POLICY_CONTEXT}\n\nStep 1: analyse this review for possible policy violations. Quote only wording that is actually present. Confidence is 0-100.`,
     input: context,
     schemaName: "initial_policy_analysis",
     schema: firstPassSchema,
+    validate: (value) => firstPassValidator.parse(value),
   });
 
   const final = await generateStrictJson<ReviewAnalysis>({
@@ -103,6 +124,7 @@ that no report should be filed.`,
     input: `${context}\n\nFirst analysis (JSON):\n${JSON.stringify(pass1)}`,
     schemaName: "final_policy_decision",
     schema: finalSchema,
+    validate: (value) => finalValidator.parse(value),
   });
 
   return {

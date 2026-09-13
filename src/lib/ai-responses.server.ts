@@ -16,40 +16,60 @@ export async function generateStrictJson<T>(args: {
   input: string;
   schemaName: string;
   schema: JsonSchema;
+  validate: (value: unknown) => T;
 }): Promise<T> {
   const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) {
     throw new FriendlyError("The AI service isn't configured yet.", "");
   }
 
-  const response = await fetch(RESPONSES_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Lovable-API-Key": apiKey,
-      "X-Lovable-AIG-SDK": "fetch",
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      stream: true,
-      reasoning: { effort: "low", summary: "auto" },
-      instructions: args.instructions,
-      input: args.input,
-      text: {
-        format: {
-          type: "json_schema",
-          name: args.schemaName,
-          strict: true,
-          schema: args.schema,
-        },
+  let response: Response | undefined;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    response = await fetch(RESPONSES_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Lovable-API-Key": apiKey,
+        "X-Lovable-AIG-SDK": "fetch",
       },
-    }),
-  });
+      body: JSON.stringify({
+        model: MODEL,
+        stream: true,
+        reasoning: { effort: "low", summary: "auto" },
+        instructions: args.instructions,
+        input: args.input,
+        text: {
+          format: {
+            type: "json_schema",
+            name: args.schemaName,
+            strict: true,
+            schema: args.schema,
+          },
+        },
+      }),
+    });
 
-  if (!response.ok || !response.body) {
+    if (response.ok || (response.status !== 429 && response.status < 500)) break;
+    if (attempt === 2) break;
+    const retryAfter = Number(response.headers.get("Retry-After"));
+    const fallbackDelay = 750 * 2 ** attempt + Math.floor(Math.random() * 250);
+    const delay = Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : fallbackDelay;
+    await response.body?.cancel().catch(() => undefined);
+    await new Promise((resolve) => setTimeout(resolve, delay));
+  }
+
+  if (!response || !response.ok || !response.body) {
+    if (!response) throw new FriendlyError("The AI service could not be reached.", "Please try again.");
     const body = await response.text().catch(() => "");
     console.error(`AI gateway failed [${response.status}]: ${body}`);
-    throw new FriendlyError(describeAiFailure(response.status), "");
+    let gatewayMessage = "";
+    try {
+      const parsed = JSON.parse(body) as { message?: string; error?: { message?: string } };
+      gatewayMessage = parsed.message ?? parsed.error?.message ?? "";
+    } catch {
+      gatewayMessage = "";
+    }
+    throw new FriendlyError(gatewayMessage || describeAiFailure(response.status), "");
   }
 
   const reader = response.body.getReader();
@@ -94,9 +114,9 @@ export async function generateStrictJson<T>(args: {
   }
 
   try {
-    return JSON.parse(text) as T;
+    return args.validate(JSON.parse(text));
   } catch {
-    console.error("AI returned unparsable JSON:", text.slice(0, 500));
+    console.error("AI returned invalid structured output.");
     throw new FriendlyError("The AI result came back incomplete.", "Please try again.");
   }
 }
