@@ -144,6 +144,28 @@ function Home() {
     setError(null);
     setStage("analyzing");
 
+    if (signedIn && result) {
+      try {
+        const savedResult = await save({
+          data: {
+            platform: result.platform,
+            sourceUrl: result.sourceUrl,
+            business,
+            review: selected,
+          },
+        });
+        setAnalysis(savedResult.analysis);
+        setStage("result");
+        setSaved(true);
+        return;
+      } catch (saveError) {
+        console.error(saveError);
+        setError({ message: "We couldn't save this analysis.", hint: "Please try again." });
+        setStage("picking");
+        return;
+      }
+    }
+
     const response = await analyze({ data: { business, review: selected } });
     if (!response.ok) {
       setError({ message: response.message, hint: response.hint });
@@ -155,22 +177,6 @@ function Home() {
     setStage("result");
     setSaved(false);
 
-    if (signedIn && result) {
-      try {
-        await save({
-          data: {
-            platform: result.platform,
-            sourceUrl: result.sourceUrl,
-            business,
-            review: selected,
-            analysis: response.analysis as unknown as Record<string, unknown>,
-          },
-        });
-        setSaved(true);
-      } catch (saveError) {
-        console.error(saveError);
-      }
-    }
   }
 
   function reset() {
