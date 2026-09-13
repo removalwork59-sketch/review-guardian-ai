@@ -206,6 +206,7 @@ export function ReferenceLanding({
                 <span className="case-note case-note-three"><i /><i /><i /></span>
                 <div className="envelope-front" />
                 <div className="envelope-flap" />
+                <span className="envelope-check">✓</span>
               </div>
               <h3>AI Builds Your Case</h3>
               <p>No spammed appeals and no unsupported claims. Our AI checks the review against published policy, organises the evidence and prepares the strongest legitimate report.</p>
@@ -217,6 +218,7 @@ export function ReferenceLanding({
                   <span className="removal-avatar" />
                   <span className="removal-stars"><b>★</b> ☆ ☆ ☆ ☆</span>
                   <i /><i /><i />
+                  <strong className="removed-label">Removed</strong>
                 </div>
                 <div className="removal-hammer"><span /><b /></div>
                 <span className="removal-burst">✦</span>

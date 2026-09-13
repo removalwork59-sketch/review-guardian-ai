@@ -580,7 +580,7 @@
 .three-step-outcome { --step-card-background: oklch(0.155 0.03 254); }
 .three-step-card h3 { margin: 0; color: var(--color-ink); font-size: 1.22rem; font-weight: 750; line-height: 1.18; }
 .three-step-card p { margin: 12px 0 0; color: color-mix(in oklab, var(--color-ink) 72%, transparent); font-size: 1rem; line-height: 1.55; }
-.step-visual { position: relative; height: 150px; margin-bottom: 22px; }
+.step-visual { position: relative; height: 170px; margin-bottom: 16px; }
 
 .step-link-flight svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .flight-path { fill: none; stroke: var(--brand-cyan); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 7 9; opacity: .95; }
@@ -589,54 +589,59 @@
   left: 16px;
   bottom: 21px;
   display: grid;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   place-items: center;
   border-radius: 999px;
   background: var(--brand-cyan);
   color: var(--color-background);
-  font-size: 18px;
+  font-size: 0;
   font-weight: 800;
   offset-path: path("M25 118 C 92 120, 128 72, 237 39");
-  animation: link-travel 3.5s cubic-bezier(.55, 0, .35, 1) infinite;
+  animation: link-travel 5.2s cubic-bezier(.45, 0, .2, 1) infinite;
 }
-.flight-link span { animation: link-spin 3.5s ease-in-out infinite; }
-.flight-dot { position: absolute; width: 5px; height: 5px; border-radius: 50%; background: var(--brand-cyan); opacity: 0; animation: flight-spark 3.5s ease-out infinite; }
+.flight-link span { width: 16px; height: 8px; border: 2px solid var(--color-background); border-radius: 999px; transform: rotate(42deg); animation: link-spin 5.2s ease-in-out infinite; }
+.flight-link span::after { content: ""; position: absolute; width: 16px; height: 8px; margin: -2px 0 0 -7px; border: 2px solid var(--color-background); border-radius: 999px; }
+.flight-dot { position: absolute; width: 5px; height: 5px; border-radius: 50%; background: var(--brand-cyan); opacity: 0; animation: flight-spark 5.2s ease-out infinite; }
 .flight-dot-one { left: 30%; bottom: 34%; }
 .flight-dot-two { left: 52%; bottom: 54%; animation-delay: .16s; }
 
 .step-envelope { width: min(230px, 88%); margin-inline: auto; perspective: 600px; }
 .envelope-back, .envelope-front, .envelope-flap { position: absolute; left: 8%; width: 84%; }
-.envelope-back { bottom: 17px; height: 74px; border: 2px solid var(--brand-cyan); border-radius: 7px 7px 12px 12px; background: color-mix(in oklab, var(--brand-cyan) 10%, var(--color-card)); }
+.envelope-back { bottom: 15px; height: 82px; border: 2px solid var(--brand-cyan); border-radius: 7px 7px 12px 12px; background: color-mix(in oklab, var(--brand-cyan) 8%, var(--color-card)); }
 .envelope-front { z-index: 4; bottom: 17px; height: 72px; border: 2px solid var(--brand-cyan); border-top: 0; border-radius: 0 0 12px 12px; background: linear-gradient(32deg, color-mix(in oklab, var(--brand-cyan) 13%, var(--color-card)) 50%, transparent 51%); clip-path: polygon(0 0, 50% 58%, 100% 0, 100% 100%, 0 100%); }
-.envelope-flap { z-index: 5; bottom: 87px; height: 52px; border: 2px solid var(--brand-cyan); border-bottom: 0; background: color-mix(in oklab, var(--brand-cyan) 8%, var(--color-card)); clip-path: polygon(0 100%, 50% 0, 100% 100%); transform-origin: bottom; animation: envelope-open 4.8s ease-in-out infinite; }
-.case-note { position: absolute; z-index: 3; bottom: 43px; width: 48px; height: 64px; padding: 13px 8px; border-radius: 4px; background: var(--color-ink); box-shadow: 0 8px 18px color-mix(in oklab, var(--color-background) 35%, transparent); animation: note-file 4.8s cubic-bezier(.5, 0, .25, 1) infinite; }
+.envelope-flap { z-index: 2; bottom: 95px; height: 62px; border: 2px solid var(--brand-cyan); border-bottom: 0; background: color-mix(in oklab, var(--brand-cyan) 13%, var(--color-card)); clip-path: polygon(0 100%, 50% 0, 100% 100%); transform-origin: bottom; animation: envelope-open 5.2s ease-in-out infinite; }
+.case-note { position: absolute; z-index: 3; bottom: 43px; width: 43px; height: 58px; padding: 12px 7px; border-radius: 4px; background: var(--color-ink); box-shadow: 0 8px 18px color-mix(in oklab, var(--color-background) 35%, transparent); animation: note-file 5.2s cubic-bezier(.5, 0, .25, 1) infinite; }
 .case-note i { display: block; height: 3px; margin-bottom: 5px; border-radius: 3px; background: color-mix(in oklab, var(--brand-cyan) 42%, transparent); }
-.case-note-one { left: 27%; animation-delay: 0s; }
-.case-note-two { left: 43%; animation-delay: .28s; }
-.case-note-three { left: 58%; animation-delay: .56s; }
+.case-note-one { left: 28%; animation-delay: 0s; }
+.case-note-two { left: 43%; animation-delay: .22s; }
+.case-note-three { left: 58%; animation-delay: .44s; }
+.envelope-check { position: absolute; z-index: 7; right: 11%; bottom: 25px; display: grid; width: 29px; height: 29px; place-items: center; border-radius: 50%; background: var(--brand-cyan); color: var(--color-background); font-weight: 900; opacity: 0; animation: envelope-confirm 5.2s ease-in-out infinite; }
 
 .step-removal { width: min(260px, 94%); margin-inline: auto; }
-.removal-review { position: absolute; left: 8%; bottom: 25px; width: 68%; height: 72px; padding: 17px 16px 12px 48px; border-radius: 13px; background: color-mix(in oklab, var(--color-ink) 92%, var(--brand-cyan)); animation: review-remove 4.4s ease-in-out infinite; transform-origin: center; }
+.removal-review { position: absolute; left: 8%; bottom: 25px; width: 72%; height: 76px; padding: 17px 16px 12px 48px; border-radius: 13px; background: color-mix(in oklab, var(--color-ink) 96%, var(--brand-cyan)); animation: review-dim 5.2s ease-in-out infinite; transform-origin: center; }
 .removal-avatar { position: absolute; left: 16px; top: 18px; width: 15px; height: 15px; border-radius: 50%; background: color-mix(in oklab, var(--brand-cyan) 14%, var(--color-ink)); }
 .removal-stars { display: block; margin-bottom: 8px; color: color-mix(in oklab, var(--color-muted-foreground) 20%, transparent); font-size: 12px; }
 .removal-stars b { color: var(--color-danger); }
 .removal-review i { display: block; width: 86%; height: 5px; margin-top: 5px; border-radius: 5px; background: color-mix(in oklab, var(--brand-cyan) 8%, var(--color-ink)); }
 .removal-review i:nth-of-type(2) { width: 60%; }
 .removal-review i:nth-of-type(3) { width: 38%; }
-.removal-hammer { position: absolute; z-index: 3; right: 13%; top: 2px; width: 78px; height: 100px; transform-origin: 65px 15px; animation: hammer-strike 4.4s cubic-bezier(.65, 0, .25, 1) infinite; }
+.removal-hammer { position: absolute; z-index: 3; right: 3%; top: -42px; width: 78px; height: 112px; transform-origin: 66px 8px; animation: hammer-strike 5.2s cubic-bezier(.65, 0, .25, 1) infinite; }
 .removal-hammer span { position: absolute; left: 38px; width: 8px; height: 78px; border-radius: 5px; background: linear-gradient(to right, oklch(0.48 0.11 62), oklch(0.69 0.12 62)); transform: rotate(17deg); }
 .removal-hammer b { position: absolute; left: 24px; top: 58px; width: 40px; height: 18px; border-radius: 3px; background: oklch(0.43 0.12 54); transform: rotate(17deg); }
-.removal-burst { position: absolute; right: 30%; bottom: 52px; color: var(--brand-cyan); font-size: 26px; opacity: 0; animation: removal-burst 4.4s ease-out infinite; }
+.removed-label { position: absolute; z-index: 2; left: 50%; top: 50%; padding: 5px 14px; border-radius: 999px; background: var(--brand-cyan); color: var(--color-background); font-size: 12px; line-height: 1; opacity: 0; transform: translate(-50%, -50%) scale(.75); animation: removed-label 5.2s ease-in-out infinite; }
+.removal-burst { position: absolute; right: 24%; bottom: 56px; color: var(--brand-cyan); font-size: 26px; opacity: 0; animation: removal-burst 5.2s ease-out infinite; }
 
-@keyframes link-travel { 0%, 10% { offset-distance: 0%; opacity: 0; transform: scale(.7); } 18% { opacity: 1; } 72% { opacity: 1; transform: scale(1); } 86%, 100% { offset-distance: 100%; opacity: 0; transform: scale(.8); } }
-@keyframes link-spin { 0%, 20% { transform: rotate(-25deg); } 75%, 100% { transform: rotate(45deg); } }
-@keyframes flight-spark { 0%, 38% { opacity: 0; transform: scale(.3); } 48% { opacity: 1; transform: scale(1); } 66%, 100% { opacity: 0; transform: scale(.2); } }
-@keyframes envelope-open { 0%, 12%, 88%, 100% { transform: rotateX(0deg); } 25%, 72% { transform: rotateX(172deg); z-index: 1; } }
-@keyframes note-file { 0%, 18%, 100% { transform: translateY(-66px) rotate(-4deg); opacity: 0; } 31%, 52% { transform: translateY(-42px) rotate(0); opacity: 1; } 72%, 92% { transform: translateY(34px) scale(.82); opacity: 0; } }
-@keyframes hammer-strike { 0%, 28%, 72%, 100% { transform: translate(8px, -8px) rotate(12deg); } 42%, 50% { transform: translate(-25px, 35px) rotate(-32deg); } }
-@keyframes review-remove { 0%, 40% { opacity: 1; transform: translateX(0) rotate(0) scale(1); filter: blur(0); } 53% { transform: translateX(-7px) rotate(-2deg) scale(.98); } 68%, 86% { opacity: 0; transform: translateX(-74px) rotate(-8deg) scale(.55); filter: blur(4px); } 100% { opacity: 1; transform: none; filter: blur(0); } }
-@keyframes removal-burst { 0%, 43% { opacity: 0; transform: scale(.2) rotate(0); } 50% { opacity: 1; transform: scale(1.3) rotate(45deg); } 64%, 100% { opacity: 0; transform: scale(2) rotate(90deg); } }
+@keyframes link-travel { 0%, 7% { offset-distance: 0%; opacity: 0; transform: scale(.78); } 12% { opacity: 1; } 45%, 70% { offset-distance: 100%; opacity: 1; transform: scale(1); } 82%, 100% { offset-distance: 100%; opacity: 0; transform: scale(.8); } }
+@keyframes link-spin { 0%, 12% { transform: rotate(-40deg); } 45%, 100% { transform: rotate(42deg); } }
+@keyframes flight-spark { 0%, 25% { opacity: 0; transform: scale(.3); } 34% { opacity: 1; transform: scale(1); } 46%, 100% { opacity: 0; transform: scale(.2); } }
+@keyframes envelope-open { 0%, 10%, 78%, 100% { transform: rotateX(0deg); z-index: 5; } 20%, 69% { transform: rotateX(178deg); z-index: 1; } }
+@keyframes note-file { 0%, 16%, 100% { transform: translateY(-80px) rotate(-3deg); opacity: 0; } 25%, 45% { transform: translateY(-51px) rotate(0); opacity: 1; } 62%, 72% { transform: translateY(28px) scale(.83); opacity: 0; } }
+@keyframes envelope-confirm { 0%, 72% { opacity: 0; transform: scale(.6); } 80%, 92% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(.7); } }
+@keyframes hammer-strike { 0%, 14% { opacity: 0; transform: translate(28px, -45px) rotate(9deg); } 22% { opacity: 1; } 34%, 40% { opacity: 1; transform: translate(-20px, 52px) rotate(-28deg); } 48%, 100% { opacity: 0; transform: translate(28px, -45px) rotate(9deg); } }
+@keyframes review-dim { 0%, 36% { opacity: 1; filter: brightness(1); } 48%, 88% { opacity: .28; filter: brightness(.5); } 100% { opacity: 1; filter: brightness(1); } }
+@keyframes removed-label { 0%, 43% { opacity: 0; transform: translate(-50%, -50%) scale(.72); } 51%, 88% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(.8); } }
+@keyframes removal-burst { 0%, 32% { opacity: 0; transform: scale(.2) rotate(0); } 39% { opacity: 1; transform: scale(1.25) rotate(45deg); } 50%, 100% { opacity: 0; transform: scale(2) rotate(90deg); } }
 
 @media (max-width: 900px) {
   .reference-three-steps { padding: 70px 0; }
@@ -646,10 +651,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .flight-link, .flight-link span, .flight-dot, .envelope-flap, .case-note, .removal-hammer, .removal-review, .removal-burst { animation: none; }
+  .flight-link, .flight-link span, .flight-dot, .envelope-flap, .case-note, .envelope-check, .removal-hammer, .removal-review, .removed-label, .removal-burst { animation: none; }
   .flight-link { left: auto; right: 13%; bottom: 76%; opacity: 1; }
   .envelope-flap { transform: rotateX(172deg); }
   .case-note { transform: translateY(-42px); opacity: 1; }
+  .envelope-check, .removed-label { opacity: 1; }
 }
 .reference-features-section { padding-top: 93px; }
 .reference-features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 28px; }
