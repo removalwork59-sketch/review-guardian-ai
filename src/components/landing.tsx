@@ -217,7 +217,7 @@ export function ImpressionSection() {
 
         <div className="surface animate-rise rounded-3xl border-primary/25 p-7">
           <p className="text-sm font-semibold uppercase tracking-wide text-primary">
-            With Review Shield
+            With Removal Work
           </p>
           <div className="mt-4 flex items-center gap-3">
             <span className="font-display text-5xl font-semibold text-safe">4.4</span>
@@ -566,7 +566,7 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="mx-auto mt-10 flex max-w-6xl flex-wrap items-center justify-between gap-3 border-t border-border px-3 pt-6 text-xs text-muted-foreground">
-        <span>© {new Date().getFullYear()} Review Shield. All rights reserved.</span>
+        <span>© {new Date().getFullYear()} Removal Work. All rights reserved.</span>
         <span>Independent tool — not affiliated with Google, Meta or YouTube.</span>
       </div>
     </footer>
