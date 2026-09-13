@@ -800,14 +800,14 @@
   padding: 92px max(40px, calc((100vw - 1110px) / 2)) 84px;
   overflow: hidden;
   border-block: 1px solid color-mix(in oklab, var(--color-ink) 7%, transparent);
-  background: color-mix(in oklab, var(--color-background) 92%, oklch(0.12 0.04 255));
+  background: oklch(0.16 0.035 255);
 }
-.review-impression-intro { max-width: 700px; }
+.review-impression-intro { max-width: 790px; }
 .review-impression-intro h2 {
   margin: 0;
   color: var(--color-ink);
   font-family: var(--font-display);
-  font-size: clamp(2.55rem, 5vw, 4.4rem);
+  font-size: clamp(2.55rem, 4.55vw, 4rem);
   font-weight: 760;
   line-height: 1.06;
   letter-spacing: 0;
@@ -816,7 +816,7 @@
 .review-impression-intro p { max-width: 690px; margin-top: 24px; color: color-mix(in oklab, var(--color-ink) 72%, transparent); font-size: 1.08rem; line-height: 1.58; }
 .rating-showdown { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 70px; }
 .rating-business { min-width: 0; padding: 8px 0 0; }
-.rating-you { padding: 32px 28px 0; border: 1px solid color-mix(in oklab, var(--color-ink) 14%, transparent); border-radius: 24px; background: color-mix(in oklab, var(--color-background) 72%, oklch(0.1 0.035 255)); }
+.rating-you { padding: 32px 28px 0; border: 1px solid color-mix(in oklab, var(--color-ink) 14%, transparent); border-radius: 24px; background: oklch(0.135 0.03 255); }
 .rating-owner { display: block; color: color-mix(in oklab, var(--color-ink) 62%, transparent); font-size: .85rem; font-weight: 650; }
 .rating-score { display: flex; align-items: center; gap: 18px; margin-top: 8px; }
 .rating-score strong { color: var(--color-ink); font-family: var(--font-display); font-size: clamp(3rem, 5vw, 4.2rem); line-height: 1; }
