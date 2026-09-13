@@ -61,13 +61,21 @@ function AuthPage() {
           text: "Check your inbox and click the link to finish creating your account.",
         });
       }
+      await supabase.rpc("ensure_my_profile");
       void navigate({ to: "/dashboard" });
       return;
     }
 
     const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      setBusy(false);
+      return setMessage({ tone: "error", text: error.message });
+    }
+    const { error: profileError } = await supabase.rpc("ensure_my_profile");
     setBusy(false);
-    if (error) return setMessage({ tone: "error", text: error.message });
+    if (profileError) {
+      return setMessage({ tone: "error", text: "Your account is secure, but the workspace could not finish loading. Please try again." });
+    }
     void navigate({ to: "/dashboard" });
   }
 
@@ -81,6 +89,7 @@ function AuthPage() {
       return;
     }
     if (result.redirected) return;
+    await supabase.rpc("ensure_my_profile");
     void navigate({ to: "/dashboard" });
   }
 
