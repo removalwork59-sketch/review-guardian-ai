@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { LayoutGrid, MapPin, Send, Upload, LogOut, Search } from "lucide-react";
+import { LayoutGrid, MapPin, Send, Upload, LogOut, Search, ListChecks } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { Wordmark } from "@/components/brand";
@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 const NAV = [
   { to: "/dashboard", label: "Reviews", icon: LayoutGrid },
+  { to: "/pipeline", label: "Pipeline", icon: ListChecks },
   { to: "/reports", label: "Reports", icon: Send },
   { to: "/locations", label: "Locations", icon: MapPin },
   { to: "/bulk", label: "Bulk scan", icon: Upload },
