@@ -14,7 +14,143 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      locations: {
+        Row: {
+          address: string
+          category: string
+          created_at: string
+          id: string
+          maps_uri: string
+          name: string
+          place_id: string
+          platform: string
+          rating: number | null
+          rating_count: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address?: string
+          category?: string
+          created_at?: string
+          id?: string
+          maps_uri?: string
+          name: string
+          place_id: string
+          platform?: string
+          rating?: number | null
+          rating_count?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string
+          category?: string
+          created_at?: string
+          id?: string
+          maps_uri?: string
+          name?: string
+          place_id?: string
+          platform?: string
+          rating?: number | null
+          rating_count?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      review_cases: {
+        Row: {
+          analysis: Json
+          author_name: string
+          confidence: number
+          created_at: string
+          headline: string
+          id: string
+          location_id: string
+          plain_summary: string
+          platform: string
+          rejection_risk: string
+          reported_at: string | null
+          resolved_at: string | null
+          review_external_id: string
+          review_rating: number | null
+          review_relative_time: string
+          review_text: string
+          review_url: string
+          severity: string
+          source_url: string
+          status: string
+          status_note: string
+          updated_at: string
+          user_id: string
+          verdict: string
+          violation_category: string
+        }
+        Insert: {
+          analysis?: Json
+          author_name?: string
+          confidence?: number
+          created_at?: string
+          headline?: string
+          id?: string
+          location_id: string
+          plain_summary?: string
+          platform?: string
+          rejection_risk?: string
+          reported_at?: string | null
+          resolved_at?: string | null
+          review_external_id: string
+          review_rating?: number | null
+          review_relative_time?: string
+          review_text?: string
+          review_url?: string
+          severity?: string
+          source_url?: string
+          status?: string
+          status_note?: string
+          updated_at?: string
+          user_id: string
+          verdict: string
+          violation_category?: string
+        }
+        Update: {
+          analysis?: Json
+          author_name?: string
+          confidence?: number
+          created_at?: string
+          headline?: string
+          id?: string
+          location_id?: string
+          plain_summary?: string
+          platform?: string
+          rejection_risk?: string
+          reported_at?: string | null
+          resolved_at?: string | null
+          review_external_id?: string
+          review_rating?: number | null
+          review_relative_time?: string
+          review_text?: string
+          review_url?: string
+          severity?: string
+          source_url?: string
+          status?: string
+          status_note?: string
+          updated_at?: string
+          user_id?: string
+          verdict?: string
+          violation_category?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_cases_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
