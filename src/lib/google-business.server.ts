@@ -74,14 +74,14 @@ export async function exchangeGoogleCode(code: string, verifier: string, redirec
     }),
   });
   const payload = await response.json() as Record<string, unknown>;
-  if (!response.ok || typeof payload.access_token !== "string") {
+  if (!response.ok || typeof payload["access_token"] !== "string") {
     throw new Error("Google did not authorize Business Profile access.");
   }
   return {
-    accessToken: payload.access_token,
-    refreshToken: typeof payload.refresh_token === "string" ? payload.refresh_token : null,
-    expiresIn: typeof payload.expires_in === "number" ? payload.expires_in : 3600,
-    scopes: typeof payload.scope === "string" ? payload.scope.split(" ") : [],
+    accessToken: payload["access_token"],
+    refreshToken: typeof payload["refresh_token"] === "string" ? payload["refresh_token"] : null,
+    expiresIn: typeof payload["expires_in"] === "number" ? payload["expires_in"] : 3600,
+    scopes: typeof payload["scope"] === "string" ? payload["scope"].split(" ") : [],
   };
 }
 

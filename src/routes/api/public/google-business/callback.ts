@@ -1,7 +1,7 @@
-import { createAPIFileRoute } from "@tanstack/react-start/api";
+import { createFileRoute } from "@tanstack/react-router";
 
-export const APIRoute = createAPIFileRoute("/api/public/google-business/callback")({
-  GET: async ({ request }) => {
+export const Route = createFileRoute("/api/public/google-business/callback")({
+  server: { handlers: { GET: async ({ request }) => {
     const requestUrl = new URL(request.url);
     const state = requestUrl.searchParams.get("state");
     const code = requestUrl.searchParams.get("code");
@@ -50,5 +50,5 @@ export const APIRoute = createAPIFileRoute("/api/public/google-business/callback
     } catch {
       return Response.redirect(`${savedState.redirect_origin}/locations?google=error`, 302);
     }
-  },
+  } } },
 });
