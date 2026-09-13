@@ -1131,7 +1131,18 @@
 @media (prefers-reduced-motion: reduce) {
   .audit-shield-halo, .audit-ray, .audit-shield, .audit-shield-star { animation: none; }
 }
-.reference-footer { display: grid; gap: .5rem; margin-top: 0; padding: 2rem 0 2.5rem; border-top: 1px solid color-mix(in oklab, var(--color-cyan) 12%, transparent); color: var(--color-muted-foreground); font-size: .75rem; line-height: 1.6; }
+.reference-footer { margin-top: 0; padding: 3.5rem 0 2rem; border-top: 1px solid color-mix(in oklab, var(--color-cyan) 18%, transparent); color: var(--color-muted-foreground); font-size: .8rem; line-height: 1.6; }
+.reference-footer-main { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4rem; align-items: start; padding-bottom: 2.5rem; }
+.reference-footer-brand { max-width: 23rem; }
+.reference-footer-brand strong { display: block; color: var(--color-ink); font-family: var(--font-display); font-size: 1.15rem; font-weight: 750; }
+.reference-footer-brand p { margin-top: .65rem; }
+.reference-footer nav { display: grid; grid-template-columns: repeat(2, minmax(8.5rem, 1fr)); gap: 2.5rem; }
+.reference-footer nav div { display: grid; align-content: start; gap: .65rem; }
+.reference-footer nav span { margin-bottom: .2rem; color: var(--color-ink); font-size: .72rem; font-weight: 750; text-transform: uppercase; }
+.reference-footer nav :is(a, button) { width: fit-content; color: var(--color-muted-foreground); text-align: left; transition: color .18s ease, transform .18s ease; }
+.reference-footer nav :is(a, button):hover { color: var(--brand-cyan); transform: translateX(2px); }
+.reference-footer-bottom { display: flex; justify-content: space-between; gap: 2rem; padding-top: 1.25rem; border-top: 1px solid color-mix(in oklab, var(--color-cyan) 11%, transparent); }
+.reference-footer-bottom p:last-child { max-width: 39rem; text-align: right; }
 
 @media (max-width: 760px) {
   .reference-wrap { width: calc(100% - 2rem); }
@@ -1163,7 +1174,11 @@
   .reference-final-cta { margin-top: 96px; padding: 34px 25px; }
   .reference-final-cta h2 { font-size: 25px; }
   .reference-final-cta p { font-size: 13px; line-height: 1.55; }
-  .reference-footer { font-size: 10px; }
+  .reference-footer { padding-top: 2.75rem; font-size: 12px; }
+  .reference-footer-main { grid-template-columns: 1fr; gap: 2rem; }
+  .reference-footer nav { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+  .reference-footer-bottom { flex-direction: column; gap: .6rem; }
+  .reference-footer-bottom p:last-child { text-align: left; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1466,6 +1481,8 @@
   transition: background .16s ease, transform .16s ease;
 }
 .rw-menu-list a:hover, .rw-menu-list button:hover { background: color-mix(in oklab, var(--brand-cyan) 12%, transparent); }
+.rw-menu-list button:disabled { cursor: default; opacity: .68; }
+.rw-menu-list button:disabled:hover { background: transparent; }
 .rw-menu-list b { display: block; font-size: 13.5px; font-weight: 650; }
 .rw-menu-list small { display: block; font-size: 12px; color: color-mix(in oklab, var(--ink) 55%, transparent); }
 .rw-menu-list svg { color: var(--brand-cyan); flex: 0 0 auto; }
@@ -1478,6 +1495,7 @@
   text-transform: uppercase; padding: 3px 7px; border-radius: 999px;
   color: var(--brand-cyan); background: color-mix(in oklab, var(--brand-cyan) 14%, transparent);
 }
+.rw-planned { color: var(--color-muted-foreground); background: color-mix(in oklab, var(--color-muted) 72%, transparent); }
 .rw-flow { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; }
 .rw-flow li { display: flex; align-items: center; gap: 9px; padding: 9px 10px; border-radius: 12px; font-size: 13px; font-weight: 600; color: var(--ink); }
 .rw-flow li:hover { background: color-mix(in oklab, var(--brand-cyan) 10%, transparent); }
@@ -2032,6 +2050,77 @@ body {
 .reference-chat-bubble button:hover { background: color-mix(in oklab, currentColor 9%, transparent); }
 .reference-page.reference-light .audit-chat-panel {
   background: linear-gradient(145deg, var(--card), color-mix(in oklab, var(--muted) 52%, var(--card)));
+}
+
+/* UI finishing authority — existing composition, refined rhythm and interaction. */
+.reference-page :where(button, a, input):focus-visible {
+  outline: 2px solid var(--brand-cyan);
+  outline-offset: 3px;
+}
+.reference-copy > p,
+.reference-platforms-copy p,
+.reference-promise p,
+.three-step-card p,
+.reference-features p,
+.audit-finale-lede,
+.audit-chat-panel p {
+  text-wrap: pretty;
+}
+.reference-three-steps > h2,
+.reference-platforms-copy h2,
+.reference-features-section > h2,
+.audit-finale-copy h2 {
+  text-wrap: balance;
+}
+.reference-gradient-button,
+.reference-outline-button,
+.rw-cta,
+.rw-ghost-btn,
+.audit-main-action,
+.audit-call-action,
+.audit-chat-action,
+.reference-chat-avatar {
+  touch-action: manipulation;
+  transform: translateZ(0);
+}
+.reference-gradient-button:active,
+.reference-outline-button:active,
+.rw-cta:active,
+.rw-ghost-btn:active,
+.audit-main-action:active,
+.audit-call-action:active,
+.audit-chat-action:active,
+.reference-chat-avatar:active {
+  transform: translateY(0) scale(.98);
+}
+.reference-press-track:hover { animation-play-state: paused; }
+.reference-features article { display: flex; flex-direction: column; }
+.reference-features article p { margin-bottom: 0; }
+.proof-row,
+.reference-platforms-grid article,
+.three-step-card,
+.reference-features article,
+.reference-chat-bubble,
+.auth-slide { backface-visibility: hidden; }
+.app-page-title,
+.app-section-title,
+.app-page-description,
+.app-section-description { text-wrap: pretty; }
+.app-page-content :where(button, a, input, select, textarea):focus-visible,
+.app-header :where(button, a):focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+.app-filter-row > button { min-height: 2.5rem; }
+
+@media (max-width: 640px) {
+  .reference-actions > *, .audit-finale-actions > * { width: 100%; }
+  .reference-actions > * { justify-content: center; }
+  .reference-platforms-copy h2 { font-size: clamp(2.25rem, 11vw, 3rem); }
+  .reference-platforms-label { text-align: left; }
+  .app-page-heading { grid-template-columns: 1fr; align-items: start; }
+  .app-page-heading > :last-child { width: 100%; }
+  .app-page-heading > :last-child > * { width: 100%; }
 }
 
 /* Richness authority — same palette, stronger material depth and a controlled filled glow. */

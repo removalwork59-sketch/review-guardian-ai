@@ -150,7 +150,12 @@ export function SiteHeader({
             <ul className="rw-menu-list rw-menu-platforms">
               {platformItems.map((item) => (
                 <li key={item.name}>
-                  <button type="button" onClick={scan}>
+                  <button
+                    type="button"
+                    onClick={item.live ? scan : undefined}
+                    disabled={!item.live}
+                    aria-label={item.live ? `Scan a ${item.name} review` : `${item.name} is planned`}
+                  >
                     <span className="rw-plat-icon" style={{ color: item.color }}>
                       {item.icon ? <item.icon className="size-4" /> : <b>{item.glyph}</b>}
                     </span>
@@ -158,7 +163,7 @@ export function SiteHeader({
                       <b>{item.name}</b>
                       <small>{item.note}</small>
                     </span>
-                    {item.live ? <em className="rw-live">Live</em> : null}
+                    <em className={`rw-live ${item.live ? "" : "rw-planned"}`}>{item.live ? "Live" : "Planned"}</em>
                   </button>
                 </li>
               ))}
