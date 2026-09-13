@@ -43,6 +43,13 @@
       "when": 1789311676601,
       "tag": "0005_add_google_business_connections",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1789312720062,
+      "tag": "0006_claim_google_oauth_state",
+      "breakpoints": true
     }
   ]
 }
