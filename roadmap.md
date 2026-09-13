@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Done
+- Chose a safe portability path: keep the current Lovable backend operational while preserving additive SQL migrations for a later controlled move to the user's own database/VPS; never use credentials exposed in chat
 - Completed a second exhaustive old-versus-new production capability audit with a P0–P3 migration matrix, security/reliability rejection list, dependency blockers, and safe implementation order; no old UI was copied
 - Complete UI finishing pass with unified spacing, containers, grids, cards, controls, typography rhythm, and responsive structure
 - Confirmed Removal Work superadmin account with private profile, server-protected role, and verified password login
@@ -16,7 +17,7 @@
 - Desktop and mobile homepage validation with no overflow or console errors
 
 ## Open
-- Assess the user-provided replacement database safely; migration is blocked until they confirm whether to replace Lovable Cloud and rotate the credentials pasted into chat
+- Prepare a controlled external-database/VPS migration when the destination is ready: rotate exposed credentials, provision fresh restricted credentials, back up and verify data, apply repository migrations, test RLS/auth/storage, then switch configuration with rollback available
 - Production mission: complete the one-review flow first, then implement platform adapters, verified review identity, multi-stage auditable AI, evidence/report strategy, immutable outcomes/appeals, durable bounded workers, bulk import, analytics and admin configuration without importing old UI
 - Integrate the strongest production backend capabilities from the audited old repository without importing its UI: secure Google Business Profile connection/sync, durable review records and case history, reliable bulk jobs, reporting/status workflows, and hardened AI analysis
 - Facebook / Instagram / YouTube scanning — blocked until a Meta/YouTube connection exists
