@@ -22,6 +22,17 @@ import {
 
 
 import { BrandMark, StarRating, Wordmark } from "@/components/brand";
+import {
+  ClosingSection,
+  DashboardSection,
+  FaqSection,
+  ImpressionSection,
+  IndustriesSection,
+  PlatformsSection,
+  ProblemsSection,
+  SiteFooter,
+  StepsSection,
+} from "@/components/landing";
 import { Button } from "@/components/ui/button";
 import { ScanProgress } from "@/components/scan-progress";
 import { AnalysisPanel } from "@/components/analysis-panel";
