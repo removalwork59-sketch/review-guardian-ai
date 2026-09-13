@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Done
+- Added the secure Google Business Profile consent foundation: encrypted token storage, expiring one-time OAuth state, PKCE, owner-scoped connection controls, and a Locations connection panel
 - Added a durable owner-scoped bulk queue with deduplication, leases, bounded three-item passes, persisted queued/discovering/identified/analyzing/report-ready counts, and exact-identity gating
 - Hardened the Google report handoff so only reportable analyses with an exact verified review identity can open the real Google review
 - Chose a safe portability path: keep the current Lovable backend operational while preserving additive SQL migrations for a later controlled move to the user's own database/VPS; never use credentials exposed in chat
@@ -20,7 +21,7 @@
 
 ## Open
 - Deploy the Removal Work application backend to the Hostinger VPS and verify its live URL; blocked until a fresh non-root SSH private key is securely available and the matching public key is installed on the server
-- Connect owner-authorized Google Business Profile OAuth and sync complete listing reviews into the verified review pipeline; preserve the current sampled public lookup as a limited fallback
+- Activate owner-authorized Google Business Profile OAuth after its client ID/secret are saved, then add paginated account/location/review sync; preserve the current sampled public lookup as a limited fallback
 - Use the saved `OPENAI_API_KEY` and `ANTHROPIC_API_KEY` only if an explicitly selected production integration needs them; keep the current tested Lovable AI analysis path unchanged
 - Prepare a controlled external-database/VPS migration when the destination is ready: rotate exposed credentials, provision fresh restricted credentials, back up and verify data, apply repository migrations, test RLS/auth/storage, then switch configuration with rollback available
 - Production mission: continue from the verified one-review flow with platform adapters, scheduled queue execution, immutable outcomes/appeals, analytics and admin configuration without importing old UI

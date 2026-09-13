@@ -10,16 +10,12 @@ export const Route = createFileRoute("/api/public/google-business/callback")({
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { decryptSecret, encryptSecret, exchangeGoogleCode, getGoogleAccountEmail, hashValue } = await import("@/lib/google-business.server");
-    const { data: savedState, error: stateError } = await supabaseAdmin
-      .from("google_oauth_states")
-      .select("id,user_id,code_verifier_ciphertext,redirect_origin,expires_at,used_at")
-      .eq("state_hash", hashValue(state))
-      .maybeSingle();
-    if (stateError || !savedState || savedState.used_at || new Date(savedState.expires_at).getTime() <= Date.now()) {
+    const { data: claimedStates, error: stateError } = await supabaseAdmin
+      .rpc("claim_google_oauth_state", { _state_hash: hashValue(state) });
+    const savedState = claimedStates?.[0];
+    if (stateError || !savedState) {
       return new Response("This Google authorization link expired. Start again from Locations.", { status: 400 });
     }
-
-    await supabaseAdmin.from("google_oauth_states").update({ used_at: new Date().toISOString() }).eq("id", savedState.id).is("used_at", null);
     try {
       const tokens = await exchangeGoogleCode(
         code,
