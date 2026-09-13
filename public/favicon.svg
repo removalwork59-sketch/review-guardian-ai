@@ -1,6 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <defs><linearGradient id="g" x1="8" y1="8" x2="56" y2="56"><stop stop-color="#9b7bff"/><stop offset=".52" stop-color="#17e8ee"/><stop offset="1" stop-color="#ff48bd"/></linearGradient></defs>
-  <rect width="64" height="64" rx="16" fill="#080b1b"/>
-  <path d="M11 15l17 36c1.6 3.5 6.4 3.5 8 0l17-36-11 4-10 22-10-22-11-4z" fill="url(#g)" stroke="#b5ffff" stroke-width="1.5" stroke-linejoin="round"/>
-  <path d="M49 6l1.6 4.4L55 12l-4.4 1.6L49 18l-1.6-4.4L43 12l4.4-1.6L49 6z" fill="#17e8ee"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="g" x1="6" y1="6" x2="26" y2="27" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#34e0a1"/>
+      <stop offset="1" stop-color="#0ea5a5"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="9" fill="#08201f"/>
+  <path d="M9 12.5 14.6 22 24 8.5" stroke="url(#g)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M24.6 5.1l.75 1.65 1.65.75-1.65.75-.75 1.65-.75-1.65L22.2 7.5l1.65-.75.75-1.65Z" fill="#34e0a1"/>
 </svg>
