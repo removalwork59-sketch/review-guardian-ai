@@ -1,13 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { ExternalLink, MapPin } from "lucide-react";
+import { ExternalLink, Link2, Loader2, MapPin, Unlink } from "lucide-react";
+import { useState } from "react";
 
 import { AppShell } from "@/components/app-shell";
 import { EmptyState } from "@/components/case-ui";
 import { StarRating } from "@/components/brand";
 import { listLocations } from "@/lib/cases.functions";
 import { StatTile } from "@/components/ui/stat-tile";
+import { Button } from "@/components/ui/button";
+import { disconnectGoogleBusiness, getGoogleBusinessConnection, startGoogleBusinessConnection } from "@/lib/google-business.functions";
 
 export const Route = createFileRoute("/_authenticated/locations")({
   head: () => ({
@@ -34,12 +37,61 @@ function LocationsPage() {
   });
 
   const locations = data ?? [];
+  const queryClient = useQueryClient();
+  const fetchConnection = useServerFn(getGoogleBusinessConnection);
+  const startConnection = useServerFn(startGoogleBusinessConnection);
+  const disconnect = useServerFn(disconnectGoogleBusiness);
+  const [connectionBusy, setConnectionBusy] = useState(false);
+  const { data: connection } = useQuery({
+    queryKey: ["google-business-connection"],
+    queryFn: () => fetchConnection({ data: undefined }),
+  });
+
+  async function connectGoogle() {
+    setConnectionBusy(true);
+    try {
+      const result = await startConnection({ data: { origin: window.location.origin } });
+      window.location.assign(result.authorizationUrl);
+    } finally {
+      setConnectionBusy(false);
+    }
+  }
+
+  async function disconnectGoogle() {
+    setConnectionBusy(true);
+    try {
+      await disconnect({ data: undefined });
+      await queryClient.invalidateQueries({ queryKey: ["google-business-connection"] });
+    } finally {
+      setConnectionBusy(false);
+    }
+  }
 
   return (
     <AppShell
       title="Locations"
       description="Every business you've scanned, with its review activity."
     >
+      <section className="surface mb-6 flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="font-display text-lg font-semibold text-ink">Google Business Profile</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {connection?.connected
+              ? `Connected${connection.email ? ` as ${connection.email}` : ""}. Your authorized listings can be synced here.`
+              : "Connect the Google account that manages your listings to access complete owner-authorized reviews."}
+          </p>
+          {!connection?.configured ? <p className="mt-2 text-sm text-warning">Google OAuth credentials are required before connection can begin.</p> : null}
+        </div>
+        {connection?.connected ? (
+          <Button type="button" variant="outline" onClick={disconnectGoogle} disabled={connectionBusy}>
+            {connectionBusy ? <Loader2 className="animate-spin" /> : <Unlink />} Disconnect
+          </Button>
+        ) : (
+          <Button type="button" onClick={connectGoogle} disabled={connectionBusy || !connection?.configured}>
+            {connectionBusy ? <Loader2 className="animate-spin" /> : <Link2 />} Connect Google
+          </Button>
+        )}
+      </section>
       {isPending ? (
         <EmptyState title="Loading your locations…" body="One moment." />
       ) : locations.length === 0 ? (
