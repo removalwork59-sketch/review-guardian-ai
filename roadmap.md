@@ -20,6 +20,8 @@
 - Desktop and mobile homepage validation with no overflow or console errors
 
 ## Open
+- Case pipeline dashboard with pending/identified/reported/resolved counts, category and business filters, and a bulk action queue — done
+- Enable Connect Google by saving the approved Google Business Profile client ID and secret (secure form; user must supply)
 - Sync the user's own Google Business Profile reviews into review records and show them in Reviews with AI analysis and a report button (code ready; needs the approved Google OAuth client saved)
 - Submit one real report from the user's own listing and track its status updates in Reports (needs live consent plus explicit user confirmation before the irreversible submission)
 - Put the Google Business Profile consent callback live on the Hostinger VPS with the user's approved OAuth client, sync owner-authorized reviews, then submit and record one real report from the user's own listing; blocked by safe VPS access, an HTTPS hostname, approved Google OAuth credentials, and the user's final confirmation before the irreversible report submission
