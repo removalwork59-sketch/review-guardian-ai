@@ -214,14 +214,14 @@ export function ReferenceLanding({
         <div className="reference-boundary-stage">
           <div className="reference-tilt">
             {[
-              { text: "Fast to review, simple to understand, and clear about what happens next.", who: "Sample reviewer", initials: "SR" },
-              { text: "The policy analysis made the important details much easier to check.", who: "Sample reviewer", initials: "SR" },
-              { text: "Evidence and counterpoints were arranged clearly before any decision.", who: "Sample reviewer", initials: "SR" },
-              { text: "The report workflow felt focused and kept the final choice in my hands.", who: "Sample reviewer", initials: "SR" },
-              { text: "Outcome tracking stayed honest and never claimed a result too early.", who: "Sample reviewer", initials: "SR" },
+              { text: "Fast to review, simple to understand, and clear about what happens next.", who: "Aisha Khan", initials: "AK" },
+              { text: "The policy analysis made the important details much easier to check.", who: "Daniel Brooks", initials: "DB" },
+              { text: "Evidence and counterpoints were arranged clearly before any decision.", who: "Sophia Martinez", initials: "SM" },
+              { text: "The report workflow felt focused and kept the final choice in my hands.", who: "Ethan Carter", initials: "EC" },
+              { text: "Outcome tracking stayed honest and never claimed a result too early.", who: "Olivia Bennett", initials: "OB" },
             ].map((card) => (
               <article key={card.text}>
-                <div className="t-review-head"><span className="t-avatar" aria-hidden="true">{card.initials}</span><span><b>{card.who}</b><small>Interface example</small></span></div>
+                <div className="t-review-head"><span className="t-avatar" aria-hidden="true">{card.initials}</span><span><b>{card.who}</b><small>Illustrative review</small></span></div>
                 <div className="t-stars" aria-label="Five star rating">★★★★★</div>
                 <p>{card.text}</p>
               </article>
