@@ -2051,6 +2051,9 @@ body {
 .reference-page.reference-light .audit-chat-panel {
   background: linear-gradient(145deg, var(--card), color-mix(in oklab, var(--muted) 52%, var(--card)));
 }
+.reference-page.reference-light .reference-footer :where(strong, nav span) { color: var(--ink); }
+.reference-page.reference-light .reference-footer nav :where(a, button) { color: var(--muted-foreground); }
+.reference-page.reference-light .reference-footer nav :where(a, button):hover { color: oklch(0.38 0.14 178); }
 
 /* UI finishing authority — existing composition, refined rhythm and interaction. */
 .reference-page :where(button, a, input):focus-visible {

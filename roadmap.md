@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Done
+- Finished the current UI without redesigning it: completed the footer with working destinations, clarified disabled planned-platform controls, refined CTA/focus/press states, text wrapping, animation stability, and mobile action alignment; desktop/mobile checks passed without overflow, page errors, or failed responses
 - Fixed the top five Home/Login UI audit blockers without changing the interface: strengthened light-mode readability, replaced unsupported claims, made report statuses explicitly user-recorded, clarified approved-access signup, and added password recovery plus Google sign-in loading feedback
 - Investigated supplied Tests 2–6: all are direct Google review-share links; added safe `share.google` recognition, bounded Google-only redirect expansion, and an immediate honest limitation instead of a long failed lookup or guessed review identity
 - Ran a real Eiffel Tower Google Maps scan end to end: real lookup, `openai/gpt-6-astra` policy analysis, 99% non-reportable verdict, AI audit persistence, and display in Reviews; Reports correctly created no draft because the evidence did not support reporting
@@ -29,7 +30,6 @@
 - Desktop and mobile homepage validation with no overflow or console errors
 
 ## Open
-- Finish the current UI without redesigning it: repair dead or broken controls, refine text alignment, CTAs, footer, visual consistency, and existing animations across public, login, and authenticated screens
 - Enable Connect Google by saving the approved Google Business Profile client ID and secret (secure form; user must supply)
 - Sync the user's own Google Business Profile reviews into review records and show them in Reviews with AI analysis and a report button (code ready; needs the approved Google OAuth client saved)
 - Submit one real report from the user's own listing and track its status updates in Reports (needs live consent plus explicit user confirmation before the irreversible submission)

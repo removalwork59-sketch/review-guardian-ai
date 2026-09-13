@@ -429,13 +429,14 @@ function BusinessHeader({ business, onReset }: { business: BusinessInfo; onReset
           View on Google
           <ExternalLink className="size-3.5" />
         </a>
-        <button
+        <Button
           type="button"
           onClick={onReset}
-          className="rounded-xl border border-border px-3 py-2 text-sm font-medium text-ink transition hover:bg-muted"
+          variant="outline"
+          size="sm"
         >
           New scan
-        </button>
+        </Button>
       </div>
     </div>
   );
