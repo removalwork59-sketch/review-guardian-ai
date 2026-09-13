@@ -444,13 +444,13 @@ const WORKFLOW = [
     icon: Flag,
     label: "Report",
     body: "One clear next step",
-    tone: "bg-warning-soft text-warning",
+    tone: "bg-warn-soft text-warn",
   },
   {
     icon: Clock,
     label: "Track",
     body: "Know where it stands",
-    tone: "bg-warning-soft text-warning",
+    tone: "bg-warn-soft text-warn",
   },
   {
     icon: CheckCircle2,
