@@ -59,12 +59,17 @@ export function ReferenceLanding({
   return (
     <div className={`reference-page ${lightMode ? "reference-light" : ""}`}>
       <header className="reference-nav">
-        <div className="reference-wrap flex h-[66px] items-center justify-between">
+        <div className="reference-wrap flex items-center justify-between gap-6">
           <Wordmark />
+          <nav className="reference-navlinks">
+            <a href="#how">Review Removal <ChevronDown /></a>
+            <a href="#features">Brand Protection <ChevronDown /></a>
+            <a href="#scan">Resources <ChevronDown /></a>
+          </nav>
           <div className="flex items-center gap-2">
             <button type="button" onClick={() => setLightMode((value) => !value)} className="reference-icon-button" aria-label="Toggle appearance">{lightMode ? <Sun className="size-4" /> : <MoonStar className="size-4" />}</button>
-            <Link to={signedIn ? "/dashboard" : "/auth"} className="reference-outline-button">{signedIn ? "Dashboard" : "Sign in"}</Link>
-            <Link to={signedIn ? "/dashboard" : "/auth"} className="reference-gradient-button">Start free</Link>
+            <Link to={signedIn ? "/dashboard" : "/auth"} className="reference-outline-button">{signedIn ? "Dashboard" : "Client Login"}</Link>
+            <button type="button" onClick={openScanner} className="reference-gradient-button">Get a Free Review Audit <span className="arrow-dot"><ArrowRight className="size-3.5" /></span></button>
           </div>
         </div>
       </header>
@@ -73,10 +78,10 @@ export function ReferenceLanding({
         <section className="reference-hero">
           <div className="reference-copy">
             <div className="reference-kicker"><Sparkles className="blink-star size-3.5" /> AI policy analysis for Google reviews</div>
-            <h1>Remove policy-<br />violating reviews.<br /><span>Protect the rating<br />you earned.</span></h1>
-            <p>Removal Work scans Google reviews for violations of Google's own review policies, builds evidence-backed removal cases and tracks every report and appeal to resolution — across every location you manage.</p>
+            <h1>Only Report<br />What Breaks<br />The Rules</h1>
+            <p>Scanned against Google's published review policies — spam, fake content, off-topic, conflict of interest and harassment. Evidence-backed cases, tracked to the real outcome.</p>
             <div className="reference-actions">
-              <button type="button" onClick={openScanner} className="reference-gradient-button reference-primary-action">Open the command center <ArrowRight className="size-4" /></button>
+              <button type="button" onClick={openScanner} className="reference-gradient-button reference-primary-action">Get Your Free Review Audit <span className="arrow-dot"><ArrowRight className="size-3.5" /></span></button>
               <a href="#how" className="reference-outline-button reference-secondary-action">See how it works</a>
             </div>
             <ul className="reference-checks">
@@ -84,13 +89,45 @@ export function ReferenceLanding({
             </ul>
           </div>
 
-          <div className="reference-console">
-            <div className="reference-tile-grid">
-              {productTiles.map((tile, index) => <div className="reference-product-tile" key={tile.label} style={{ animationDelay: `${index * 420}ms` }}><img src={tile.icon} alt="" /><span>{tile.label}</span></div>)}
+          <div className="reference-proof">
+            <div className="reference-proof-review">
+              <div className="reference-proof-head">
+                <span className="reference-proof-who"><span className="reference-avatar">TW</span> Tom W.</span>
+                <span className="reference-proof-when">2 weeks ago</span>
+              </div>
+              <div className="reference-proof-stars">★★★★★</div>
+              <p>Great with my kids. Very patient and thorough.</p>
             </div>
-            <p>Every number in Removal Work comes from your live review and case data — no sample content.</p>
+            <div className="reference-proof-outcome">
+              <div className="big-stars">★★★★★</div>
+              <h3><CheckCircle2 /> Reputation Restored.</h3>
+              <p className="reference-proof-meta">Policy violations reported · <span>★</span> rating context tracked</p>
+            </div>
           </div>
         </section>
+
+        <div className="reference-press" aria-hidden="true">
+          <div className="reference-press-track">
+            {["Forbes", "BUSINESS INSIDER", "CEO", "Inc.", "Forbes", "BUSINESS INSIDER", "CEO", "Inc."].map((name, index) => <span key={`${name}-${index}`}>{name}</span>)}
+          </div>
+        </div>
+
+        <div className="reference-tilt">
+          {[
+            { stars: "★★★★★", text: "\"Cleared the two fake reviews that were costing us bookings.\"", who: "Multi-location dental group" },
+            { stars: "★★★★★", text: "\"A fake 1-star from a competitor was flagged with real evidence.\"", who: "Home services brand" },
+            { stars: "★★★★★", text: "\"No retainer, no guesswork — we see every case status.\"", who: "Franchise operator" },
+            { stars: "★★★★★", text: "\"The portal shows exactly what Google decided, good or bad.\"", who: "Hospitality group" },
+            { stars: "★★★★★", text: "\"Honest about what can and can't be removed.\"", who: "Medical practice" },
+          ].map((card) => (
+            <article key={card.who}>
+              <div className="t-stars">{card.stars}</div>
+              <p className="mt-2">{card.text}</p>
+              <b>{card.who}</b>
+            </article>
+          ))}
+        </div>
+
 
         {scannerOpen ? (
           <section id="scan" className="reference-scan-panel animate-rise">
