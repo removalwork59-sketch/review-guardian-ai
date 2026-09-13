@@ -1334,7 +1334,6 @@
 
 /* tilted testimonial strip */
 .reference-boundary-stage {
-  --boundary-upper: oklch(0.93 0.055 210);
   --boundary-surface: color-mix(in oklab, var(--brand-surface) 82%, var(--brand-cyan));
   --boundary-foreground: oklch(0.97 0.012 165);
   --boundary-muted: oklch(0.82 0.045 165);
@@ -1348,15 +1347,12 @@
   isolation: isolate;
   margin-top: 52px;
   padding-bottom: 56px;
-  background: linear-gradient(to bottom, var(--boundary-upper) 0 102px, transparent 102px);
 }
 .reference-boundary-stage::before {
   content: "";
   position: absolute;
   z-index: -1;
-  top: 102px;
-  bottom: 0;
-  left: 50%;
+  inset: 0 50% auto 50%;
   width: 100vw;
   transform: translateX(-50%);
   background: linear-gradient(145deg, var(--boundary-surface), color-mix(in oklab, var(--boundary-surface) 90%, var(--brand-cyan)));
