@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, CheckCircle2, ChevronDown, MoonStar, Sparkles, Sun } from "lucide-react";
+import { ArrowRight, CheckCircle2, ChevronDown, MoonStar, Sparkles, Sun, X } from "lucide-react";
 import { useState } from "react";
 
 import analyticsIcon from "@/assets/reference-icons/analytics.png";
@@ -44,6 +44,7 @@ export function ReferenceLanding({
 }) {
   const [scannerOpen, setScannerOpen] = useState(false);
   const [lightMode, setLightMode] = useState(false);
+  const [chatOpen, setChatOpen] = useState(true);
 
   function openScanner() {
     setScannerOpen(true);
