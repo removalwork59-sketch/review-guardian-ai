@@ -1,204 +1,114 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
-import { AlertTriangle, Check, Loader2, Minus, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { AlertTriangle, Check, Loader2, Minus, Search, ShieldCheck, X } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
-import { VerdictBadge } from "@/components/case-ui";
-import { parseUrlList } from "@/lib/case-types";
-import { scanAndSaveUrl } from "@/lib/bulk.functions";
 import { Button } from "@/components/ui/button";
+import { parseUrlList } from "@/lib/case-types";
+import {
+  createBulkJob,
+  getLatestBulkJob,
+  MAX_BULK_URLS,
+  runBulkJobPass,
+  type BulkJob,
+  type BulkJobItem,
+} from "@/lib/bulk.functions";
 
 export const Route = createFileRoute("/_authenticated/bulk")({
-  head: () => ({
-    meta: [
-      { title: "Bulk scan — Removal Work" },
-      { name: "description", content: "Paste many review links and check them all in one go." },
-      { property: "og:title", content: "Bulk scan — Removal Work" },
-      {
-        property: "og:description",
-        content: "Paste many review links and check them all in one go.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () => ({ meta: [
+    { title: "Bulk review discovery — Removal Work" },
+    { name: "description", content: "Queue real Google review links for verified discovery and policy analysis." },
+    { property: "og:title", content: "Bulk review discovery — Removal Work" },
+    { property: "og:description", content: "Queue real Google review links for verified discovery and policy analysis." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: BulkPage,
 });
 
-type RowState = "queued" | "skipped" | "running" | "done" | "failed";
-
-type Row = {
-  url: string;
-  valid: boolean;
-  reason: string;
-  state: RowState;
-  detail: string;
-  verdict?: string;
-};
-
-const MAX_URLS = 25;
+const STAGES = [
+  ["Queued", "queued"],
+  ["Discovering", "discovering"],
+  ["Identified", "identified"],
+  ["Analyzing", "analyzing"],
+  ["Report-ready", "reportReady"],
+] as const;
 
 function BulkPage() {
-  const run = useServerFn(scanAndSaveUrl);
-  const queryClient = useQueryClient();
-
+  const create = useServerFn(createBulkJob);
+  const getLatest = useServerFn(getLatestBulkJob);
+  const runPass = useServerFn(runBulkJobPass);
   const [text, setText] = useState("");
-  const [rows, setRows] = useState<Row[] | null>(null);
-  const [running, setRunning] = useState(false);
-
+  const [job, setJob] = useState<BulkJob | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
   const preview = useMemo(() => parseUrlList(text), [text]);
   const validCount = preview.filter((row) => row.valid).length;
-  const overLimit = validCount > MAX_URLS;
+
+  useEffect(() => { void getLatest().then(setJob).catch(() => undefined); }, [getLatest]);
 
   async function start() {
-    const initial: Row[] = preview.map((row) => ({
-      ...row,
-      state: row.valid ? "queued" : "skipped",
-      detail: row.valid ? "Waiting" : row.reason,
-    }));
-    setRows(initial);
-    setRunning(true);
-
-    const queue = initial
-      .map((row, index) => ({ row, index }))
-      .filter((item) => item.row.state === "queued")
-      .slice(0, MAX_URLS);
-
-    const patch = (index: number, next: Partial<Row>) =>
-      setRows((current) =>
-        current ? current.map((row, i) => (i === index ? { ...row, ...next } : row)) : current,
-      );
-
-    let cursor = 0;
-    async function worker() {
-      while (cursor < queue.length) {
-        const item = queue[cursor++]!;
-        patch(item.index, { state: "running", detail: "Scanning and checking…" });
-        try {
-          const result = await run({ data: { url: item.row.url } });
-          if (result.ok) {
-            patch(item.index, {
-              state: "done",
-              verdict: result.case.verdict,
-              detail: `${result.businessName} — ${result.case.headline}`,
-            });
-          } else {
-            patch(item.index, { state: "failed", detail: `${result.message} ${result.hint}` });
-          }
-        } catch {
-          patch(item.index, { state: "failed", detail: "This link couldn't be checked." });
-        }
-      }
-    }
-
-    await Promise.all([worker(), worker()]);
-    setRunning(false);
-    void queryClient.invalidateQueries({ queryKey: ["cases"] });
-    void queryClient.invalidateQueries({ queryKey: ["locations"] });
+    setBusy(true);
+    setError("");
+    try {
+      const created = await create({ data: { text, sourceKind: "competitor" } });
+      setJob(await runPass({ data: { jobId: created.id } }));
+      setText("");
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "The queue could not be started.");
+    } finally { setBusy(false); }
   }
 
-  const finished = rows !== null && !running;
+  async function continuePass() {
+    if (!job) return;
+    setBusy(true);
+    setError("");
+    try { setJob(await runPass({ data: { jobId: job.id } })); }
+    catch (caught) { setError(caught instanceof Error ? caught.message : "The next pass could not run."); }
+    finally { setBusy(false); }
+  }
 
   return (
-    <AppShell
-      title="Bulk scan"
-      description="Paste a list of Google review links — we check them one by one and save each result."
-      actions={
-        finished ? (
-          <Button asChild><Link to="/dashboard">See all results</Link></Button>
-        ) : null
-      }
-    >
-      <div className="surface app-card">
-        <label htmlFor="urls" className="text-sm font-medium text-ink">
-          Review links
-        </label>
-        <p className="mt-1 text-sm text-muted-foreground">
-          One per line. Up to {MAX_URLS} links at a time.
-        </p>
-        <textarea
-          id="urls"
-          rows={7}
-          value={text}
-          onChange={(event) => setText(event.target.value)}
-          placeholder={"https://www.google.com/maps/place/…\nhttps://maps.app.goo.gl/…"}
-          className="app-textarea mt-3 font-mono"
-        />
+    <AppShell title="Bulk review discovery" description="Queue Google links, verify each review, then analyze only confirmed matches.">
+      {job ? (
+        <section className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-5" aria-label="Pipeline counts">
+          {STAGES.map(([label, key]) => <div key={key} className="surface app-card"><p className="text-xs text-muted-foreground">{label}</p><p className="mt-1 text-2xl font-semibold text-ink">{job[key]}</p></div>)}
+        </section>
+      ) : null}
 
+      <div className="surface app-card">
+        <label htmlFor="urls" className="text-sm font-medium text-ink">Competitor or review links</label>
+        <p className="mt-1 text-sm text-muted-foreground">One real Google link per line. Up to {MAX_BULK_URLS}; duplicates are removed safely.</p>
+        <textarea id="urls" rows={7} value={text} onChange={(event) => setText(event.target.value)} placeholder={"https://www.google.com/maps/place/…\nhttps://maps.app.goo.gl/…"} className="app-textarea mt-3 font-mono" />
+        {error ? <p className="mt-3 text-sm text-danger">{error}</p> : null}
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-          <p className="text-sm text-muted-foreground">
-            {preview.length === 0
-              ? "Nothing pasted yet."
-              : `${validCount} ready · ${preview.length - validCount} can't be used`}
-            {overLimit ? ` · only the first ${MAX_URLS} will run` : ""}
-          </p>
-          <Button
-            type="button"
-            onClick={start}
-            disabled={running || validCount === 0}
-            className="min-w-32"
-          >
-            {running ? <Loader2 className="size-4 animate-spin" /> : null}
-            {running ? "Checking…" : `Check ${Math.min(validCount, MAX_URLS) || ""} links`.trim()}
-          </Button>
+          <p className="text-sm text-muted-foreground">{preview.length === 0 ? "No links added yet." : `${validCount} valid · ${preview.length - validCount} skipped`}</p>
+          <Button type="button" onClick={start} disabled={busy || validCount === 0}>{busy ? <Loader2 className="size-4 animate-spin" /> : <Search className="size-4" />}{busy ? "Running first pass…" : "Queue and run first pass"}</Button>
         </div>
       </div>
 
-      {rows ? (
-        <div className="mt-6 grid gap-3">
-          {rows.map((row, index) => (
-            <div key={`${row.url}-${index}`} className="surface bulk-result-row grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3 p-4">
-              <StateIcon state={row.state} />
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-ink">{row.url}</p>
-                <p className="mt-0.5 text-sm text-muted-foreground">{row.detail}</p>
-              </div>
-              {row.verdict ? <span className="bulk-result-verdict"><VerdictBadge verdict={row.verdict} /></span> : null}
-            </div>
-          ))}
+      {job ? <div className="mt-6 space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <p className="text-sm text-muted-foreground">{job.needsReview} need review · {job.failed} failed</p>
+          {job.queued > 0 ? <Button type="button" variant="outline" onClick={continuePass} disabled={busy}>{busy ? <Loader2 className="size-4 animate-spin" /> : null}Run next bounded pass</Button> : <Button asChild><Link to="/dashboard">See saved reviews</Link></Button>}
         </div>
-      ) : null}
+        {job.items.map((item) => <div key={item.id} className="surface bulk-result-row grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3 p-4"><StateIcon status={item.status} /><div className="min-w-0"><p className="truncate text-sm font-medium text-ink">{item.businessName ?? item.sourceUrl}</p><p className="mt-0.5 text-sm text-muted-foreground">{item.detail}</p></div><span className="text-xs font-medium text-muted-foreground">{labelStatus(item.status)}</span></div>)}
+      </div> : null}
 
-      <p className="mt-6 text-sm text-muted-foreground">
-        For each business we check the review most likely to be a problem — the lowest-rated one
-        Google shares. Google only shares a handful of reviews per business, so this is a sample,
-        not the full history.
-      </p>
+      <p className="mt-6 text-sm text-muted-foreground">Business links can be discovered, but a review is analyzed only when Google returns one exact identity match. Removal Work never guesses which review you meant.</p>
     </AppShell>
   );
 }
 
-function StateIcon({ state }: { state: RowState }) {
+function labelStatus(status: BulkJobItem["status"]) { return status.replace("_", " "); }
+
+function StateIcon({ status }: { status: BulkJobItem["status"] }) {
   const base = "mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full";
-  if (state === "running")
-    return (
-      <span className={`${base} bg-info-soft text-primary`}>
-        <Loader2 className="size-3.5 animate-spin" />
-      </span>
-    );
-  if (state === "done")
-    return (
-      <span className={`${base} bg-safe-soft text-safe`}>
-        <Check className="size-3.5" />
-      </span>
-    );
-  if (state === "failed")
-    return (
-      <span className={`${base} bg-danger-soft text-danger`}>
-        <X className="size-3.5" />
-      </span>
-    );
-  if (state === "skipped")
-    return (
-      <span className={`${base} bg-warning-soft text-warning`}>
-        <AlertTriangle className="size-3.5" />
-      </span>
-    );
-  return (
-    <span className={`${base} bg-muted text-muted-foreground`}>
-      <Minus className="size-3.5" />
-    </span>
-  );
+  if (["discovering", "analyzing"].includes(status)) return <span className={`${base} bg-info-soft text-primary`}><Loader2 className="size-3.5 animate-spin" /></span>;
+  if (status === "report_ready") return <span className={`${base} bg-safe-soft text-safe`}><ShieldCheck className="size-3.5" /></span>;
+  if (status === "identified") return <span className={`${base} bg-safe-soft text-safe`}><Check className="size-3.5" /></span>;
+  if (status === "failed") return <span className={`${base} bg-danger-soft text-danger`}><X className="size-3.5" /></span>;
+  if (status === "needs_review") return <span className={`${base} bg-warning-soft text-warning`}><AlertTriangle className="size-3.5" /></span>;
+  return <span className={`${base} bg-muted text-muted-foreground`}><Minus className="size-3.5" /></span>;
 }
