@@ -279,8 +279,8 @@ function Home() {
                   </div>
                 </div>
               </div>
-              {stage === "idle" ? <Workflow /> : null}
             </section>
+            {stage === "idle" ? <Workflow /> : null}
 
             {error ? <ErrorNote {...error} /> : null}
             {stage === "scanning" ? <div className="mx-auto mt-8 max-w-xl"><ScanProgress steps={SCAN_STEPS} done={false} /></div> : null}
@@ -533,7 +533,7 @@ const WORKFLOW = [
 
 function Workflow() {
   return (
-    <div className="absolute inset-x-4 bottom-0 z-10 translate-y-1/2 sm:inset-x-8 lg:inset-x-14">
+    <div className="relative z-10 -mt-16 px-1 sm:-mt-20 sm:px-6 lg:px-10">
       <ol className="workflow-ribbon mx-auto grid max-w-5xl grid-cols-3 gap-2 sm:grid-cols-6 sm:gap-3">
         {WORKFLOW.map((step, index) => (
           <li
