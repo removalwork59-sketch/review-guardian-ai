@@ -814,7 +814,7 @@
 .rating-score > span { color: var(--color-star); font-size: clamp(2rem, 2.75vw, 2.95rem); letter-spacing: .07em; white-space: nowrap; filter: drop-shadow(0 0 11px color-mix(in oklab, var(--color-star) 45%, transparent)); animation: rating-glow 3.4s ease-in-out infinite; }
 .rating-score-low > span { display: flex; gap: .07em; color: inherit; }
 .rating-score-low > span i { color: var(--color-star); font-style: normal; }
-.rating-score-low > span i:nth-child(n+4) { color: color-mix(in oklab, var(--color-primary) 47%, var(--color-background)); filter: none; }
+.rating-score-low > span i:nth-child(n+4) { color: oklch(0.49 0.12 255); filter: drop-shadow(0 0 5px oklch(0.49 0.12 255 / .22)); }
 .store-scene { position: absolute; inset: 181px 42px 27px; overflow: hidden; border-bottom: 2px solid color-mix(in oklab, var(--color-primary) 78%, transparent); perspective: 900px; box-shadow: 0 12px 24px -20px color-mix(in oklab, var(--color-primary) 62%, transparent); }
 .store-scene::after { content: ""; position: absolute; left: 47%; right: 1%; bottom: -14px; height: 29px; background: radial-gradient(ellipse, color-mix(in oklab, var(--color-primary) 38%, transparent), transparent 68%); filter: blur(7px); }
 .store-building { position: absolute; z-index: 4; right: 5%; bottom: 0; width: 220px; height: 168px; border: 2px solid color-mix(in oklab, var(--color-primary) 65%, transparent); background: linear-gradient(135deg, color-mix(in oklab, var(--color-primary) 72%, var(--color-ink)) 0 8%, color-mix(in oklab, var(--color-primary) 37%, var(--color-background)) 8% 100%); box-shadow: inset 0 0 36px color-mix(in oklab, var(--color-primary) 20%, transparent), 0 20px 40px oklch(0 0 0 / .38), 15px -8px 0 color-mix(in oklab, var(--color-primary) 31%, var(--color-background)); transform: rotateY(-4deg); }
@@ -832,12 +832,12 @@
 .growth-arc-two { left: 13%; bottom: -96px; width: 63%; opacity: .55; }
 .customer-line { position: absolute; z-index: 5; left: 1%; bottom: 0; width: 69%; height: 108px; }
 .customer-line i, .leaving-customer i { position: absolute; left: calc(var(--person) * 16%); bottom: 0; width: 34px; height: 88px; filter: drop-shadow(0 0 9px color-mix(in oklab, var(--color-primary) 58%, transparent)); animation: customer-march 7s linear calc(var(--person) * -1.08s) infinite; }
-.customer-line i b, .leaving-customer i b { position: absolute; left: 9px; top: 0; width: 19px; height: 19px; border: 3px solid var(--color-ink); border-radius: 50%; background: color-mix(in oklab, var(--color-primary) 22%, var(--color-ink)); }
-.customer-line i em, .leaving-customer i em { position: absolute; left: 17px; top: 20px; width: 4px; height: 36px; border-radius: 4px; background: var(--color-ink); }
-.customer-line i span, .customer-line i small, .leaving-customer i span, .leaving-customer i small { position: absolute; left: 17px; top: 28px; width: 4px; height: 31px; border-radius: 4px; background: var(--color-ink); transform-origin: top; }
+.customer-line i b, .leaving-customer i b { position: absolute; left: 8px; top: 0; width: 20px; height: 20px; border: 2px solid color-mix(in oklab, var(--color-ink) 72%, var(--color-primary)); border-radius: 50%; background: radial-gradient(circle at 35% 28%, var(--color-ink), color-mix(in oklab, var(--color-primary) 32%, var(--color-ink)) 68%); box-shadow: inset -3px -3px 5px color-mix(in oklab, var(--color-primary) 24%, transparent), 0 0 8px color-mix(in oklab, var(--color-primary) 58%, transparent); }
+.customer-line i em, .leaving-customer i em { position: absolute; left: 15px; top: 18px; width: 7px; height: 39px; border-radius: 6px; background: linear-gradient(90deg, color-mix(in oklab, var(--color-primary) 42%, var(--color-ink)), var(--color-ink) 52%, color-mix(in oklab, var(--color-primary) 38%, var(--color-ink))); box-shadow: 0 0 8px color-mix(in oklab, var(--color-primary) 45%, transparent); }
+.customer-line i span, .customer-line i small, .leaving-customer i span, .leaving-customer i small { position: absolute; left: 16px; top: 28px; width: 6px; height: 31px; border-radius: 5px; background: linear-gradient(90deg, color-mix(in oklab, var(--color-primary) 36%, var(--color-ink)), var(--color-ink)); transform-origin: top; }
 .customer-line i span, .leaving-customer i span { transform: rotate(48deg); }
 .customer-line i small, .leaving-customer i small { transform: rotate(-48deg); }
-.customer-line i::before, .customer-line i::after, .leaving-customer i::before, .leaving-customer i::after { content: ""; position: absolute; left: 17px; top: 54px; width: 4px; height: 34px; border-radius: 4px; background: var(--color-ink); transform-origin: top; }
+.customer-line i::before, .customer-line i::after, .leaving-customer i::before, .leaving-customer i::after { content: ""; position: absolute; left: 16px; top: 53px; width: 6px; height: 35px; border-radius: 5px; background: linear-gradient(90deg, color-mix(in oklab, var(--color-primary) 36%, var(--color-ink)), var(--color-ink)); transform-origin: top; }
 .customer-line i::before, .leaving-customer i::before { transform: rotate(25deg); }
 .customer-line i::after, .leaving-customer i::after { transform: rotate(-25deg); }
 .money { position: absolute; z-index: 7; display: grid; width: 42px; height: 42px; place-items: center; border: 2px solid color-mix(in oklab, var(--brand-cyan) 78%, var(--color-ink)); border-radius: 50%; background: radial-gradient(circle at 34% 28%, var(--color-ink), var(--brand-cyan) 22%, color-mix(in oklab, var(--brand-cyan) 66%, var(--color-background))); color: var(--color-ink); font-size: 1.2rem; font-weight: 850; box-shadow: 0 0 22px color-mix(in oklab, var(--brand-cyan) 42%, transparent); animation: money-rise 5s ease-in-out infinite; }
@@ -877,6 +877,8 @@
   .store-glow { right: 0; }
   .quiet-store .store-building { right: 1%; }
   .money { transform: scale(.8); }
+  .customer-line { width: 61%; }
+  .customer-line i { left: calc(var(--person) * 14%); }
 }
 
 @media (prefers-reduced-motion: reduce) {
