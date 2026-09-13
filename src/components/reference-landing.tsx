@@ -220,7 +220,7 @@ export function ReferenceLanding({
               { text: "The report workflow felt focused and kept the final choice in my hands.", who: "Sample reviewer", initials: "SR" },
               { text: "Outcome tracking stayed honest and never claimed a result too early.", who: "Sample reviewer", initials: "SR" },
             ].map((card) => (
-              <article key={card.who}>
+              <article key={card.text}>
                 <div className="t-review-head"><span className="t-avatar" aria-hidden="true">{card.initials}</span><span><b>{card.who}</b><small>Interface example</small></span></div>
                 <div className="t-stars" aria-label="Five star rating">★★★★★</div>
                 <p>{card.text}</p>
