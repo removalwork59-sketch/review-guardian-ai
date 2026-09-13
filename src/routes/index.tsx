@@ -231,25 +231,7 @@ function Home() {
               </div>
             ) : null}
 
-            {stage === "idle" ? (
-              <div className="mx-auto mt-14 grid max-w-3xl gap-3 text-left sm:grid-cols-3">
-                <Highlight
-                  icon={<MessageSquareQuote className="size-4.5" />}
-                  title="We read the review"
-                  body="We find the business and pull the review straight from the platform."
-                />
-                <Highlight
-                  icon={<Sparkles className="size-4.5" />}
-                  title="AI checks the rules"
-                  body="It weighs both sides before deciding — a harsh review isn't a broken rule."
-                />
-                <Highlight
-                  icon={<ShieldCheck className="size-4.5" />}
-                  title="You get one clear answer"
-                  body="Plain English, with the evidence, the risks and what to do next."
-                />
-              </div>
-            ) : null}
+            {stage === "idle" ? <Workflow /> : null}
           </section>
         ) : null}
 
