@@ -802,28 +802,28 @@
   border-block: 1px solid color-mix(in oklab, var(--color-ink) 7%, transparent);
   background: oklch(0.16 0.035 255);
 }
-.review-impression-intro { max-width: 790px; }
+.review-impression-intro { max-width: 820px; }
 .review-impression-intro h2 {
   margin: 0;
   color: var(--color-ink);
   font-family: var(--font-display);
-  font-size: clamp(2.55rem, 4.55vw, 4rem);
+  font-size: clamp(2.55rem, 4.3vw, 3.55rem);
   font-weight: 760;
   line-height: 1.06;
   letter-spacing: 0;
 }
 .review-impression-intro h2 span { color: var(--brand-cyan); }
-.review-impression-intro p { max-width: 690px; margin-top: 24px; color: color-mix(in oklab, var(--color-ink) 72%, transparent); font-size: 1.08rem; line-height: 1.58; }
-.rating-showdown { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 34px; margin-top: 62px; }
-.rating-showdown::before { content: ""; position: absolute; top: 0; bottom: 0; left: calc(50% - 17px); width: 1px; background: color-mix(in oklab, var(--color-ink) 8%, transparent); }
+.review-impression-intro p { max-width: 680px; margin-top: 24px; color: color-mix(in oklab, var(--color-ink) 72%, transparent); font-size: 1rem; line-height: 1.58; }
+.rating-showdown { position: relative; display: grid; grid-template-columns: minmax(0, 1.42fr) minmax(390px, 1fr); gap: 34px; margin-top: 58px; }
+.rating-showdown::before { content: ""; position: absolute; top: 0; bottom: 0; left: calc(58.68% - 17px); width: 1px; background: color-mix(in oklab, var(--color-ink) 8%, transparent); }
 .rating-business { min-width: 0; padding: 8px 0 0; }
 .rating-competitor { padding-right: 30px; }
-.rating-you { padding: 30px 28px 0; border: 1px solid color-mix(in oklab, var(--color-ink) 14%, transparent); border-radius: 22px 22px 4px 4px; background: oklch(0.135 0.03 255); box-shadow: inset 0 1px color-mix(in oklab, var(--color-ink) 4%, transparent), 0 18px 40px oklch(0 0 0 / .11); }
+.rating-you { padding: 28px 26px 0; border: 1px solid color-mix(in oklab, var(--color-ink) 14%, transparent); border-radius: 20px 20px 4px 4px; background: oklch(0.135 0.03 255); box-shadow: inset 0 1px color-mix(in oklab, var(--color-ink) 4%, transparent), 0 18px 40px oklch(0 0 0 / .11); }
 .rating-owner { display: block; color: color-mix(in oklab, var(--color-ink) 62%, transparent); font-size: .85rem; font-weight: 650; }
 .rating-score { display: flex; align-items: center; gap: 18px; margin-top: 8px; }
-.rating-score strong { color: var(--color-ink); font-family: var(--font-display); font-size: clamp(3rem, 5vw, 4.2rem); line-height: 1; }
+.rating-score strong { color: var(--color-ink); font-family: var(--font-display); font-size: clamp(3rem, 4.4vw, 3.9rem); line-height: 1; }
 .rating-score span { color: var(--color-star); font-size: clamp(1rem, 1.7vw, 1.45rem); letter-spacing: .16em; white-space: nowrap; }
-.store-scene { position: relative; height: 166px; margin-top: 20px; overflow: hidden; border-bottom: 1px solid color-mix(in oklab, var(--color-ink) 13%, transparent); }
+.store-scene { position: relative; height: 150px; margin-top: 16px; overflow: hidden; border-bottom: 1px solid color-mix(in oklab, var(--color-ink) 13%, transparent); }
 .store-building { position: absolute; right: 16%; bottom: 0; width: 126px; height: 82px; border: 3px solid color-mix(in oklab, var(--color-ink) 32%, transparent); background: color-mix(in oklab, var(--color-background) 80%, transparent); box-shadow: inset 0 0 22px color-mix(in oklab, var(--color-ink) 3%, transparent); }
 .store-sign { position: absolute; left: 40%; top: -30px; width: 38px; height: 15px; border-radius: 2px; background: color-mix(in oklab, var(--color-ink) 34%, transparent); box-shadow: 0 3px 0 color-mix(in oklab, var(--color-background) 70%, transparent); }
 .store-roof { position: absolute; left: -12px; top: -13px; width: 144px; height: 13px; border-radius: 2px 2px 0 0; background: color-mix(in oklab, var(--color-ink) 35%, transparent); box-shadow: 0 -5px 0 -2px color-mix(in oklab, var(--color-ink) 18%, transparent); }
@@ -833,7 +833,7 @@
 .store-door::after { content: ""; position: absolute; right: 5px; top: 27px; width: 3px; height: 3px; border-radius: 50%; background: color-mix(in oklab, var(--color-ink) 55%, transparent); }
 .store-step { position: absolute; right: 7px; bottom: -3px; width: 44px; height: 5px; background: color-mix(in oklab, var(--color-ink) 25%, transparent); }
 .customer-line { position: absolute; z-index: 2; left: 2%; bottom: 0; width: 65%; height: 75px; }
-.customer-line i { --delay: calc(var(--person) * -.19s); position: absolute; left: calc(var(--person) * 17%); bottom: -1px; width: 24px; height: 61px; transform-origin: 50% 100%; animation: customer-walk 1.15s ease-in-out var(--delay) infinite; }
+.customer-line i { position: absolute; left: calc(var(--person) * 17%); bottom: -1px; width: 24px; height: 61px; transform-origin: 50% 100%; }
 .customer-line i b { position: absolute; left: 7px; top: 0; width: 11px; height: 11px; border: 2px solid color-mix(in oklab, var(--color-ink) 88%, transparent); border-radius: 50%; }
 .customer-line i em { position: absolute; left: 11px; top: 12px; width: 2px; height: 27px; background: color-mix(in oklab, var(--color-ink) 88%, transparent); transform: rotate(calc((var(--person) - 2) * .8deg)); }
 .customer-line i span, .customer-line i small { position: absolute; left: 11px; top: 19px; width: 2px; height: 23px; background: color-mix(in oklab, var(--color-ink) 88%, transparent); transform-origin: top; }
@@ -842,17 +842,19 @@
 .customer-line i::before, .customer-line i::after { content: ""; position: absolute; left: 11px; top: 37px; width: 2px; height: 24px; background: color-mix(in oklab, var(--color-ink) 88%, transparent); transform-origin: top; }
 .customer-line i::before { transform: rotate(24deg); }
 .customer-line i::after { transform: rotate(-24deg); }
-.money { position: absolute; z-index: 3; color: var(--brand-cyan); font-size: 1rem; font-weight: 800; opacity: 0; animation: money-float 3.2s ease-out infinite; }
-.money-one { left: 14%; bottom: 51px; }
-.money-two { left: 34%; bottom: 37px; animation-delay: 1.05s; }
-.money-three { left: 52%; bottom: 60px; animation-delay: 2.1s; }
+.money { position: absolute; z-index: 3; color: var(--brand-cyan); font-size: .9rem; font-weight: 800; opacity: 0; animation: money-float 4s linear infinite; }
+.money-one { left: 12%; bottom: 51px; }
+.money-two { left: 31%; bottom: 45px; animation-delay: -1.35s; }
+.money-three { left: 49%; bottom: 57px; animation-delay: -2.7s; }
 .quiet-store .store-building { right: 28%; filter: brightness(.66); }
 .wind-lines { position: absolute; left: 5%; bottom: 35px; width: 105px; }
-.wind-lines i { display: block; width: 72px; height: 1px; margin-top: 10px; background: repeating-linear-gradient(90deg, color-mix(in oklab, var(--color-ink) 28%, transparent) 0 9px, transparent 9px 16px); animation: wind-drift 2.2s linear infinite; }
+.wind-lines i { display: block; width: 72px; height: 1px; margin-top: 10px; background: repeating-linear-gradient(90deg, color-mix(in oklab, var(--color-ink) 24%, transparent) 0 9px, transparent 9px 16px); animation: wind-drift 2.2s linear infinite; }
 .wind-lines i:nth-child(2) { width: 93px; animation-delay: -.7s; }
 .wind-lines i:nth-child(3) { width: 54px; animation-delay: -1.4s; }
-.tumbleweed { position: absolute; z-index: 4; left: -34px; bottom: 4px; width: 31px; height: 31px; border: 2px solid color-mix(in oklab, var(--color-star) 72%, transparent); border-radius: 50%; opacity: .75; animation: tumble-roll 7.4s linear infinite; }
-.tumbleweed i { position: absolute; inset: 5px; border: 1px solid var(--color-star); border-radius: 50% 20% 50% 20%; }
+.tumbleweed { position: absolute; z-index: 4; left: -34px; bottom: 4px; width: 29px; height: 29px; border: 1px solid color-mix(in oklab, var(--color-star) 70%, transparent); border-radius: 42% 58% 45% 55%; opacity: .75; animation: tumble-roll 7.2s linear infinite; }
+.tumbleweed::before, .tumbleweed::after { content: ""; position: absolute; inset: 3px; border: 1px solid color-mix(in oklab, var(--color-star) 68%, transparent); border-radius: 62% 38% 58% 42%; transform: rotate(32deg); }
+.tumbleweed::after { inset: 7px 2px; transform: rotate(-39deg); }
+.tumbleweed i { position: absolute; inset: 5px; border: 1px solid color-mix(in oklab, var(--color-star) 72%, transparent); border-radius: 50% 20% 50% 20%; }
 .tumbleweed i:nth-child(2) { transform: rotate(60deg); }
 .tumbleweed i:nth-child(3) { transform: rotate(120deg); }
 .rating-facts { margin: 0; padding: 0; list-style: none; }
@@ -868,10 +870,9 @@
 .rating-change-cta span { display: grid; width: 30px; height: 30px; place-items: center; border-radius: 50%; background: color-mix(in oklab, var(--color-background) 82%, transparent); color: var(--brand-cyan); }
 .rating-change-cta:hover { transform: translateY(-2px); filter: brightness(1.06); }
 .rating-change-cta:hover svg { transform: translateX(2px); }
-@keyframes customer-walk { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-4px) rotate(1deg); } }
-@keyframes money-float { 0% { opacity: 0; transform: translateY(10px) scale(.7); } 20%, 58% { opacity: 1; } 100% { opacity: 0; transform: translateY(-46px) scale(1.08); } }
+@keyframes money-float { 0% { opacity: 0; transform: translateY(9px); } 12% { opacity: .88; } 68% { opacity: .88; } 100% { opacity: 0; transform: translateY(-40px); } }
 @keyframes wind-drift { from { transform: translateX(0); } to { transform: translateX(25px); } }
-@keyframes tumble-roll { 0%, 5% { opacity: 0; transform: translateX(0) translateY(0) rotate(0); } 10% { opacity: .78; } 28% { transform: translateX(120px) translateY(-9px) rotate(300deg); } 48% { transform: translateX(255px) translateY(0) rotate(650deg); } 68% { opacity: .78; transform: translateX(390px) translateY(-7px) rotate(980deg); } 78%, 100% { opacity: 0; transform: translateX(500px) translateY(0) rotate(1250deg); } }
+@keyframes tumble-roll { 0%, 3% { opacity: 0; transform: translateX(0) translateY(0) rotate(0); } 8% { opacity: .76; } 25% { transform: translateX(112px) translateY(-8px) rotate(290deg); } 48% { transform: translateX(242px) translateY(0) rotate(630deg); } 69% { opacity: .76; transform: translateX(360px) translateY(-7px) rotate(940deg); } 79%, 100% { opacity: 0; transform: translateX(458px) translateY(0) rotate(1190deg); } }
 
 @media (max-width: 760px) {
   .review-impression { padding: 68px 20px 64px; }
@@ -887,7 +888,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .customer-line i, .money, .wind-lines i, .tumbleweed { animation: none; }
+  .money, .wind-lines i, .tumbleweed { animation: none; }
   .money { opacity: .8; }
   .tumbleweed { left: 20%; opacity: .65; }
 }
