@@ -162,6 +162,16 @@ export const runBulkJobPass = createServerFn({ method: "POST" })
       if (claimError) throw claimError;
       const item = claimed?.[0];
       if (!item) break;
+      if (!item.source_url) {
+        await context.supabase.from("bulk_job_items").update({
+          status: "failed",
+          detail: "The saved link is missing.",
+          error_code: "missing_source_url",
+          completed_at: new Date().toISOString(),
+        }).eq("id", item.id);
+        await context.supabase.rpc("refresh_bulk_job_counts", { _job_id: data.jobId });
+        continue;
+      }
 
       try {
         const lookup = await lookupGooglePlace(item.source_url);
