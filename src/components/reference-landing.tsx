@@ -14,6 +14,21 @@ import { Button } from "@/components/ui/button";
 
 
 
+const platforms = [
+  { name: "Google Reviews", glyph: "G", color: "#4285f4" },
+  { name: "Instagram", icon: Instagram, color: "#e1306c" },
+  { name: "Trustpilot", icon: Star, color: "#00b67a" },
+  { name: "Facebook", icon: Facebook, color: "#1877f2" },
+  { name: "Reddit", glyph: "r", color: "#ff4500" },
+  { name: "Indeed", glyph: "i", color: "#2164f3" },
+  { name: "TripAdvisor", glyph: "oo", color: "#34e0a1" },
+  { name: "Airbnb", glyph: "A", color: "#ff5a5f" },
+  { name: "X", glyph: "𝕏", color: "#e7e9ea" },
+  { name: "YouTube", icon: Youtube, color: "#ff0000" },
+  { name: "Glassdoor", glyph: "g", color: "#0caa41" },
+  { name: "More platforms", glyph: "20+", color: "#b8f26d" },
+];
+
 const steps = [
   { title: "Import", body: "Bring in your Google review export or paste a public review link." },
   { title: "Scan", body: "The AI scanner classifies each review and assigns a removal priority." },
