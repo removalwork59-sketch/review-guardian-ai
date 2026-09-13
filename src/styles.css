@@ -610,7 +610,7 @@
 .envelope-back, .envelope-front, .envelope-flap { position: absolute; left: 8%; width: 84%; }
 .envelope-back { z-index: 1; bottom: 15px; height: 82px; border: 2px solid var(--brand-cyan); border-radius: 7px 7px 12px 12px; background: color-mix(in oklab, var(--brand-cyan) 8%, var(--color-card)); }
 .envelope-front { z-index: 5; bottom: 15px; height: 74px; border: 2px solid var(--brand-cyan); border-top: 0; border-radius: 0 0 12px 12px; background: linear-gradient(32deg, color-mix(in oklab, var(--brand-cyan) 13%, var(--color-card)) 49%, transparent 50%), linear-gradient(-32deg, color-mix(in oklab, var(--brand-cyan) 13%, var(--color-card)) 49%, transparent 50%); clip-path: polygon(0 0, 50% 58%, 100% 0, 100% 100%, 0 100%); }
-.envelope-flap { z-index: 4; bottom: 95px; height: 62px; border: 2px solid var(--brand-cyan); border-bottom: 0; background: color-mix(in oklab, var(--brand-cyan) 13%, var(--color-card)); clip-path: polygon(0 100%, 50% 0, 100% 100%); transform-origin: center bottom; animation: envelope-open 5.23s ease-in-out infinite; }
+.envelope-flap { z-index: 6; bottom: 34px; height: 62px; border: 2px solid var(--brand-cyan); background: color-mix(in oklab, var(--brand-cyan) 10%, var(--color-card)); clip-path: polygon(0 0, 100% 0, 50% 72%); transform-origin: center bottom; animation: envelope-open 5.23s ease-in-out infinite; }
 .case-note { position: absolute; z-index: 3; bottom: 38px; width: 39px; height: 54px; padding: 11px 7px; border-radius: 4px; background: var(--color-ink); box-shadow: 0 8px 18px color-mix(in oklab, var(--color-background) 35%, transparent); opacity: 0; animation: note-file 5.23s cubic-bezier(.45, 0, .22, 1) infinite; }
 .case-note i { display: block; height: 3px; margin-bottom: 5px; border-radius: 3px; background: color-mix(in oklab, var(--brand-cyan) 42%, transparent); }
 .case-note-one { left: 28%; animation-delay: 0s; }
@@ -633,35 +633,36 @@
 .removal-burst { position: absolute; right: 24%; bottom: 56px; color: var(--brand-cyan); font-size: 26px; opacity: 0; animation: removal-burst 5.23s ease-out infinite; }
 
 @keyframes link-travel {
-  0%, 4% { opacity: 0; transform: translate(10px, 102px) scale(.82); }
-  8% { opacity: 1; }
-  43%, 76% { opacity: 1; transform: translate(220px, 22px) scale(1); }
-  86%, 100% { opacity: 0; transform: translate(220px, 22px) scale(.82); }
+  0% { opacity: 1; transform: translate(10px, 102px) scale(.94); }
+  29%, 88% { opacity: 1; transform: translate(220px, 22px) scale(1); }
+  96% { opacity: .12; transform: translate(220px, 22px) scale(.86); }
+  96.1% { opacity: .12; transform: translate(10px, 102px) scale(.86); }
+  100% { opacity: 1; transform: translate(10px, 102px) scale(.94); }
 }
-@keyframes link-spin { 0%, 8% { transform: rotate(-38deg); } 43%, 100% { transform: rotate(0deg); } }
+@keyframes link-spin { 0% { transform: rotate(-38deg); } 29%, 100% { transform: rotate(0deg); } }
 @keyframes flight-spark { 0%, 25% { opacity: 0; transform: scale(.3); } 34% { opacity: 1; transform: scale(1); } 46%, 100% { opacity: 0; transform: scale(.2); } }
 @keyframes envelope-open {
-  0%, 8% { transform: rotateX(0deg); z-index: 4; }
-  17%, 71% { transform: rotateX(178deg); z-index: 1; }
-  80%, 100% { transform: rotateX(0deg); z-index: 4; }
+  0%, 20% { bottom: 34px; transform: rotateX(0deg); clip-path: polygon(0 0, 100% 0, 50% 72%); z-index: 6; }
+  29%, 82% { bottom: 95px; transform: rotateX(0deg); clip-path: polygon(0 100%, 50% 0, 100% 100%); z-index: 2; }
+  91%, 100% { bottom: 34px; transform: rotateX(0deg); clip-path: polygon(0 0, 100% 0, 50% 72%); z-index: 6; }
 }
 @keyframes note-file {
-  0%, 18% { transform: translateY(-98px) scale(.9); opacity: 0; }
-  23% { opacity: 1; }
-  39% { transform: translateY(-57px) scale(1); opacity: 1; }
-  57% { transform: translateY(9px) scale(.88); opacity: 1; }
-  64%, 100% { transform: translateY(25px) scale(.8); opacity: 0; }
+  0%, 28% { transform: translateY(-102px) scale(.9); opacity: 0; }
+  34% { transform: translateY(-86px) scale(.94); opacity: 1; }
+  56% { transform: translateY(-55px) scale(1); opacity: 1; }
+  76% { transform: translateY(6px) scale(.9); opacity: 1; }
+  84%, 100% { transform: translateY(24px) scale(.8); opacity: 0; }
 }
-@keyframes envelope-confirm { 0%, 77% { opacity: 0; transform: scale(.55); } 84%, 94% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(.7); } }
+@keyframes envelope-confirm { 0%, 17% { opacity: 1; transform: scale(1); } 23%, 86% { opacity: 0; transform: scale(.55); } 93%, 100% { opacity: 1; transform: scale(1); } }
 @keyframes hammer-strike {
-  0%, 12% { opacity: 0; transform: translate(22px, -35px) rotate(7deg); }
-  18% { opacity: 1; transform: translate(12px, -17px) rotate(4deg); }
-  32%, 38% { opacity: 1; transform: translate(-17px, 48px) rotate(-27deg); }
-  45%, 100% { opacity: 0; transform: translate(-17px, 48px) rotate(-27deg); }
+  0%, 11% { opacity: 0; transform: translate(22px, -35px) rotate(7deg); }
+  17% { opacity: 1; transform: translate(13px, -18px) rotate(5deg); }
+  43%, 49% { opacity: 1; transform: translate(-17px, 48px) rotate(-27deg); }
+  56%, 100% { opacity: 0; transform: translate(-17px, 48px) rotate(-27deg); }
 }
-@keyframes review-dim { 0%, 36% { opacity: 1; filter: brightness(1); } 44%, 89% { opacity: .24; filter: brightness(.42); } 96%, 100% { opacity: 1; filter: brightness(1); } }
-@keyframes removed-label { 0%, 41% { opacity: 0; transform: translate(-50%, -50%) scale(.72); } 48%, 89% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 96%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(.8); } }
-@keyframes removal-burst { 0%, 30% { opacity: 0; transform: scale(.2) rotate(0); } 37% { opacity: 1; transform: scale(1.2) rotate(45deg); } 47%, 100% { opacity: 0; transform: scale(2) rotate(90deg); } }
+@keyframes review-dim { 0%, 48% { opacity: 1; filter: brightness(1); transform: scale(1); } 56%, 89% { opacity: .24; filter: brightness(.42); transform: scale(.98); } 97%, 100% { opacity: 1; filter: brightness(1); transform: scale(1); } }
+@keyframes removed-label { 0%, 51% { opacity: 0; transform: translate(-50%, -50%) scale(.72); } 59%, 89% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 97%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(.8); } }
+@keyframes removal-burst { 0%, 43% { opacity: 0; transform: scale(.2) rotate(0); } 50% { opacity: 1; transform: scale(1.2) rotate(45deg); } 60%, 100% { opacity: 0; transform: scale(2) rotate(90deg); } }
 
 @media (max-width: 900px) {
   .reference-three-steps { padding: 70px 0; }
