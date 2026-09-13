@@ -180,7 +180,7 @@ export const runBulkJobPass = createServerFn({ method: "POST" })
           status: "identified",
           business_name: lookup.business.name,
           detail: matches.length === 1 ? "Exact review identity verified" : "Business found; exact review needs confirmation",
-        }).eq("id", item.id).eq("lease_token", item.lease_token);
+        }).eq("id", item.id);
         await context.supabase.rpc("refresh_bulk_job_counts", { _job_id: data.jobId });
 
         const review = matches.length === 1 ? matches[0] : undefined;
