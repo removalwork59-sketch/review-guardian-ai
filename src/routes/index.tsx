@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import {
   ArrowRight,
+  Bot,
   CheckCircle2,
   ClipboardList,
   Clock,
@@ -12,13 +13,16 @@ import {
   LayoutGrid,
   MapPin,
   MessageSquareQuote,
+  Radar,
   Search,
   ShieldCheck,
   Sparkles,
+  Star,
 } from "lucide-react";
 
 
 import { BrandMark, StarRating, Wordmark } from "@/components/brand";
+import { Button } from "@/components/ui/button";
 import { ScanProgress } from "@/components/scan-progress";
 import { AnalysisPanel } from "@/components/analysis-panel";
 import { analyzeReviewForPolicy, scanReviewUrl } from "@/lib/review.functions";
@@ -168,9 +172,8 @@ function Home() {
   const busy = stage === "scanning" || stage === "analyzing";
 
   return (
-    <main className="aurora-bg relative min-h-screen overflow-hidden bg-background">
-      <div className="grid-veil pointer-events-none absolute inset-x-0 top-0 -z-10 h-[80vh]" />
-      <header className="mx-auto flex max-w-5xl items-center justify-between px-5 py-5">
+    <main className="premium-home relative min-h-screen overflow-hidden bg-background">
+      <header className="mx-auto flex max-w-[1400px] items-center justify-between px-5 py-5 sm:px-8 lg:px-10">
         <Wordmark />
         <div className="flex items-center gap-2">
           <span className="hidden items-center gap-1.5 rounded-full border border-border bg-card/60 px-3 py-1.5 text-xs text-muted-foreground backdrop-blur lg:inline-flex">
@@ -187,65 +190,80 @@ function Home() {
         </div>
       </header>
 
-      <div className="mx-auto w-full max-w-4xl px-5 pb-24">
+      <div className="mx-auto w-full max-w-[1400px] px-3 pb-24 sm:px-6 lg:px-8">
         {stage === "idle" || stage === "scanning" ? (
-          <section className="pt-8 text-center sm:pt-16">
-            <span className="animate-rise inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3.5 py-1.5 text-xs font-medium text-primary">
-              <Sparkles className="size-3.5" />
-              AI policy analysis on real Google reviews
-            </span>
-            <h1 className="animate-rise mt-5 text-balance font-display text-4xl font-semibold leading-[1.04] text-ink sm:text-6xl">
-              Find problematic <span className="text-gradient-brand">reviews.</span>
-              <br className="hidden sm:block" /> Report them properly.
-            </h1>
-            <p className="animate-rise mx-auto mt-5 max-w-xl text-balance text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Paste a review link. AI reads the real review, checks it against platform policy and
-              builds the evidence for a legitimate report.
-            </p>
-
-            <form onSubmit={handleScan} className="mx-auto mt-9 w-full max-w-2xl">
-              <div className="surface animate-rise flex flex-col gap-2 p-2.5 ring-1 ring-primary/10 sm:flex-row sm:items-center sm:rounded-[28px] sm:p-2">
-                <div className="flex flex-1 items-center gap-3 px-3 py-2">
-                  <Search className="size-5 shrink-0 text-primary" />
-                  <input
-                    value={url}
-                    onChange={(event) => setUrl(event.target.value)}
-                    inputMode="url"
-                    autoComplete="off"
-                    placeholder="Paste a Google review link"
-                    aria-label="Review link"
-                    className="w-full bg-transparent text-base text-ink outline-none placeholder:text-muted-foreground"
-                  />
+          <>
+            <section className="hero-shell animate-rise relative overflow-hidden rounded-[18px] border border-border px-5 pb-24 pt-9 sm:px-10 sm:pb-28 sm:pt-12 lg:px-14 lg:pb-32">
+              <div className="hero-grain pointer-events-none absolute inset-0" />
+              <div className="relative grid items-center gap-12 lg:grid-cols-[1.04fr_.96fr] lg:gap-16">
+                <div>
+                  <span className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground">
+                    <ShieldCheck className="size-4 text-primary" />
+                    Real reviews. Real policy checks. No false promises.
+                  </span>
+                  <h1 className="mt-6 max-w-3xl font-display text-[clamp(2.85rem,6vw,5.65rem)] font-semibold leading-[.98] text-ink">
+                    Turn harmful reviews into a clear, <span className="text-gradient-brand">legitimate action.</span>
+                  </h1>
+                  <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+                    Paste a Google review link. AI reads the real content, checks policy, builds the evidence and helps you track the outcome.
+                  </p>
+                  <div className="mt-7 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                    <span className="inline-flex items-center gap-2"><CheckCircle2 className="size-4 text-safe" />Evidence, not guesswork</span>
+                    <span className="hidden h-4 w-px bg-border sm:block" />
+                    <span className="inline-flex items-center gap-2"><Clock className="size-4 text-star" />Track every case</span>
+                  </div>
                 </div>
-                <button
-                  type="submit"
-                  disabled={busy}
-                  className="cta-glow inline-flex h-13 items-center justify-center gap-2 rounded-2xl px-7 text-base font-semibold disabled:opacity-60 sm:rounded-[22px]"
-                >
-                  Scan review
-                  <ArrowRight className="size-4.5" />
-                </button>
+
+                <div className="scanner-stage relative mx-auto w-full max-w-xl">
+                  <div className="scanner-orbit" aria-hidden="true" />
+                  <div className="scanner-panel relative overflow-hidden rounded-[18px] border border-border bg-background/75 p-4 shadow-2xl backdrop-blur-xl sm:p-6">
+                    <div className="flex items-center justify-between border-b border-border pb-4">
+                      <div className="flex items-center gap-3">
+                        <span className="flex size-10 items-center justify-center rounded-xl bg-primary/15 text-primary"><Radar className="size-5" /></span>
+                        <div>
+                          <p className="text-sm font-semibold text-ink">Review intelligence</p>
+                          <p className="text-xs text-muted-foreground">Google review policy scan</p>
+                        </div>
+                      </div>
+                      <span className="inline-flex items-center gap-1.5 text-xs font-medium text-safe"><span className="status-pulse size-2 rounded-full bg-safe" />Live</span>
+                    </div>
+
+                    <form onSubmit={handleScan} className="mt-5">
+                      <label htmlFor="review-url" className="text-xs font-semibold uppercase text-muted-foreground">Review URL</label>
+                      <div className="mt-2 flex min-h-14 items-center gap-3 rounded-xl border border-input bg-card/75 px-4 transition focus-within:border-primary/60 focus-within:ring-4 focus-within:ring-primary/10">
+                        <Search className="size-5 shrink-0 text-primary" />
+                        <input
+                          id="review-url"
+                          value={url}
+                          onChange={(event) => setUrl(event.target.value)}
+                          inputMode="url"
+                          autoComplete="off"
+                          placeholder="Paste a Google review link"
+                          aria-label="Review link"
+                          className="min-w-0 flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-muted-foreground"
+                        />
+                      </div>
+                      <Button type="submit" disabled={busy} className="cta-glow mt-3 h-14 w-full rounded-xl text-base font-semibold">
+                        Scan review free <ArrowRight className="size-4.5" />
+                      </Button>
+                    </form>
+
+                    <div className="mt-5 grid grid-cols-3 gap-2">
+                      <MiniSignal icon={MessageSquareQuote} label="Review" />
+                      <MiniSignal icon={Bot} label="AI check" active />
+                      <MiniSignal icon={ShieldCheck} label="Evidence" />
+                    </div>
+                    <p className="mt-4 text-center text-[11px] leading-relaxed text-muted-foreground">Independent tool — not affiliated with Google</p>
+                  </div>
+                </div>
               </div>
-            </form>
-
-
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-2 text-sm">
-              <Pill label="Google" ready />
-              <Pill label="Facebook" />
-              <Pill label="Instagram" />
-              <Pill label="More soon" />
-            </div>
+              {stage === "idle" ? <Workflow /> : null}
+            </section>
 
             {error ? <ErrorNote {...error} /> : null}
-
-            {stage === "scanning" ? (
-              <div className="mt-10">
-                <ScanProgress steps={SCAN_STEPS} done={false} />
-              </div>
-            ) : null}
-
-            {stage === "idle" ? <Workflow /> : null}
-          </section>
+            {stage === "scanning" ? <div className="mx-auto mt-8 max-w-xl"><ScanProgress steps={SCAN_STEPS} done={false} /></div> : null}
+            {stage === "idle" ? <TrustSection /> : null}
+          </>
         ) : null}
 
         {result && (stage === "picking" || stage === "analyzing" || stage === "result") ? (
@@ -429,6 +447,15 @@ function Pill({ label, ready = false }: { label: string; ready?: boolean }) {
   );
 }
 
+function MiniSignal({ icon: Icon, label, active = false }: { icon: typeof Search; label: string; active?: boolean }) {
+  return (
+    <div className={`signal-tile flex min-h-20 flex-col items-center justify-center gap-2 rounded-xl border px-2 text-center ${active ? "border-primary/35 bg-primary/10" : "border-border bg-card/50"}`}>
+      <Icon className={`size-4 ${active ? "text-primary" : "text-muted-foreground"}`} />
+      <span className="text-xs font-medium text-ink">{label}</span>
+    </div>
+  );
+}
+
 const WORKFLOW = [
   {
     icon: MessageSquareQuote,
@@ -470,25 +497,57 @@ const WORKFLOW = [
 
 function Workflow() {
   return (
-    <div className="mx-auto mt-14 max-w-4xl">
-      <p className="text-sm font-medium text-muted-foreground">How one review moves through</p>
-      <ol className="mt-4 grid grid-cols-2 gap-3 text-left sm:grid-cols-3 lg:grid-cols-6">
+    <div className="absolute inset-x-4 bottom-0 z-10 translate-y-1/2 sm:inset-x-8 lg:inset-x-14">
+      <ol className="workflow-ribbon mx-auto grid max-w-5xl grid-cols-3 gap-2 sm:grid-cols-6 sm:gap-3">
         {WORKFLOW.map((step, index) => (
           <li
             key={step.label}
-            className="surface surface-hover animate-rise p-4"
+            className="workflow-card animate-rise relative min-h-28 overflow-hidden rounded-xl border border-border p-3.5 shadow-xl sm:min-h-32 sm:p-4"
             style={{ animationDelay: `${index * 70}ms` }}
           >
             <span
-              className={`inline-flex size-9 items-center justify-center rounded-xl ${step.tone}`}
+              className={`inline-flex size-8 items-center justify-center rounded-lg ${step.tone}`}
             >
-              <step.icon className="size-4.5" />
+              <step.icon className="size-4" />
             </span>
             <p className="mt-3 text-sm font-semibold text-ink">{step.label}</p>
-            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{step.body}</p>
+            <p className="mt-1 hidden text-[11px] leading-relaxed text-muted-foreground sm:block">{step.body}</p>
           </li>
         ))}
       </ol>
+    </div>
+  );
+}
+
+function TrustSection() {
+  return (
+    <section className="mx-auto grid max-w-6xl gap-10 px-3 pb-8 pt-32 sm:pt-36 lg:grid-cols-[.9fr_1.1fr] lg:items-center lg:gap-20 lg:pt-44">
+      <div className="animate-rise">
+        <span className="inline-flex items-center gap-2 text-sm font-medium text-primary"><Sparkles className="size-4" />Built for honest reputation work</span>
+        <h2 className="mt-4 max-w-lg font-display text-3xl font-semibold leading-tight text-ink sm:text-5xl">Know what breaks policy before you report it.</h2>
+        <p className="mt-5 max-w-xl leading-relaxed text-muted-foreground">The analysis weighs evidence and counter-evidence, then recommends the strongest legitimate next step. Google always makes the final decision.</p>
+      </div>
+      <div>
+        <p className="mb-4 text-sm font-semibold text-ink">One simple workflow</p>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <TrustTile icon={Star} label="Rating context" tone="text-star bg-star-soft" />
+          <TrustTile icon={MessageSquareQuote} label="Real review" tone="text-info bg-info-soft" />
+          <TrustTile icon={Bot} label="AI analysis" tone="text-primary bg-primary/10" />
+          <TrustTile icon={ClipboardList} label="Policy evidence" tone="text-info bg-info-soft" />
+          <TrustTile icon={Flag} label="Report path" tone="text-warn bg-warn-soft" />
+          <TrustTile icon={CheckCircle2} label="Outcome tracking" tone="text-safe bg-safe-soft" />
+        </div>
+        <div className="mt-5 flex flex-wrap gap-2"><Pill label="Google connected" ready /><Pill label="Facebook soon" /><Pill label="Instagram soon" /></div>
+      </div>
+    </section>
+  );
+}
+
+function TrustTile({ icon: Icon, label, tone }: { icon: typeof Search; label: string; tone: string }) {
+  return (
+    <div className="surface surface-hover flex min-h-24 items-center gap-3 rounded-xl p-4">
+      <span className={`flex size-9 shrink-0 items-center justify-center rounded-lg ${tone}`}><Icon className="size-4.5" /></span>
+      <span className="text-sm font-semibold text-ink">{label}</span>
     </div>
   );
 }
