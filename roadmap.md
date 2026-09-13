@@ -15,5 +15,6 @@
 - Desktop and mobile homepage validation with no overflow or console errors
 
 ## Open
+- Integrate the strongest production backend capabilities from the audited old repository without importing its UI: secure Google Business Profile connection/sync, durable review records and case history, reliable bulk jobs, reporting/status workflows, and hardened AI analysis
 - Facebook / Instagram / YouTube scanning — blocked until a Meta/YouTube connection exists
 - Verified removal outcome — Google gives no API for report status; user marks the real outcome
