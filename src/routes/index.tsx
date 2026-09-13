@@ -328,6 +328,21 @@ function Home() {
                   onReport={() => window.open(review.reviewUrl, "_blank", "noopener")}
                 />
                 <Note text="We can't remove a review for you. Google decides that. This opens the review on Google so you can flag it there with the reasoning above." />
+                {signedIn ? (
+                  <p className="text-center text-sm text-muted-foreground">
+                    {saved ? "Saved to your dashboard. " : ""}
+                    <Link to="/dashboard" className="font-medium text-primary hover:underline">
+                      Open your reviews
+                    </Link>
+                  </p>
+                ) : (
+                  <p className="text-center text-sm text-muted-foreground">
+                    <Link to="/auth" className="font-medium text-primary hover:underline">
+                      Sign in
+                    </Link>{" "}
+                    to save this case and track what happens after you report it.
+                  </p>
+                )}
               </>
             ) : null}
           </section>
