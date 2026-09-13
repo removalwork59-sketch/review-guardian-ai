@@ -583,7 +583,8 @@
 .step-visual { position: relative; height: 170px; margin-bottom: 16px; }
 
 .step-link-flight svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.flight-path { fill: none; stroke: var(--brand-cyan); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 6 8; opacity: .95; }
+.flight-path { fill: none; stroke: var(--brand-cyan); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 6 8; opacity: .95; animation: flight-dash 2.6s linear infinite; }
+@keyframes flight-dash { to { stroke-dashoffset: -28; } }
 .flight-link {
   position: absolute;
   left: 0;
