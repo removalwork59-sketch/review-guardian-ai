@@ -38,6 +38,7 @@ function AuthPage() {
   const [message, setMessage] = useState<{ tone: "error" | "ok"; text: string } | null>(null);
 
   useEffect(() => {
+    setReady(true);
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) void navigate({ to: "/dashboard" });
     });
