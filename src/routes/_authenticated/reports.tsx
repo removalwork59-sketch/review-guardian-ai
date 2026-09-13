@@ -7,12 +7,12 @@ import { useCases, useStatusMutation } from "./dashboard";
 export const Route = createFileRoute("/_authenticated/reports")({
   head: () => ({
     meta: [
-      { title: "Reports — Review Shield" },
+      { title: "Reports — Removal Work" },
       {
         name: "description",
         content: "Track what you reported to Google and what actually happened.",
       },
-      { property: "og:title", content: "Reports — Review Shield" },
+      { property: "og:title", content: "Reports — Removal Work" },
       {
         property: "og:description",
         content: "Track what you reported to Google and what actually happened.",

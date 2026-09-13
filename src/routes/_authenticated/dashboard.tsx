@@ -11,9 +11,9 @@ import type { CaseRecord, CaseStatus } from "@/lib/case-types";
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
-      { title: "Reviews — Review Shield" },
+      { title: "Reviews — Removal Work" },
       { name: "description", content: "Every review you've checked, with its result and status." },
-      { property: "og:title", content: "Reviews — Review Shield" },
+      { property: "og:title", content: "Reviews — Removal Work" },
       {
         property: "og:description",
         content: "Every review you've checked, with its result and status.",

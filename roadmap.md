@@ -5,11 +5,10 @@
 - Sign in (email + Google), saved cases in the database
 - Reviews, Reports, Locations dashboards with real status tracking
 - Bulk scan screen with per-link status
-
-## In progress
 - Quality pass: homepage workflow strip (Review → AI check → Evidence → Report → Track → Outcome)
-- Google-inspired accent colours used meaningfully (rating / warning / report / resolved)
-- Mobile + tablet check on every screen, loading/empty/error states
+- Removal Work branding with animated V-star mark and matching favicon
+- Premium violet, cyan and magenta visual system with glow, float, shimmer and scan motion
+- Desktop and mobile homepage validation with no overflow or console errors
 
 ## Open
 - Facebook / Instagram / YouTube scanning — blocked until a Meta/YouTube connection exists

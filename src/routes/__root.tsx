@@ -77,13 +77,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Review Shield — AI review policy checks" },
+      { title: "Removal Work — AI Review Policy Intelligence" },
       {
         name: "description",
         content:
           "Paste a review link and let AI check it against platform policies in plain English.",
       },
-      { property: "og:title", content: "Review Shield — AI review policy checks" },
+      { property: "og:title", content: "Removal Work — AI Review Policy Intelligence" },
       {
         property: "og:description",
         content:
@@ -103,7 +103,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap",
       },
-      { rel: "icon", type: "image/png", href: "/favicon.png" },
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
     ],
   }),
   shellComponent: RootShell,

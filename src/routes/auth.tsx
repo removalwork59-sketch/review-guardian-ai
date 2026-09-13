@@ -9,12 +9,12 @@ import "@lovable.dev/cloud-auth-js/styles.css";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in — Review Shield" },
+      { title: "Sign in — Removal Work" },
       {
         name: "description",
         content: "Sign in to keep your review cases, reports and locations in one place.",
       },
-      { property: "og:title", content: "Sign in — Review Shield" },
+      { property: "og:title", content: "Sign in — Removal Work" },
       {
         property: "og:description",
         content: "Sign in to keep your review cases, reports and locations in one place.",
@@ -83,7 +83,7 @@ function AuthPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-background px-5 py-12">
+    <main className="grid-bg flex min-h-screen flex-col items-center justify-center bg-background px-5 py-12">
       <Link to="/">
         <Wordmark />
       </Link>

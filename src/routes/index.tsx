@@ -47,13 +47,13 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Review Shield — Check a review for policy violations" },
+      { title: "Removal Work — AI Review Policy Intelligence" },
       {
         name: "description",
         content:
           "Paste a Google review link and let AI check it against platform policies, weigh the evidence and prepare the strongest legitimate report.",
       },
-      { property: "og:title", content: "Review Shield — Check a review in seconds" },
+      { property: "og:title", content: "Removal Work — AI Review Policy Intelligence" },
       {
         property: "og:description",
         content:
@@ -184,7 +184,7 @@ function Home() {
   const busy = stage === "scanning" || stage === "analyzing";
 
   return (
-    <main className="premium-home relative min-h-screen overflow-hidden bg-background">
+    <main className="premium-home grid-bg relative min-h-screen overflow-hidden bg-background">
       <header className="site-nav sticky top-0 z-50">
         <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-5 py-4 sm:px-8 lg:px-10">
           <Wordmark />
@@ -198,7 +198,7 @@ function Home() {
               to={signedIn ? "/dashboard" : "/auth"}
               className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-card/70 px-3.5 py-2 text-sm font-medium text-ink backdrop-blur transition hover:border-primary/40 hover:bg-muted"
             >
-              <LayoutGrid className="size-4" />
+              <LayoutGrid className="size-4 text-primary" />
               {signedIn ? "Dashboard" : "Client login"}
             </Link>
             <a
@@ -219,12 +219,12 @@ function Home() {
               <div className="hero-grain pointer-events-none absolute inset-0" />
               <div className="relative grid items-center gap-12 lg:grid-cols-[1.04fr_.96fr] lg:gap-16">
                 <div>
-                  <span className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground">
-                    <ShieldCheck className="size-4 text-primary" />
-                    Real reviews. Real policy checks. No false promises.
+                   <span className="glass-badge inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold text-muted-foreground">
+                     <Sparkles className="blink-star size-4 text-primary" />
+                     AI policy intelligence for Google reviews
                   </span>
                   <h1 className="mt-6 max-w-3xl font-display text-[clamp(2.85rem,6vw,5.65rem)] font-semibold leading-[.98] text-ink">
-                    Turn harmful reviews into a clear, <span className="text-gradient-brand">legitimate action.</span>
+                     Remove policy-violating reviews. <span className="text-gradient-brand">Protect the rating you earned.</span>
                   </h1>
                   <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
                     Paste a Google review link. AI reads the real content, checks policy, builds the evidence and helps you track the outcome.
@@ -237,8 +237,9 @@ function Home() {
                 </div>
 
                 <div className="scanner-stage relative mx-auto w-full max-w-xl">
-                  <div className="scanner-orbit" aria-hidden="true" />
-                  <div className="scanner-panel relative overflow-hidden rounded-[18px] border border-border bg-background/75 p-4 shadow-2xl backdrop-blur-xl sm:p-6">
+                   <div className="scanner-orbit" aria-hidden="true" />
+                   <div className="scanner-halo" aria-hidden="true" />
+                   <div className="scanner-panel card-3d relative overflow-hidden rounded-[18px] border border-border bg-background/75 p-4 shadow-2xl backdrop-blur-xl sm:p-6">
                     <div className="flex items-center justify-between border-b border-border pb-4">
                       <div className="flex items-center gap-3">
                         <span className="flex size-10 items-center justify-center rounded-xl bg-primary/15 text-primary"><Radar className="size-5" /></span>
