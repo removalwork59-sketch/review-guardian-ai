@@ -781,7 +781,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .flight-link, .flight-link span, .flight-dot, .envelope-flap, .case-note, .envelope-check, .removal-hammer, .removal-review, .removed-label, .removal-burst { animation: none; }
+  .flight-link, .flight-link span, .flight-dot, .flight-path, .envelope-flap, .step-envelope, .case-note, .envelope-check, .removal-hammer, .removal-review, .removed-label, .impact-ring, .impact-spark { animation: none; }
+  .removal-hammer { opacity: 1; transform: rotate(0deg); }
+  .impact-ring, .impact-spark { opacity: 0; }
   .flight-link { left: auto; right: 13%; bottom: 76%; opacity: 1; }
   .envelope-flap { transform: rotateX(172deg); }
   .case-note { transform: translateY(-42px); opacity: 1; }
