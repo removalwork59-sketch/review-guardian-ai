@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Done
+- Complete the existing footer with the provided verified contact details and Facebook link, then recheck public UI controls and finishing without redesigning the interface
 - Finished the current UI without redesigning it: completed the footer with working destinations, clarified disabled planned-platform controls, refined CTA/focus/press states, text wrapping, animation stability, and mobile action alignment; desktop/mobile checks passed without overflow, page errors, or failed responses
 - Fixed the top five Home/Login UI audit blockers without changing the interface: strengthened light-mode readability, replaced unsupported claims, made report statuses explicitly user-recorded, clarified approved-access signup, and added password recovery plus Google sign-in loading feedback
 - Investigated supplied Tests 2–6: all are direct Google review-share links; added safe `share.google` recognition, bounded Google-only redirect expansion, and an immediate honest limitation instead of a long failed lookup or guessed review identity
