@@ -1,5 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import {
+  ScanSearch,
+
   LayoutGrid,
   MapPin,
   Send,
@@ -21,6 +23,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 const NAV = [
   { to: "/dashboard", label: "Reviews", icon: LayoutGrid },
+  { to: "/scans", label: "Scan reports", icon: ScanSearch },
   { to: "/pipeline", label: "Pipeline", icon: ListChecks },
   { to: "/reports", label: "Reports", icon: Send },
   { to: "/locations", label: "Locations", icon: MapPin },
