@@ -356,6 +356,7 @@ function ScansPage() {
   const { data, isPending, error } = useCases();
   const status = useStatusMutation();
   const removeCase = useDeleteCaseMutation();
+  const exportCase = useExportScanMutation();
   const [verdictFilter, setVerdictFilter] = useState<string>("all");
   const [siteFilter, setSiteFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
