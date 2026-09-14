@@ -2,6 +2,8 @@
 
 ## Done
 - Added a public contact section after the review cards with address, phone, email, and social links; verified on desktop and mobile
+- Verified notify.removalwork.online email domain, built the validated contact email form (name/email/subject/message) delivering to removalwork59@gmail.com with rate limiting, and confirmed a real test send was accepted for delivery
+- Added an About section after the review cards with honest company story, mission, and vision copy
 - Restyled the boundary deck as five clearly labelled sample review cards with five-star ratings, a blue upper band, and a compact soft cyan-teal lower band separated from the next section
 - Arranged the five workflow cards as the selected overlapping fan deck across a light-to-dark section boundary, preserving the existing upper section and all original workflow copy
 - Completed the existing footer with the provided verified email, phone, address, postal code, and Facebook link; all contact actions are accessible and the existing design remains unchanged
