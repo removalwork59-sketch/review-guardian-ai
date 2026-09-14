@@ -1,7 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, BadgeCheck, CheckCircle2, Facebook, Instagram, Mail, MapPin, Phone, Scale, ShieldCheck, Sparkles, Star, Youtube } from "lucide-react";
+import { ArrowRight, BadgeCheck, CheckCircle2, Facebook, Instagram, Mail, MapPin, Phone, Scale, Send, ShieldCheck, Sparkles, Star, Youtube } from "lucide-react";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
+
+import { sendContactMessage } from "@/lib/contact.functions";
 
 import analyticsIcon from "@/assets/reference-icons/analytics.png";
 import casesIcon from "@/assets/reference-icons/cases.png";
@@ -37,6 +39,78 @@ const features = [
   { icon: analyticsIcon, title: "Reputation analytics", body: "Rating context, violation mix, negative-review tracking and per-location case status computed from your saved workspace data." },
   { icon: locationsIcon, title: "Multi-location workspaces", body: "One workspace for your business, with per-location attribution for every review and case." },
 ];
+
+function ContactForm() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [status, setStatus] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
+
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (busy) return;
+    setStatus(null);
+    if (name.trim().length < 2 || subject.trim().length < 3 || message.trim().length < 10) {
+      setStatus({ kind: "err", text: "Please fill every field — message needs at least 10 characters." });
+      return;
+    }
+    if (!/^\S+@\S+\.\S+$/.test(email.trim())) {
+      setStatus({ kind: "err", text: "Please enter a valid email address so we can reply." });
+      return;
+    }
+    setBusy(true);
+    try {
+      const result = await sendContactMessage({ data: { name: name.trim(), email: email.trim(), subject: subject.trim(), message: message.trim() } });
+      if (result.sent) {
+        setStatus({ kind: "ok", text: "Message sent. The Removal Work team will reply to your email soon." });
+        setName(""); setEmail(""); setSubject(""); setMessage("");
+      } else if (result.reason === "rate_limited") {
+        setStatus({ kind: "err", text: "Too many messages in a short time. Please try again in a few minutes." });
+      } else {
+        setStatus({ kind: "err", text: "Your message could not be delivered right now. Please email us directly at removalwork59@gmail.com." });
+      }
+    } catch {
+      setStatus({ kind: "err", text: "Your message could not be delivered right now. Please email us directly at removalwork59@gmail.com." });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <form className="reference-contact-form" onSubmit={onSubmit}>
+      <div className="reference-contact-form-head">
+        <h3>Send us a message</h3>
+        <p>Name, subject and your message — it lands directly in our inbox.</p>
+      </div>
+      <div className="reference-contact-form-row">
+        <label>
+          <span>Name</span>
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" maxLength={80} autoComplete="name" />
+        </label>
+        <label>
+          <span>Email</span>
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" maxLength={120} autoComplete="email" />
+        </label>
+      </div>
+      <label>
+        <span>Subject</span>
+        <input value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="What is this about?" maxLength={120} />
+      </label>
+      <label>
+        <span>Message</span>
+        <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Tell us about your review situation…" rows={5} maxLength={2000} />
+      </label>
+      <div className="reference-contact-form-foot">
+        <Button type="submit" disabled={busy} className="reference-gradient-button">
+          {busy ? "Sending…" : "Send message"} <Send className="size-4" />
+        </Button>
+        {status ? <p className={`reference-contact-form-status ${status.kind === "ok" ? "is-ok" : "is-err"}`} role="status" aria-live="polite">{status.text}</p> : null}
+      </div>
+    </form>
+  );
+}
 
 function WalkingClient({ x, delay, leaving = false }: { x: number; delay: number; leaving?: boolean }) {
   return (
@@ -233,6 +307,32 @@ export function ReferenceLanding({
           </ul>
         </div>
 
+        <section id="about" className="reference-about">
+          <div className="reference-about-copy">
+            <h2>About Removal Work</h2>
+            <p>
+              Removal Work started with a simple frustration: honest businesses had no structured way to answer
+              reviews that break platform rules. We built a workspace that reads the real review, checks it against
+              Google's published policies with AI, prepares the evidence, and keeps a truthful record of every case —
+              so decisions stay in the owner's hands.
+            </p>
+          </div>
+          <div className="reference-about-grid">
+            <article className="reference-about-card">
+              <h3>Our mission</h3>
+              <p>Give every business a clear, evidence-first way to investigate policy-violating reviews — with real data, honest verdicts, and no fabricated outcomes.</p>
+            </article>
+            <article className="reference-about-card">
+              <h3>Our vision</h3>
+              <p>A reputation workflow where every report is backed by verified evidence, every status is user-recorded, and trust is earned by accuracy — across every major review platform.</p>
+            </article>
+            <article className="reference-about-card">
+              <h3>How we work</h3>
+              <p>Real Google lookups, adversarial AI policy checks, and durable case tracking. If evidence does not support a report, we say so — we never claim submissions or removals that did not happen.</p>
+            </article>
+          </div>
+        </section>
+
         <section id="contact" className="reference-contact">
           <div className="reference-contact-copy">
             <h2>Contact us</h2>
@@ -260,6 +360,7 @@ export function ReferenceLanding({
               <span className="contact-value">Facebook</span>
             </a>
           </div>
+          <ContactForm />
         </section>
 
         <section id="platforms" className="reference-platforms">

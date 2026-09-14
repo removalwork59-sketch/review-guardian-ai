@@ -2,6 +2,8 @@
 
 ## Done
 - Added a public contact section after the review cards with address, phone, email, and social links; verified on desktop and mobile
+- Verified notify.removalwork.online email domain, built the validated contact email form (name/email/subject/message) delivering to removalwork59@gmail.com with rate limiting, and confirmed a real test send was accepted for delivery
+- Added an About section after the review cards with honest company story, mission, and vision copy
 - Restyled the boundary deck as five clearly labelled sample review cards with five-star ratings, a blue upper band, and a compact soft cyan-teal lower band separated from the next section
 - Arranged the five workflow cards as the selected overlapping fan deck across a light-to-dark section boundary, preserving the existing upper section and all original workflow copy
 - Completed the existing footer with the provided verified email, phone, address, postal code, and Facebook link; all contact actions are accessible and the existing design remains unchanged
@@ -35,7 +37,6 @@
 
 ## Open
 - Add a real client showcase after the review cards using only client names, projects, and public contact details supplied by the user; blocked until verified client data is provided
-- Add a validated contact email form for name, subject, and message that delivers to removalwork59@gmail.com; sender-domain setup must be confirmed first
 - Enable Connect Google by saving the approved Google Business Profile client ID and secret (secure form; user must supply)
 - Sync the user's own Google Business Profile reviews into review records and show them in Reviews with AI analysis and a report button (code ready; needs the approved Google OAuth client saved)
 - Submit one real report from the user's own listing and track its status updates in Reports (needs live consent plus explicit user confirmation before the irreversible submission)
