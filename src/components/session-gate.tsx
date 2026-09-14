@@ -15,10 +15,15 @@ export function SessionGate({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let active = true;
-    void supabase.auth.getUser().then(({ data, error }) => {
+    void supabase.auth.getUser().then(async ({ data, error }) => {
       if (!active) return;
-      if (error || !data.user) void navigate({ to: "/auth", replace: true });
-      else setSignedIn(true);
+      if (error || !data.user) {
+        // Drop a stored session the auth server no longer accepts, so /auth shows the form.
+        await supabase.auth.signOut({ scope: "local" });
+        void navigate({ to: "/auth", replace: true });
+      } else {
+        setSignedIn(true);
+      }
     });
     return () => {
       active = false;

@@ -36,8 +36,14 @@ function AuthPage() {
   const [message, setMessage] = useState<{ tone: "error" | "ok"; text: string } | null>(null);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) void navigate({ to: "/app/reviews" });
+    // Ask the auth server, not local storage: a session revoked elsewhere must not bounce the
+    // visitor to the workspace and straight back to this page.
+    void supabase.auth.getUser().then(async ({ data, error }) => {
+      if (data.user && !error) {
+        void navigate({ to: "/app/reviews" });
+      } else {
+        await supabase.auth.signOut({ scope: "local" });
+      }
     });
   }, [navigate]);
 
