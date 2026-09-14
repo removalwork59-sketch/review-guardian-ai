@@ -34,6 +34,14 @@ describe("parseGoogleReference", () => {
     ).toBeUndefined();
   });
 
+  it("reads a place id carried in the q parameter", () => {
+    const reference = parseGoogleReference(
+      "https://www.google.com/maps/place/?q=place_id:ChIJj61dQgK6j4AR4GeTYWZsKWw",
+    );
+    expect(reference.placeId).toBe("ChIJj61dQgK6j4AR4GeTYWZsKWw");
+    expect(reference.searchText).toBeUndefined();
+  });
+
   it("rejects links that are not Google", () => {
     expect(() => parseGoogleReference("https://evil.example/maps/place/Cafe")).toThrow(
       FriendlyError,

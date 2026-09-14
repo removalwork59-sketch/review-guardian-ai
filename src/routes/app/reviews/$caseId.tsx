@@ -108,7 +108,11 @@ function CaseDetailPage() {
       {detail.isPending ? (
         <LoadingState label="Loading the review…" />
       ) : detail.error ? (
-        <ErrorState body="We couldn't load this review." onRetry={() => void detail.refetch()} />
+        <ErrorState
+          body="We couldn't load this review."
+          error={detail.error}
+          onRetry={() => void detail.refetch()}
+        />
       ) : !detail.data ? (
         <ErrorState
           title="Review not found"

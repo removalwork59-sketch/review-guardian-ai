@@ -63,6 +63,7 @@ function AdminSystemPage() {
         ) : (
           <ErrorState
             body="The system overview didn't load."
+            error={overview.error}
             onRetry={() => void overview.refetch()}
           />
         )

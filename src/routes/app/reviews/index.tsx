@@ -134,7 +134,11 @@ function ReviewsPage() {
       {cases.isPending ? (
         <LoadingState label="Loading your reviews…" />
       ) : cases.error ? (
-        <ErrorState body="We couldn't load your reviews." onRetry={() => void cases.refetch()} />
+        <ErrorState
+          body="We couldn't load your reviews."
+          error={cases.error}
+          onRetry={() => void cases.refetch()}
+        />
       ) : shown.length === 0 ? (
         <EmptyState
           title={all.length === 0 ? "No reviews checked yet" : "Nothing in this filter"}

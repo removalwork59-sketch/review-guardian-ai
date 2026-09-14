@@ -41,6 +41,7 @@ function LocationsPage() {
       ) : locations.error ? (
         <ErrorState
           body="We couldn't load your locations."
+          error={locations.error}
           onRetry={() => void locations.refetch()}
         />
       ) : rows.length === 0 ? (

@@ -37,7 +37,7 @@ function AdminAiPage() {
         isForbidden(runs.error) ? (
           <PermissionDenied />
         ) : (
-          <ErrorState onRetry={() => void runs.refetch()} />
+          <ErrorState error={runs.error} onRetry={() => void runs.refetch()} />
         )
       ) : !runs.data?.length ? (
         <EmptyState title="No AI runs yet" body="Runs appear here once reviews are analyzed." />

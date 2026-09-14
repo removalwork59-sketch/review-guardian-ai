@@ -54,6 +54,7 @@ function SettingsPage() {
           ) : workspace.error || !workspace.data ? (
             <ErrorState
               body="We couldn't load your workspace."
+              error={workspace.error}
               onRetry={() => void workspace.refetch()}
             />
           ) : (

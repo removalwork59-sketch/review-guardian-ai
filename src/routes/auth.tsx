@@ -5,6 +5,7 @@ import { ArrowRight, Bot, CheckCircle2, FileCheck2, ScanSearch, Sparkles } from 
 import { Wordmark } from "@/components/brand";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { isSchemaMissing, MIGRATION_BLOCKER } from "@/lib/errors";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -74,7 +75,9 @@ function AuthPage() {
     if (profileError) {
       return setMessage({
         tone: "error",
-        text: "Your account is secure, but the workspace could not finish loading. Please try again.",
+        text: isSchemaMissing(profileError)
+          ? `You're signed in, but the workspace can't open: ${MIGRATION_BLOCKER}`
+          : `You're signed in, but your profile couldn't be prepared (database error ${profileError.code ?? "unknown"}).`,
       });
     }
     void navigate({ to: "/app/reviews" });

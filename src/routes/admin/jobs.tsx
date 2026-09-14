@@ -61,7 +61,7 @@ function AdminJobsPage() {
         isForbidden(jobs.error) ? (
           <PermissionDenied />
         ) : (
-          <ErrorState onRetry={() => void jobs.refetch()} />
+          <ErrorState error={jobs.error} onRetry={() => void jobs.refetch()} />
         )
       ) : !jobs.data?.length ? (
         <EmptyState title="No jobs" body="No review jobs match this filter." />

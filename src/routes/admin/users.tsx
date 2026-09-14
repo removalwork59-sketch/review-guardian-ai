@@ -43,6 +43,7 @@ function AdminUsersPage() {
           <PermissionDenied />
         ) : (
           <ErrorState
+            error={error}
             onRetry={() => {
               void users.refetch();
               void workspaces.refetch();

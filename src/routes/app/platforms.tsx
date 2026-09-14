@@ -87,6 +87,7 @@ function PlatformsPage() {
       ) : connection.error || !data ? (
         <ErrorState
           body="We couldn't check your Google connection."
+          error={connection.error}
           onRetry={() => void connection.refetch()}
         />
       ) : (

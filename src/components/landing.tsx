@@ -118,8 +118,9 @@ export function PromiseSection() {
               The platform still decides
             </h3>
             <p className="mt-3 leading-relaxed text-muted-foreground">
-              We never touch your business profile and never claim a review was removed. You report
-              it through the official channel and track the real outcome here.
+              We only read your Business Profile if you connect it through Google's own consent
+              screen, and we never claim a review was removed. You report it through the official
+              channel and track the real outcome here.
             </p>
           </div>
         </div>
@@ -355,7 +356,7 @@ export function DashboardSection() {
               {
                 icon: Radar,
                 title: "Bulk scanning",
-                body: "Paste up to 25 links and watch each one move through queued, scanning and done.",
+                body: "Paste up to 25 links; each one is scanned independently and you can follow every job.",
               },
               {
                 icon: ClipboardList,
@@ -365,7 +366,7 @@ export function DashboardSection() {
               {
                 icon: TrendingUp,
                 title: "Honest status",
-                body: "New, reported, pending, removed, rejected or ignored. Nothing is marked resolved for you.",
+                body: "Draft, ready, reported, with Google, removed or kept. Nothing is marked removed until Google decides.",
               },
             ].map((row) => (
               <div key={row.title} className="flex items-start gap-3 px-5 py-4">
@@ -613,8 +614,9 @@ export function SiteFooter() {
         <div>
           <p className="text-sm font-semibold text-ink">Good to know</p>
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-            We never request access to your business profile and never claim a review was removed.
-            Reporting and removal decisions belong to the platform.
+            We only access your Business Profile if you connect it with Google's consent, and we
+            never claim a review was removed. Reporting and removal decisions belong to the
+            platform.
           </p>
         </div>
       </div>

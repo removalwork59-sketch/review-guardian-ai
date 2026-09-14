@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { dbError } from "./errors";
 import { z } from "zod";
 
 import { assertWorkspaceRole, requireWorkspace } from "./workspace-middleware";
@@ -24,7 +25,7 @@ export const getGoogleBusinessConnection = createServerFn({ method: "POST" })
       .select("google_account_email,status,last_synced_at,last_error")
       .eq("workspace_id", context.workspaceId)
       .maybeSingle();
-    if (error) throw error;
+    if (error) throw dbError(error);
     return {
       configured: isGoogleBusinessConfigured(),
       connected: data?.status === "connected",
@@ -60,7 +61,7 @@ export const startGoogleBusinessConnection = createServerFn({ method: "POST" })
       redirect_origin: origin,
       expires_at: new Date(Date.now() + 10 * 60_000).toISOString(),
     });
-    if (error) throw error;
+    if (error) throw dbError(error);
 
     const { writeAudit } = await import("./audit.server");
     await writeAudit({
@@ -91,7 +92,7 @@ export const disconnectGoogleBusiness = createServerFn({ method: "POST" })
       .from("google_business_connections")
       .delete()
       .eq("workspace_id", context.workspaceId);
-    if (error) throw error;
+    if (error) throw dbError(error);
 
     const { forgetOwnedLocations } = await import("./google-business-api.server");
     forgetOwnedLocations(context.workspaceId);

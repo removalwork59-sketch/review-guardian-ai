@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { DECISION_LABELS, VERDICT_LABELS, VERDICT_TONE } from "@/lib/case-types";
 import type { CaseRecord } from "@/lib/case-types";
+import { errorMessage } from "@/lib/errors";
 import { REPORT_STATUS_LABELS, REPORT_STATUS_TONE } from "@/lib/state-machines";
 import type { ReportStatus } from "@/lib/state-machines";
 
@@ -124,20 +125,29 @@ export function LoadingState({ label = "Loading…" }: { label?: string }) {
   );
 }
 
+/** Error state that always shows the real reason the backend gave, not just a generic line. */
 export function ErrorState({
   title = "Something didn't load",
   body = "Please try again.",
+  error,
   onRetry,
 }: {
   title?: string;
   body?: string;
+  error?: unknown;
   onRetry?: () => void;
 }) {
+  const reason = errorMessage(error);
   return (
     <div className="surface app-empty-state text-center" role="alert">
       <AlertTriangle className="mx-auto size-6 text-warning" aria-hidden="true" />
       <p className="mt-2 font-display text-lg font-semibold text-ink">{title}</p>
       <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">{body}</p>
+      {reason ? (
+        <p className="mx-auto mt-3 max-w-xl rounded-lg border border-border bg-muted/40 px-3 py-2 text-left text-sm text-foreground">
+          {reason}
+        </p>
+      ) : null}
       {onRetry ? (
         <Button type="button" variant="outline" className="mt-5" onClick={onRetry}>
           <RefreshCw className="size-4" aria-hidden="true" />

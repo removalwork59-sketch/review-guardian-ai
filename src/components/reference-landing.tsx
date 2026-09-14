@@ -47,22 +47,22 @@ const features = [
   {
     icon: reviewsIcon,
     title: "Review operations at scale",
-    body: "Import or scan reviews, filter by rating, category, priority and status, and batch-triage the queue without losing a single record.",
+    body: "Scan one link or up to 25 at once. Each review is found on Google, analysed and kept with its decision, so nothing gets lost.",
   },
   {
     icon: casesIcon,
     title: "Removal case management",
-    body: "Move cases from New through Reviewing, Evidence ready, Reported, Appeal and Resolved, with a full audit trail on every action.",
+    body: "Follow each report from draft to reported, Google's review, the decision and any appeal. Every status change is recorded.",
   },
   {
     icon: reportsIcon,
     title: "Evidence packages",
-    body: "Build a professional, submission-ready summary containing the review, business context, policy category and AI analysis.",
+    body: "Report text with quotes verified against the review itself, ready to paste into Google's own report form.",
   },
   {
     icon: analyticsIcon,
-    title: "Reputation analytics",
-    body: "Rating context, violation mix, negative-review tracking and per-location case status computed from live data.",
+    title: "Location overview",
+    body: "Each business's Google rating plus the reviews you've checked, reported and had removed, computed from your real cases.",
   },
   {
     icon: locationsIcon,
@@ -358,18 +358,7 @@ export function ReferenceLanding({
               <div>
                 <b>Bright Smile Dental</b>
                 <p>
-                  <span>★★★★★</span>{" "}
-                  <strong className="proof-rating">
-                    <i>3.9</i>
-                    <i>4.6</i>
-                    <i>5.0</i>
-                  </strong>{" "}
-                  <span className="proof-count">
-                    <i>29</i>
-                    <i>28</i>
-                    <i>27</i>
-                  </span>{" "}
-                  Google reviews
+                  <span>★★★★★</span> <strong>3.9</strong> · <span>29</span> Google reviews
                 </p>
               </div>
             </div>
@@ -420,74 +409,15 @@ export function ReferenceLanding({
               </article>
             </div>
             <div className="reference-proof-outcome">
-              <div className="big-stars">★★★★★</div>
               <h3>
-                <CheckCircle2 /> Reputation Restored.
+                <CheckCircle2 /> 2 reviews worth reporting
               </h3>
               <p className="reference-proof-meta">
-                2 policy issues detected · <span>★</span> 5.0 rating context
+                Illustration only · genuine complaints are left alone · Google decides removals
               </p>
             </div>
           </div>
         </section>
-
-        <div className="reference-press" aria-hidden="true">
-          <div className="reference-press-track">
-            {[
-              "Forbes",
-              "Business Insider",
-              "CEO",
-              "Inc.",
-              "Forbes",
-              "Business Insider",
-              "CEO",
-              "Inc.",
-            ].map((name, index) => (
-              <span
-                key={`${name}-${index}`}
-                className={`press-${name.toLowerCase().split(" ")[0]}`}
-              >
-                {name}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        <div className="reference-tilt">
-          {[
-            {
-              stars: "★★★★★",
-              text: '"Cleared the two fake reviews that were costing us bookings."',
-              who: "Multi-location dental group",
-            },
-            {
-              stars: "★★★★★",
-              text: '"A fake 1-star from a competitor was flagged with real evidence."',
-              who: "Home services brand",
-            },
-            {
-              stars: "★★★★★",
-              text: '"No retainer, no guesswork — we see every case status."',
-              who: "Franchise operator",
-            },
-            {
-              stars: "★★★★★",
-              text: '"The portal shows exactly what Google decided, good or bad."',
-              who: "Hospitality group",
-            },
-            {
-              stars: "★★★★★",
-              text: '"Honest about what can and can\'t be removed."',
-              who: "Medical practice",
-            },
-          ].map((card) => (
-            <article key={card.who}>
-              <div className="t-stars">{card.stars}</div>
-              <p className="mt-2">{card.text}</p>
-              <b>{card.who}</b>
-            </article>
-          ))}
-        </div>
 
         <ul className="reference-checks reference-checks-row">
           {[
@@ -694,7 +624,11 @@ export function ReferenceLanding({
           </div>
         </section>
 
-        <section className="review-impression" aria-label="Google rating impact comparison">
+        <section
+          className="review-impression"
+          aria-label="Illustration: how a rating gap looks to customers"
+        >
+          <span className="proof-demo-label">Illustration</span>
           <div className="rating-showdown">
             <article className="rating-business rating-competitor">
               <span className="rating-owner">Your Competitor</span>
@@ -746,7 +680,8 @@ export function ReferenceLanding({
               Audit Report
             </h2>
             <p className="audit-finale-lede">
-              See exactly which reviews show clear policy issues in 60 seconds. No obligations.
+              See which reviews show real policy issues, with the evidence quoted from the review.
+              No obligations.
             </p>
             <div className="audit-finale-actions">
               <button type="button" onClick={openScanner} className="audit-main-action">

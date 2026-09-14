@@ -27,7 +27,7 @@ function AdminAuditPage() {
         isForbidden(logs.error) ? (
           <PermissionDenied />
         ) : (
-          <ErrorState onRetry={() => void logs.refetch()} />
+          <ErrorState error={logs.error} onRetry={() => void logs.refetch()} />
         )
       ) : !logs.data?.length ? (
         <EmptyState

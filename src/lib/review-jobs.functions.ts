@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { dbError, isSchemaMissing, MIGRATION_BLOCKER } from "./errors";
 import { z } from "zod";
 
 import type { Tables } from "@/integrations/supabase/types";
@@ -60,6 +61,7 @@ function toView(row: Tables<"review_jobs">, events: JobEvent[] = []): ReviewJobV
 }
 
 function failure(error: unknown): { ok: false; message: string; hint: string } {
+  if (isSchemaMissing(error)) return { ok: false, message: MIGRATION_BLOCKER, hint: "" };
   if (error instanceof FriendlyError)
     return { ok: false, message: error.message, hint: error.hint };
   if (error instanceof ForbiddenError) return { ok: false, message: error.message, hint: "" };
@@ -87,7 +89,7 @@ async function readJob(supabase: unknown, workspaceId: string, jobId: string) {
     .eq("id", jobId)
     .eq("workspace_id", workspaceId)
     .maybeSingle();
-  if (error) throw error;
+  if (error) throw dbError(error);
   if (!job)
     throw new FriendlyError("That scan couldn't be found.", "It may belong to another workspace.");
   const { data: events } = await client
@@ -172,7 +174,7 @@ export const listRecentReviewJobs = createServerFn({ method: "POST" })
       .eq("workspace_id", context.workspaceId)
       .order("created_at", { ascending: false })
       .limit(20);
-    if (error) throw error;
+    if (error) throw dbError(error);
     return (data ?? []).map((row) => toView(row));
   });
 
@@ -193,7 +195,7 @@ export const selectReviewCandidate = createServerFn({ method: "POST" })
         .eq("id", data.jobId)
         .eq("workspace_id", context.workspaceId)
         .single();
-      if (error) throw error;
+      if (error) throw dbError(error);
       const { selectCandidate } = await import("./review-pipeline.server");
       const updated = await selectCandidate(row, data.reviewId);
       kick(updated.id);
@@ -227,7 +229,7 @@ export const retryReviewJob = createServerFn({ method: "POST" })
         .eq("status", "failed")
         .select("*")
         .single();
-      if (error) throw error;
+      if (error) throw dbError(error);
       const { writeAudit } = await import("./audit.server");
       await writeAudit({
         workspaceId: context.workspaceId,
@@ -263,7 +265,7 @@ export const cancelReviewJob = createServerFn({ method: "POST" })
         .eq("workspace_id", context.workspaceId)
         .select("*")
         .single();
-      if (error) throw error;
+      if (error) throw dbError(error);
       const { writeAudit } = await import("./audit.server");
       await writeAudit({
         workspaceId: context.workspaceId,

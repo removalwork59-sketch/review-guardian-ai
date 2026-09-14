@@ -1,6 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
+import { dbError } from "./errors";
+
 import { parseUrlList } from "./case-types";
 import { FriendlyError } from "./google.server";
 import type { ReviewJobStatus } from "./state-machines";
@@ -83,7 +85,7 @@ async function readBulkJob(
     .eq("id", bulkJobId)
     .eq("workspace_id", workspaceId)
     .maybeSingle();
-  if (error) throw error;
+  if (error) throw dbError(error);
   if (!job) throw new FriendlyError("That bulk scan couldn't be found.");
 
   const { data: rows, error: itemError } = await client
@@ -93,7 +95,7 @@ async function readBulkJob(
     )
     .eq("bulk_job_id", bulkJobId)
     .order("position", { ascending: true });
-  if (itemError) throw itemError;
+  if (itemError) throw dbError(itemError);
 
   const items: BulkJobItem[] = (rows ?? []).map((row) => ({
     id: row.id,
@@ -164,7 +166,7 @@ export const createBulkJob = createServerFn({ method: "POST" })
       })
       .select("id")
       .single();
-    if (error) throw error;
+    if (error) throw dbError(error);
 
     const jobIds: string[] = [];
     for (const [position, [canonicalUrl, sourceUrl]] of unique.entries()) {
@@ -185,7 +187,7 @@ export const createBulkJob = createServerFn({ method: "POST" })
         canonical_url: canonicalUrl,
         review_job_id: job.id,
       });
-      if (itemError) throw itemError;
+      if (itemError) throw dbError(itemError);
     }
 
     const { writeAudit } = await import("./audit.server");

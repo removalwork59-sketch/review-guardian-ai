@@ -1,6 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
+import { dbError } from "./errors";
+
 import type { Json } from "@/integrations/supabase/types";
 import { requireSuperadmin } from "./workspace-middleware";
 
@@ -66,7 +68,7 @@ export const listAdminJobs = createServerFn({ method: "POST" })
       .limit(data.limit);
     if (data.status) query = query.eq("status", data.status);
     const { data: rows, error } = await query;
-    if (error) throw error;
+    if (error) throw dbError(error);
     return rows ?? [];
   });
 
@@ -86,7 +88,7 @@ export const retryAdminJob = createServerFn({ method: "POST" })
       .eq("status", "failed")
       .select("id,workspace_id,attempt_count,max_attempts")
       .maybeSingle();
-    if (error) throw error;
+    if (error) throw dbError(error);
     if (!row) throw new Error("Only failed jobs can be retried.");
     if (row.attempt_count >= row.max_attempts) {
       await supabaseAdmin
@@ -119,7 +121,7 @@ export const listAdminWorkspaces = createServerFn({ method: "POST" })
       )
       .order("created_at", { ascending: false })
       .limit(200);
-    if (error) throw error;
+    if (error) throw dbError(error);
     return data ?? [];
   });
 
@@ -137,7 +139,7 @@ export const listAdminUsers = createServerFn({ method: "POST" })
         .from("workspace_members")
         .select("user_id,role,workspace_id,workspaces(name)"),
     ]);
-    if (error) throw error;
+    if (error) throw dbError(error);
     return (profiles ?? []).map((profile) => ({
       id: profile.id,
       email: profile.email,
@@ -165,7 +167,7 @@ export const listAdminAuditLogs = createServerFn({ method: "POST" })
       .select("id,action,entity_type,entity_id,actor_id,workspace_id,metadata,created_at")
       .order("created_at", { ascending: false })
       .limit(data.limit);
-    if (error) throw error;
+    if (error) throw dbError(error);
     return rows ?? [];
   });
 
@@ -180,6 +182,6 @@ export const listAdminAiRuns = createServerFn({ method: "POST" })
       )
       .order("created_at", { ascending: false })
       .limit(data.limit);
-    if (error) throw error;
+    if (error) throw dbError(error);
     return rows ?? [];
   });

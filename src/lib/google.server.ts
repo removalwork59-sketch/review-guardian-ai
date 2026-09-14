@@ -269,9 +269,12 @@ export function parseGoogleReference(expandedUrl: string): GoogleReference {
   }
 
   const decoded = decodeURIComponent(expandedUrl);
-  const explicitId = url.searchParams.get("query_place_id") ?? url.searchParams.get("place_id");
-  const placeId = explicitId && !isCidHex(explicitId) ? explicitId : undefined;
   const query = url.searchParams.get("q") ?? url.searchParams.get("query") ?? undefined;
+  // Some Maps links carry the place id inside the query: /maps/place/?q=place_id:ChIJ…
+  const queryPlaceId = query?.match(/^place_id:([A-Za-z0-9_-]+)$/)?.[1];
+  const explicitId =
+    url.searchParams.get("query_place_id") ?? url.searchParams.get("place_id") ?? queryPlaceId;
+  const placeId = explicitId && !isCidHex(explicitId) ? explicitId : undefined;
 
   let placeName: string | undefined;
   const placeMatch = url.pathname.match(/\/maps\/place\/([^/]+)/);
@@ -294,7 +297,8 @@ export function parseGoogleReference(expandedUrl: string): GoogleReference {
   // Review share links carry the review id as a "!1sCh…" token (base64 of the review key).
   const reviewId = decoded.match(/!1s(Ch[A-Za-z0-9_-]{16,})/)?.[1];
 
-  const searchText = placeName ?? (query && !/^https?:\/\//.test(query) ? query : undefined);
+  const searchText =
+    placeName ?? (query && !queryPlaceId && !/^https?:\/\//.test(query) ? query : undefined);
   if (!placeId && !searchText && !cid) {
     throw new FriendlyError(
       "We couldn't tell which business this link points to.",

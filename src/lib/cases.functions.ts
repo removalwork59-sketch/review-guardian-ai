@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { dbError, isSchemaMissing, MIGRATION_BLOCKER } from "./errors";
 import { z } from "zod";
 
 import type { ReviewAnalysis } from "./analysis-types";
@@ -20,6 +21,7 @@ import { assertWorkspaceRole, ForbiddenError, requireWorkspace } from "./workspa
 export type ActionResult = { ok: true } | { ok: false; message: string; hint: string };
 
 function actionFailure(error: unknown): ActionResult {
+  if (isSchemaMissing(error)) return { ok: false, message: MIGRATION_BLOCKER, hint: "" };
   if (error instanceof FriendlyError)
     return { ok: false, message: error.message, hint: error.hint };
   if (error instanceof ForbiddenError) return { ok: false, message: error.message, hint: "" };
@@ -129,7 +131,7 @@ export const listCases = createServerFn({ method: "POST" })
       .eq("workspace_id", context.workspaceId)
       .order("created_at", { ascending: false })
       .limit(300);
-    if (error) throw error;
+    if (error) throw dbError(error);
     return ((data ?? []) as unknown as CaseRow[]).map(toCase);
   });
 
@@ -147,8 +149,8 @@ export const listLocations = createServerFn({ method: "POST" })
         .select("location_id,created_at,reports(status,version)")
         .eq("workspace_id", context.workspaceId),
     ]);
-    if (error) throw error;
-    if (caseError) throw caseError;
+    if (error) throw dbError(error);
+    if (caseError) throw dbError(caseError);
 
     const rows = (cases ?? []) as unknown as Array<{
       location_id: string;
@@ -192,7 +194,7 @@ export const getCaseDetail = createServerFn({ method: "POST" })
       .eq("id", data.caseId)
       .eq("workspace_id", context.workspaceId)
       .maybeSingle();
-    if (error) throw error;
+    if (error) throw dbError(error);
     if (!row) return null;
 
     const [evidence, reports, runs] = await Promise.all([
@@ -214,9 +216,9 @@ export const getCaseDetail = createServerFn({ method: "POST" })
         .eq("case_id", data.caseId)
         .order("created_at", { ascending: true }),
     ]);
-    if (evidence.error) throw evidence.error;
-    if (reports.error) throw reports.error;
-    if (runs.error) throw runs.error;
+    if (evidence.error) throw dbError(evidence.error);
+    if (reports.error) throw dbError(reports.error);
+    if (runs.error) throw dbError(runs.error);
 
     const reportIds = (reports.data ?? []).map((report) => report.id);
     const { data: events, error: eventsError } = reportIds.length
@@ -226,7 +228,7 @@ export const getCaseDetail = createServerFn({ method: "POST" })
           .in("report_id", reportIds)
           .order("created_at", { ascending: true })
       : { data: [], error: null };
-    if (eventsError) throw eventsError;
+    if (eventsError) throw dbError(eventsError);
 
     return {
       ...toCase(row as unknown as CaseRow),
@@ -292,7 +294,7 @@ export const transitionReport = createServerFn({ method: "POST" })
         .eq("id", data.reportId)
         .eq("workspace_id", context.workspaceId)
         .maybeSingle();
-      if (error) throw error;
+      if (error) throw dbError(error);
       if (!current) throw new FriendlyError("That report couldn't be found.");
 
       const from = current.status as ReportStatus;
@@ -324,7 +326,7 @@ export const transitionReport = createServerFn({ method: "POST" })
         .eq("status", from)
         .select("id")
         .maybeSingle();
-      if (updateError) throw updateError;
+      if (updateError) throw dbError(updateError);
       if (!updated)
         throw new FriendlyError("This report changed in the meantime.", "Refresh and try again.");
 
@@ -355,7 +357,7 @@ export const createReportForCase = createServerFn({ method: "POST" })
         .eq("id", data.caseId)
         .eq("workspace_id", context.workspaceId)
         .maybeSingle();
-      if (error) throw error;
+      if (error) throw dbError(error);
       if (!caseRow) throw new FriendlyError("That review couldn't be found.");
       if (caseRow.decision === "not_reportable") {
         throw new FriendlyError(
@@ -376,7 +378,7 @@ export const createReportForCase = createServerFn({ method: "POST" })
         created_by: context.userId,
         updated_by: context.userId,
       });
-      if (insertError) throw insertError;
+      if (insertError) throw dbError(insertError);
       return { ok: true };
     } catch (error) {
       return actionFailure(error);
@@ -399,7 +401,7 @@ export const setCaseDismissed = createServerFn({ method: "POST" })
         .eq("workspace_id", context.workspaceId)
         .select("id")
         .maybeSingle();
-      if (error) throw error;
+      if (error) throw dbError(error);
       if (!updated) throw new FriendlyError("That review couldn't be found.");
       const { writeAudit } = await import("./audit.server");
       await writeAudit({

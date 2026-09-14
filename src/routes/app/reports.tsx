@@ -42,7 +42,11 @@ function ReportsPage() {
       {cases.isPending ? (
         <LoadingState label="Loading reports…" />
       ) : cases.error ? (
-        <ErrorState body="We couldn't load your reports." onRetry={() => void cases.refetch()} />
+        <ErrorState
+          body="We couldn't load your reports."
+          error={cases.error}
+          onRetry={() => void cases.refetch()}
+        />
       ) : (
         <>
           <dl className="app-stats-grid mb-6">

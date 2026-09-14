@@ -1,6 +1,7 @@
 import { createMiddleware } from "@tanstack/react-start";
 
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { dbError } from "./errors";
 
 export type WorkspaceRole = "owner" | "admin" | "member" | "viewer";
 
@@ -34,7 +35,9 @@ export const requireWorkspace = createMiddleware({ type: "function" })
         error?.code ?? "",
         error?.message ?? "",
       );
-      throw new Error("Your workspace could not be loaded. Please try again.");
+      throw error
+        ? dbError(error)
+        : new Error("The database did not return a workspace for this account.");
     }
 
     const { data: membership, error: membershipError } = await context.supabase
