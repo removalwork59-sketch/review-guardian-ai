@@ -8,6 +8,10 @@ export const Route = createFileRoute("/api/public/google/callback")({
         const state = requestUrl.searchParams.get("state");
         const code = requestUrl.searchParams.get("code");
         const oauthError = requestUrl.searchParams.get("error");
+        if (state?.startsWith("login.")) {
+          const { finishGoogleLogin } = await import("@/lib/google-login.server");
+          return finishGoogleLogin(request);
+        }
         if (!state || !code || oauthError) {
           return new Response("Google authorization was cancelled or invalid.", { status: 400 });
         }

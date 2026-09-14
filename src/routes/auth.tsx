@@ -36,6 +36,41 @@ function AuthPage() {
   const [message, setMessage] = useState<{ tone: "error" | "ok"; text: string } | null>(null);
 
   useEffect(() => {
+    // Google sign-in returns here with the Supabase session in the URL fragment.
+    const fragment = new URLSearchParams(window.location.hash.slice(1));
+    const accessToken = fragment.get("access_token");
+    const refreshToken = fragment.get("refresh_token");
+    if (accessToken && refreshToken) {
+      window.history.replaceState(null, "", window.location.pathname);
+      void supabase.auth
+        .setSession({ access_token: accessToken, refresh_token: refreshToken })
+        .then(async ({ error }) => {
+          if (error) {
+            setMessage({
+              tone: "error",
+              text: "Google sign-in didn't complete. Please try again.",
+            });
+            return;
+          }
+          await supabase.rpc("ensure_my_profile");
+          void navigate({ to: "/app/reviews" });
+        });
+      return;
+    }
+    const googleResult = new URLSearchParams(window.location.search).get("google");
+    if (googleResult === "error") {
+      const reason = new URLSearchParams(window.location.search).get("reason");
+      setMessage({
+        tone: "error",
+        text:
+          reason === "cancelled"
+            ? "Google sign-in was cancelled."
+            : reason === "account"
+              ? "Google confirmed your account, but sign-in couldn't be completed. Please try again or use email."
+              : "Google sign-in didn't complete. Please try again.",
+      });
+    }
+
     // Ask the auth server, not local storage: a session revoked elsewhere must not bounce the
     // visitor to the workspace and straight back to this page.
     void supabase.auth.getUser().then(async ({ data, error }) => {
@@ -91,13 +126,8 @@ function AuthPage() {
 
   async function handleGoogle() {
     setMessage(null);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: `${window.location.origin}/app/reviews` },
-    });
-    if (error) {
-      setMessage({ tone: "error", text: "Google sign-in didn't complete. Please try again." });
-    }
+    // Server-side flow through the app's registered Google callback (see google-login.server.ts).
+    window.location.assign("/api/public/google/login");
   }
 
   return (

@@ -37,6 +37,7 @@ import { Route as AppReviewsIndexRouteImport } from './routes/app/reviews/index'
 import { Route as AppReviewsCaseIdRouteImport } from './routes/app/reviews/$caseId'
 import { Route as AppReviewsNewRouteImport } from './routes/app/reviews/new'
 import { Route as ApiPublicGoogleCallbackRouteImport } from './routes/api/public/google/callback'
+import { Route as ApiPublicGoogleLoginRouteImport } from './routes/api/public/google/login'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -177,6 +178,11 @@ const ApiPublicGoogleCallbackRoute = ApiPublicGoogleCallbackRouteImport.update({
   path: '/api/public/google/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicGoogleLoginRoute = ApiPublicGoogleLoginRouteImport.update({
+  id: '/api/public/google/login',
+  path: '/api/public/google/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -206,6 +212,7 @@ export interface FileRoutesByFullPath {
   '/app/reviews/new': typeof AppReviewsNewRoute
   '/app/reviews/': typeof AppReviewsIndexRoute
   '/api/public/google/callback': typeof ApiPublicGoogleCallbackRoute
+  '/api/public/google/login': typeof ApiPublicGoogleLoginRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -233,6 +240,7 @@ export interface FileRoutesByTo {
   '/app/reviews/new': typeof AppReviewsNewRoute
   '/app/reviews': typeof AppReviewsIndexRoute
   '/api/public/google/callback': typeof ApiPublicGoogleCallbackRoute
+  '/api/public/google/login': typeof ApiPublicGoogleLoginRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -264,6 +272,7 @@ export interface FileRoutesById {
   '/app/reviews/new': typeof AppReviewsNewRoute
   '/app/reviews/': typeof AppReviewsIndexRoute
   '/api/public/google/callback': typeof ApiPublicGoogleCallbackRoute
+  '/api/public/google/login': typeof ApiPublicGoogleLoginRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -295,6 +304,7 @@ export interface FileRouteTypes {
     | '/app/reviews/new'
     | '/app/reviews/'
     | '/api/public/google/callback'
+    | '/api/public/google/login'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -322,6 +332,7 @@ export interface FileRouteTypes {
     | '/app/reviews/new'
     | '/app/reviews'
     | '/api/public/google/callback'
+    | '/api/public/google/login'
   id:
     | '__root__'
     | '/'
@@ -352,6 +363,7 @@ export interface FileRouteTypes {
     | '/app/reviews/new'
     | '/app/reviews/'
     | '/api/public/google/callback'
+    | '/api/public/google/login'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -365,6 +377,7 @@ export interface RootRouteChildren {
   ApiPublicHealthRoute: typeof ApiPublicHealthRoute
   ApiPublicVersionRoute: typeof ApiPublicVersionRoute
   ApiPublicGoogleCallbackRoute: typeof ApiPublicGoogleCallbackRoute
+  ApiPublicGoogleLoginRoute: typeof ApiPublicGoogleLoginRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -565,6 +578,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicGoogleCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/google/login': {
+      id: '/api/public/google/login'
+      path: '/api/public/google/login'
+      fullPath: '/api/public/google/login'
+      preLoaderRoute: typeof ApiPublicGoogleLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -644,6 +664,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHealthRoute: ApiPublicHealthRoute,
   ApiPublicVersionRoute: ApiPublicVersionRoute,
   ApiPublicGoogleCallbackRoute: ApiPublicGoogleCallbackRoute,
+  ApiPublicGoogleLoginRoute: ApiPublicGoogleLoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
