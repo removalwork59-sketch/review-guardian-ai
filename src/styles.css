@@ -2399,7 +2399,8 @@ body {
 .app-sidebar-backdrop { position: fixed; inset: 0; z-index: 45; background: rgb(0 0 0 / .5); }
 @keyframes drawer-in { from { transform: translateX(-100%); } to { transform: translateX(0); } }
 
-.app-main { padding: 2rem clamp(1rem, 3vw, 2.5rem) 3rem; max-width: 1180px; width: 100%; }
+.app-main { padding: 2rem clamp(1rem, 3vw, 2.5rem) 3rem; max-width: 1180px; width: 100%; min-width: 0; }
+.app-layout > * { min-width: 0; }
 
 @media (max-width: 1023.98px) {
   .app-layout { grid-template-columns: 1fr; }
@@ -2507,4 +2508,18 @@ body {
     inset 0 2px 5px oklch(0 0 0 / .3),
     0 0 0 3px color-mix(in oklab, var(--brand-cyan) 13%, transparent),
     0 0 28px -10px color-mix(in oklab, var(--brand-cyan) 58%, transparent);
+}
+
+/* Mobile-friendly workspace filters and data cards. */
+@media (max-width: 640px) {
+  .app-filter-row { gap: .5rem; }
+  .app-filter-row > select,
+  .app-filter-row > .app-input,
+  .app-filter-row > .app-select { width: 100%; min-width: 0; flex: 1 1 100%; }
+  .app-filter-row > button { flex: 1 1 auto; }
+  .app-data-card select,
+  .app-data-card .app-input { width: 100%; min-width: 0; }
+  .app-data-card footer > * { flex: 1 1 100%; justify-content: center; }
+  .app-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .app-data-card dl { grid-template-columns: 1fr; }
 }

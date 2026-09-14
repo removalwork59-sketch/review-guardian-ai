@@ -71,6 +71,20 @@
       "when": 1789362516298,
       "tag": "0009_scan_exports_case_fk",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1789369475588,
+      "tag": "0010_enable_realtime_dashboard_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1789369593666,
+      "tag": "0011_public_case_status_optin",
+      "breakpoints": true
     }
   ]
 }

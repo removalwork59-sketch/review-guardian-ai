@@ -630,6 +630,8 @@ export type Database = {
           location_id: string
           plain_summary: string
           platform: string
+          public_slug: string | null
+          public_status: boolean
           rejection_risk: string
           reported_at: string | null
           resolved_at: string | null
@@ -662,6 +664,8 @@ export type Database = {
           location_id: string
           plain_summary?: string
           platform?: string
+          public_slug?: string | null
+          public_status?: boolean
           rejection_risk?: string
           reported_at?: string | null
           resolved_at?: string | null
@@ -694,6 +698,8 @@ export type Database = {
           location_id?: string
           plain_summary?: string
           platform?: string
+          public_slug?: string | null
+          public_status?: boolean
           rejection_risk?: string
           reported_at?: string | null
           resolved_at?: string | null

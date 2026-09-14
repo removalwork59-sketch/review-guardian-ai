@@ -77,6 +77,7 @@ function toCase(row: any): CaseRecord {
     reportedAt: row.reported_at,
     resolvedAt: row.resolved_at,
     createdAt: row.created_at,
+    publicStatus: Boolean(row.public_status),
     analysis: (row.analysis ?? null) as ReviewAnalysis | null,
   };
 }
