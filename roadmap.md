@@ -78,3 +78,6 @@
 - [ ] Dashboard: real-time counters (total scans, pending reviews, contact messages) + export history chart
 - [ ] Public /scan page showing each entry's status and review progress (owner opt-in, no private data)
 - [ ] Dashboard and /scans mobile responsive: filter dropdowns and cards mobile-friendly
+- [x] Dashboard live counters + export history chart
+- [x] Owner opt-in public status board at /scan
+- [x] Mobile responsiveness for dashboard and scans
