@@ -2146,6 +2146,10 @@ body {
 .reference-page.reference-light .reference-scan-panel input::placeholder { color: oklch(0.78 0.02 220); opacity: 1; }
 .reference-page.reference-light .reference-promise-left :where(h2, p) { color: oklch(0.99 0.005 215); }
 .reference-page.reference-light .reference-tilt article { border: 1px solid color-mix(in oklab, var(--brand-cyan) 32%, transparent); box-shadow: 0 18px 42px -26px oklch(0.3 0.09 230 / .52); }
+/* Light theme: keep readable text per card color — light on dark cards, dark on bright cards */
+.reference-page.reference-light .reference-tilt article { color: var(--boundary-card-text); }
+.reference-page.reference-light .reference-tilt article:nth-child(2),
+.reference-page.reference-light .reference-tilt article:nth-child(3) { color: oklch(0.22 0.04 240); }
 .reference-chat-bubble button { display: grid; width: 40px; height: 40px; flex: 0 0 auto; place-items: center; margin: -10px -12px -10px 0; border-radius: 10px; }
 .reference-chat-bubble button:hover { background: color-mix(in oklab, currentColor 9%, transparent); }
 .reference-page.reference-light .audit-chat-panel {
