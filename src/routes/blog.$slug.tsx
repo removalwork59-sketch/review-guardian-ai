@@ -3,12 +3,26 @@ import { ArrowLeft } from "lucide-react";
 
 import { Wordmark } from "@/components/brand";
 import { getPost } from "@/lib/blog";
+import { listPublishedPosts } from "@/lib/blog.functions";
 
 export const Route = createFileRoute("/blog/$slug")({
-  loader: ({ params }) => {
-    const post = getPost(params.slug);
-    if (!post) throw notFound();
-    return post;
+  loader: async ({ params }) => {
+    const staticPost = getPost(params.slug);
+    if (staticPost) return staticPost;
+    const published = await listPublishedPosts();
+    const dbPost = published.find((post) => post.slug === params.slug);
+    if (!dbPost) throw notFound();
+    return {
+      slug: dbPost.slug,
+      title: dbPost.title,
+      description: dbPost.description,
+      date: dbPost.publishedAt ? dbPost.publishedAt.slice(0, 10) : "",
+      readingTime: `${Math.max(1, Math.round(dbPost.body.split(/\s+/).length / 200))} min read`,
+      sections: dbPost.body
+        .split(/\n{2,}/)
+        .filter(Boolean)
+        .map((paragraph) => ({ heading: "", paragraphs: [paragraph] })),
+    };
   },
   head: ({ loaderData, params }) => ({
     meta: [
