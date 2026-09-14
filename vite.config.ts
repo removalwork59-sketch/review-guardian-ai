@@ -14,7 +14,7 @@ const rootDir = path.dirname(fileURLToPath(import.meta.url));
 // Server routes need non-VITE_ env vars (e.g. LOVABLE_API_KEY, service keys).
 // Load them into process.env for server-side code only — never into envDefine,
 // which would leak secrets into the client bundle.
-const mode = process.env.NODE_ENV === "production" ? "production" : "development";
+const mode = process.env["NODE_ENV"] === "production" ? "production" : "development";
 Object.assign(process.env, loadEnv(mode, rootDir, ""));
 
 export default defineConfig({
