@@ -46,6 +46,7 @@ export const Route = createFileRoute("/blog")({
 });
 
 function BlogIndex() {
+  const dbPosts = Route.useLoaderData();
   return (
     <div className="page-shell">
       <header className="page-header">
@@ -64,6 +65,24 @@ function BlogIndex() {
           not lawyers.
         </p>
         <div className="blog-grid">
+          {(dbPosts ?? []).map((post) => (
+            <Link
+              key={post.id}
+              to="/blog/$slug"
+              params={{ slug: post.slug }}
+              className="blog-card"
+            >
+              <span className="blog-card-meta">
+                {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : "Draft"}
+                {post.authorName ? ` · ${post.authorName}` : ""}
+              </span>
+              <h2>{post.title}</h2>
+              <p>{post.description}</p>
+              <span className="blog-card-cta">
+                Read guide <ArrowRight className="size-4" />
+              </span>
+            </Link>
+          ))}
           {BLOG_POSTS.map((post) => (
             <Link
               key={post.slug}
