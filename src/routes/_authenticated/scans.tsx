@@ -46,6 +46,23 @@ const STATUS_OPTIONS: { value: CaseStatus; label: string }[] = [
   { value: "ignored", label: "Ignore" },
 ];
 
+function useExportScanMutation() {
+  const queryClient = useQueryClient();
+  const exportFn = useServerFn(exportScanReport);
+  return useMutation({
+    mutationFn: (id: string) => exportFn({ data: { id } }),
+    onSuccess: (result) => {
+      const link = document.createElement("a");
+      link.href = `data:application/pdf;base64,${result.pdfBase64}`;
+      link.download = result.fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      void queryClient.invalidateQueries({ queryKey: ["scan-exports"] });
+    },
+  });
+}
+
 function EvidenceList({
   title,
   items,
