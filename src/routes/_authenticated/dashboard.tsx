@@ -87,6 +87,7 @@ function ReviewsPage() {
   const { data, isPending, error } = useCases();
   const status = useStatusMutation();
   const removeCase = useDeleteCaseMutation();
+  const { data: exportsData, isPending: exportsPending } = useScanExports();
   const [filter, setFilter] = useState<string>("all");
   const [siteFilter, setSiteFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
