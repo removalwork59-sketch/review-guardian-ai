@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { ExternalLink, Pencil, Star, Trash2, X } from "lucide-react";
+import { Download, ExternalLink, FileDown, Pencil, Star, Trash2, X } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { EmptyState, VerdictBadge } from "@/components/case-ui";
@@ -8,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { CATEGORY_LABELS } from "@/lib/analysis-types";
 import { CASE_STATUS_TRANSITIONS } from "@/lib/case-types";
 import type { CaseRecord, CaseStatus } from "@/lib/case-types";
+import { exportScanReport } from "@/lib/scan-export.functions";
 import {
   useCases,
   useDeleteCaseMutation,
@@ -43,6 +46,23 @@ const STATUS_OPTIONS: { value: CaseStatus; label: string }[] = [
   { value: "ignored", label: "Ignore" },
 ];
 
+function useExportScanMutation() {
+  const queryClient = useQueryClient();
+  const exportFn = useServerFn(exportScanReport);
+  return useMutation({
+    mutationFn: (id: string) => exportFn({ data: { id } }),
+    onSuccess: (result) => {
+      const link = document.createElement("a");
+      link.href = `data:application/pdf;base64,${result.pdfBase64}`;
+      link.download = result.fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      void queryClient.invalidateQueries({ queryKey: ["scan-exports"] });
+    },
+  });
+}
+
 function EvidenceList({
   title,
   items,
@@ -76,15 +96,19 @@ function EvidenceList({
 function ScanReportCard({
   item,
   busy,
+  exporting,
   onStatusChange,
   onNoteSave,
   onDelete,
+  onExport,
 }: {
   item: CaseRecord;
   busy: boolean;
+  exporting: boolean;
   onStatusChange: (status: CaseStatus) => void;
   onNoteSave: (note: string) => void;
   onDelete: () => void;
+  onExport: () => void;
 }) {
   const [editing, setEditing] = useState(false);
   const [confirming, setConfirming] = useState(false);
@@ -221,6 +245,24 @@ function ScanReportCard({
             </a>
           </Button>
         ) : null}
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="gap-1.5"
+          disabled={busy || exporting}
+          onClick={onExport}
+        >
+          {exporting ? (
+            <>
+              <Download className="h-3.5 w-3.5 animate-pulse" /> Building PDF…
+            </>
+          ) : (
+            <>
+              <FileDown className="h-3.5 w-3.5" /> Export PDF
+            </>
+          )}
+        </Button>
         {editing ? (
           <div className="flex w-full flex-wrap items-center gap-2">
             <input
@@ -314,6 +356,7 @@ function ScansPage() {
   const { data, isPending, error } = useCases();
   const status = useStatusMutation();
   const removeCase = useDeleteCaseMutation();
+  const exportCase = useExportScanMutation();
   const [verdictFilter, setVerdictFilter] = useState<string>("all");
   const [siteFilter, setSiteFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -421,11 +464,13 @@ function ScansPage() {
               key={item.id}
               item={item}
               busy={status.isPending || removeCase.isPending}
+              exporting={exportCase.isPending && exportCase.variables === item.id}
               onStatusChange={(next) => status.mutate({ id: item.id, status: next })}
               onNoteSave={(note) =>
                 status.mutate({ id: item.id, status: item.status, note })
               }
               onDelete={() => removeCase.mutate(item.id)}
+              onExport={() => exportCase.mutate(item.id)}
             />
           ))}
         </div>
