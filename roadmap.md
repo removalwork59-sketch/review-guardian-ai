@@ -70,7 +70,7 @@
 
 - [x] Scan entries: add site name, date, details fields + dashboard filters (status/verdict/business)
 - [x] Build live-review status-change email template with review details, site name, and reply link (verified: render OK, status change sent email)
-- [ ] Scan report page: PDF export per entry + export history on dashboard
+- [x] Scan report page: PDF export per entry + export history on dashboard (added `scan_exports` table, `pdf-lib` PDF builder, Export PDF button on `/scans`, history section on Dashboard; verified a real Eiffel Tower PDF download and history card)
 - [ ] Dashboard status change real action: auto request on reported OR public status page
 - [ ] Trigger a real Google Maps review scan and confirm it appears on /scans and sends the auto email
 - [ ] Create one REAL scan entry (live Add Review scan), one real contact message, confirm status update persists
