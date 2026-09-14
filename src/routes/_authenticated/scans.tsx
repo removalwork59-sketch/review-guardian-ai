@@ -6,6 +6,7 @@ import { AppShell } from "@/components/app-shell";
 import { EmptyState, VerdictBadge } from "@/components/case-ui";
 import { Button } from "@/components/ui/button";
 import { CATEGORY_LABELS } from "@/lib/analysis-types";
+import { CASE_STATUS_TRANSITIONS } from "@/lib/case-types";
 import type { CaseRecord, CaseStatus } from "@/lib/case-types";
 import {
   useCases,
@@ -203,7 +204,11 @@ function ScanReportCard({
           disabled={busy}
           onChange={(event) => onStatusChange(event.target.value as CaseStatus)}
         >
-          {STATUS_OPTIONS.map((option) => (
+          {STATUS_OPTIONS.filter(
+            (option) =>
+              option.value === item.status ||
+              CASE_STATUS_TRANSITIONS[item.status].includes(option.value),
+          ).map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
