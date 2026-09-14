@@ -86,6 +86,51 @@ export type Database = {
           },
         ]
       }
+      blog_posts: {
+        Row: {
+          author_id: string
+          author_name: string
+          body: string
+          cover_image_url: string
+          created_at: string
+          description: string
+          id: string
+          published: boolean
+          published_at: string | null
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_id: string
+          author_name?: string
+          body?: string
+          cover_image_url?: string
+          created_at?: string
+          description?: string
+          id?: string
+          published?: boolean
+          published_at?: string | null
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string
+          author_name?: string
+          body?: string
+          cover_image_url?: string
+          created_at?: string
+          description?: string
+          id?: string
+          published?: boolean
+          published_at?: string | null
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       bulk_job_items: {
         Row: {
           attempt_count: number
@@ -321,6 +366,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      contact_messages: {
+        Row: {
+          created_at: string
+          email: string
+          email_status: string
+          handled_note: string
+          id: string
+          message: string
+          name: string
+          source_ip: string | null
+          status: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          email_status?: string
+          handled_note?: string
+          id?: string
+          message: string
+          name: string
+          source_ip?: string | null
+          status?: string
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          email_status?: string
+          handled_note?: string
+          id?: string
+          message?: string
+          name?: string
+          source_ip?: string | null
+          status?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       google_business_connections: {
         Row: {

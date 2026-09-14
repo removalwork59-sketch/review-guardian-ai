@@ -50,6 +50,13 @@
       "when": 1789312720062,
       "tag": "0006_claim_google_oauth_state",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1789359061661,
+      "tag": "0007_contact_messages_and_blog_posts",
+      "breakpoints": true
     }
   ]
 }
