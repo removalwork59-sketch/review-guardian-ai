@@ -821,6 +821,36 @@ export type Database = {
           },
         ]
       }
+      scan_exports: {
+        Row: {
+          case_id: string
+          created_at: string
+          file_name: string
+          file_size: number
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          case_id: string
+          created_at?: string
+          file_name: string
+          file_size: number
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          case_id?: string
+          created_at?: string
+          file_name?: string
+          file_size?: number
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string

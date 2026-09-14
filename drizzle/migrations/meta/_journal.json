@@ -57,6 +57,13 @@
       "when": 1789359061661,
       "tag": "0007_contact_messages_and_blog_posts",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1789361999909,
+      "tag": "0008_create_scan_exports",
+      "breakpoints": true
     }
   ]
 }
