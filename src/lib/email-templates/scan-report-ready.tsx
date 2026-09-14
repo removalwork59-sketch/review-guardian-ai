@@ -44,7 +44,7 @@ const Email = ({ name, businessName, reviewerName, verdictLabel, confidence, hea
 export const template = {
   component: Email,
   subject: (data: Record<string, any>) =>
-    `Scan report ready — ${data.businessName ?? 'review checked'}`,
+    `Scan report ready — ${data['businessName'] ?? 'review checked'}`,
   displayName: 'Scan report ready',
   previewData: {
     name: 'Aisha',
