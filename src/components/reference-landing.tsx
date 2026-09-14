@@ -537,7 +537,8 @@ export function ReferenceLanding({
                 <span>Product</span>
                 <button type="button" onClick={openScanner}>Scan a review</button>
                 <a href="#how">How it works</a>
-                <a href="#platforms">Platforms</a>
+                <Link to="/services">Services</Link>
+                <Link to="/blog">Blog</Link>
               </div>
               <div>
                 <span>Workspace</span>
