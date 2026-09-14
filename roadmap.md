@@ -58,7 +58,7 @@
 - [ ] Homepage SEO title/meta/OG update with real company name and services — blocked until user supplies exact company name and target service keywords
 - [x] Mobile audit done — fixed dark-on-dark card text in light theme
 - [x] Sidebar workspace layout (AppShell) + verify screenshots
-- [ ] Fix failed superadmin login (invalid credentials) — hard reset password, verify sign-in end-to-end
+- [x] Fix failed superadmin login (invalid credentials) — hard reset password, verify authorized dashboard access end-to-end
 - [x] Dashboard: add/edit/delete controls for review cases (status, note, delete)
 - [x] Contact form submissions stored in database and shown in dashboard Messages page
 - [x] Blog manager in sidebar with create/edit/delete (live) — real post content still has to be written by the user; nothing fabricated
