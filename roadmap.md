@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Done
+- Added a public contact section after the review cards with address, phone, email, and social links; verified on desktop and mobile
 - Restyled the boundary deck as five clearly labelled sample review cards with five-star ratings, a blue upper band, and a compact soft cyan-teal lower band separated from the next section
 - Arranged the five workflow cards as the selected overlapping fan deck across a light-to-dark section boundary, preserving the existing upper section and all original workflow copy
 - Completed the existing footer with the provided verified email, phone, address, postal code, and Facebook link; all contact actions are accessible and the existing design remains unchanged
@@ -33,7 +34,6 @@
 - Desktop and mobile homepage validation with no overflow or console errors
 
 ## Open
-- Add a public contact section after the review cards with address, phone, email, and social links (in progress)
 - Enable Connect Google by saving the approved Google Business Profile client ID and secret (secure form; user must supply)
 - Sync the user's own Google Business Profile reviews into review records and show them in Reviews with AI analysis and a report button (code ready; needs the approved Google OAuth client saved)
 - Submit one real report from the user's own listing and track its status updates in Reports (needs live consent plus explicit user confirmation before the irreversible submission)
