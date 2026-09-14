@@ -50,3 +50,4 @@
 - Facebook / Instagram / YouTube scanning — blocked until a Meta/YouTube connection exists
 - Verified removal outcome — Google gives no API for report status; user marks the real outcome
 - Replace the stale `removalwork.online` deployment with this verified build; the live domain currently returns 404 for `/pipeline`, so production cannot be declared ready until safe VPS deployment access is available
+- [ ] Hero CTA button scrolling to contact form; verify mobile + desktop

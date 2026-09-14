@@ -25,8 +25,10 @@ export const Route = createFileRoute("/auth")({
         content: "Sign in to keep your review cases, reports and locations in one place.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "/auth" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "/auth" }],
   }),
   component: AuthPage,
 });
