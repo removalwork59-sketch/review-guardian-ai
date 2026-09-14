@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 import { sendContactMessage } from "@/lib/contact.functions";
 
+import chatAvatar from "@/assets/chat-avatar.png";
 import analyticsIcon from "@/assets/reference-icons/analytics.png";
 import casesIcon from "@/assets/reference-icons/cases.png";
 import locationsIcon from "@/assets/reference-icons/locations.png";
@@ -589,7 +590,9 @@ export function ReferenceLanding({
             <span>Have a review that may break policy?</span>
             <button type="button" onClick={() => setChatOpen(false)} aria-label="Dismiss"><X className="size-4" /></button>
           </div>
-          <button type="button" onClick={openScanner} className="reference-chat-avatar" aria-label="Start a review audit">RW</button>
+          <button type="button" onClick={openScanner} className="reference-chat-avatar" aria-label="Start a review audit">
+            <img src={chatAvatar} alt="Review audit assistant" width={54} height={54} loading="lazy" className="reference-chat-avatar-img" />
+          </button>
         </div>
       ) : null}
     </div>

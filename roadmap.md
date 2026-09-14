@@ -81,3 +81,6 @@
 - [x] Dashboard live counters + export history chart
 - [x] Owner opt-in public status board at /scan
 - [x] Mobile responsiveness for dashboard and scans
+
+- [ ] Trigger real Google Maps review scan and confirm live entry on /scans + PDF export + auto email
+- [ ] Verify dashboard counters/chart on mobile with real data
