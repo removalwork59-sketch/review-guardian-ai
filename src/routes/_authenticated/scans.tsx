@@ -245,6 +245,24 @@ function ScanReportCard({
             </a>
           </Button>
         ) : null}
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="gap-1.5"
+          disabled={busy || exporting}
+          onClick={onExport}
+        >
+          {exporting ? (
+            <>
+              <Download className="h-3.5 w-3.5 animate-pulse" /> Building PDF…
+            </>
+          ) : (
+            <>
+              <FileDown className="h-3.5 w-3.5" /> Export PDF
+            </>
+          )}
+        </Button>
         {editing ? (
           <div className="flex w-full flex-wrap items-center gap-2">
             <input
