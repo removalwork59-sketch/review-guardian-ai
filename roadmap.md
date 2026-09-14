@@ -54,4 +54,6 @@
 
 - [x] Blog + Services SEO pages with per-page titles/meta (done)
 - [ ] Project showcase section — blocked until user supplies real project title/description/image/link
+- [ ] Blog section real posts — blocked until user supplies real title/author/date/content/image for each post
+- [ ] Homepage SEO title/meta/OG update with real company name and services — blocked until user supplies exact company name and target service keywords
 - [x] Mobile audit done — fixed dark-on-dark card text in light theme
