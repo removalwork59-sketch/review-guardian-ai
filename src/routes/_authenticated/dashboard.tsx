@@ -196,6 +196,47 @@ function ReviewsPage() {
           ))}
         </div>
       )}
+
+      <section className="mt-10">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-lg font-bold text-ink">Export history</h2>
+          <Button asChild variant="outline" size="sm">
+            <Link to="/scans">Go to scan reports</Link>
+          </Button>
+        </div>
+        {exportsPending ? (
+          <p className="text-sm text-muted-foreground">Loading export history…</p>
+        ) : !exportsData?.length ? (
+          <EmptyState
+            title="No exports yet"
+            body="Open a scan report and click Export PDF to build a downloadable report."
+          />
+        ) : (
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {exportsData.map((exp) => (
+              <article
+                key={exp.id}
+                className="app-card flex flex-col gap-2 rounded-2xl border border-border bg-card p-4"
+              >
+                <div className="flex items-start gap-3">
+                  <span className="rounded-lg bg-info-soft p-2 text-primary">
+                    <FileDown className="h-4 w-4" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-ink">{exp.fileName}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {exp.locationName} · {new Date(exp.createdAt).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}
+                    </p>
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Size: {(exp.fileSize / 1024).toFixed(1)} KB
+                </p>
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
     </AppShell>
   );
 }
