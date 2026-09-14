@@ -107,6 +107,16 @@ function ScanReportCard({
 
       <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
         <span className="rounded-full bg-muted px-2.5 py-1">
+          Site: {item.platform === "google" ? "Google Maps" : item.platform}
+        </span>
+        <span className="rounded-full bg-muted px-2.5 py-1">
+          Scanned{" "}
+          {new Date(item.createdAt).toLocaleString(undefined, {
+            dateStyle: "medium",
+            timeStyle: "short",
+          })}
+        </span>
+        <span className="rounded-full bg-muted px-2.5 py-1">
           Confidence {item.confidence}%
         </span>
         <span className="rounded-full bg-muted px-2.5 py-1 capitalize">
@@ -118,10 +128,26 @@ function ScanReportCard({
         <span className="rounded-full bg-muted px-2.5 py-1 capitalize">
           Rejection risk: {item.rejectionRisk}
         </span>
-        <span className="rounded-full bg-muted px-2.5 py-1">
-          {new Date(item.createdAt).toLocaleDateString()}
-        </span>
       </div>
+
+      <dl className="grid gap-2 rounded-2xl border border-border bg-muted/30 p-4 text-xs sm:grid-cols-2">
+        <div className="min-w-0">
+          <dt className="font-semibold uppercase tracking-wide text-muted-foreground">Business</dt>
+          <dd className="mt-0.5 break-words text-ink">{item.locationName}</dd>
+        </div>
+        <div className="min-w-0">
+          <dt className="font-semibold uppercase tracking-wide text-muted-foreground">Address</dt>
+          <dd className="mt-0.5 break-words text-ink">{item.locationAddress || "Not provided by source"}</dd>
+        </div>
+        <div className="min-w-0">
+          <dt className="font-semibold uppercase tracking-wide text-muted-foreground">Source link</dt>
+          <dd className="mt-0.5 break-all text-ink">{item.sourceUrl}</dd>
+        </div>
+        <div className="min-w-0">
+          <dt className="font-semibold uppercase tracking-wide text-muted-foreground">Current status</dt>
+          <dd className="mt-0.5 capitalize text-ink">{item.status.replace("_", " ")}</dd>
+        </div>
+      </dl>
 
       <blockquote className="rounded-2xl border border-border bg-muted/40 p-4 text-sm text-ink">
         <p className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
@@ -271,11 +297,34 @@ function ScanReportCard({
   );
 }
 
+const VERDICT_FILTERS = [
+  { id: "all", label: "All verdicts" },
+  { id: "strong_candidate", label: "Strong cases" },
+  { id: "possible_candidate", label: "Possible" },
+  { id: "needs_human_review", label: "Needs your eyes" },
+  { id: "not_reportable", label: "No violation" },
+] as const;
+
 function ScansPage() {
   const { data, isPending, error } = useCases();
   const status = useStatusMutation();
   const removeCase = useDeleteCaseMutation();
+  const [verdictFilter, setVerdictFilter] = useState<string>("all");
+  const [siteFilter, setSiteFilter] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [sort, setSort] = useState<"newest" | "oldest">("newest");
   const cases = data ?? [];
+
+  const sites = Array.from(new Set(cases.map((item) => item.locationName))).sort();
+  const shown = cases
+    .filter((item) => verdictFilter === "all" || item.verdict === verdictFilter)
+    .filter((item) => siteFilter === "all" || item.locationName === siteFilter)
+    .filter((item) => statusFilter === "all" || item.status === statusFilter)
+    .sort((a, b) =>
+      sort === "newest"
+        ? b.createdAt.localeCompare(a.createdAt)
+        : a.createdAt.localeCompare(b.createdAt),
+    );
 
   return (
     <AppShell
@@ -287,6 +336,62 @@ function ScansPage() {
         </Button>
       }
     >
+      {cases.length > 0 ? (
+        <div className="app-filter-row">
+          {VERDICT_FILTERS.map((item) => (
+            <Button
+              key={item.id}
+              type="button"
+              onClick={() => setVerdictFilter(item.id)}
+              variant="outline"
+              size="sm"
+              className={`rounded-full ${
+                verdictFilter === item.id
+                  ? "border-primary bg-info-soft text-primary"
+                  : "border-border bg-card text-muted-foreground hover:text-ink"
+              }`}
+            >
+              {item.label}
+            </Button>
+          ))}
+          <select
+            aria-label="Filter by site"
+            className="app-input w-auto min-w-40 text-xs"
+            value={siteFilter}
+            onChange={(event) => setSiteFilter(event.target.value)}
+          >
+            <option value="all">All sites</option>
+            {sites.map((site) => (
+              <option key={site} value={site}>
+                {site}
+              </option>
+            ))}
+          </select>
+          <select
+            aria-label="Filter by status"
+            className="app-input w-auto min-w-40 text-xs"
+            value={statusFilter}
+            onChange={(event) => setStatusFilter(event.target.value)}
+          >
+            <option value="all">All statuses</option>
+            {STATUS_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <select
+            aria-label="Sort by date"
+            className="app-input w-auto min-w-36 text-xs"
+            value={sort}
+            onChange={(event) => setSort(event.target.value as "newest" | "oldest")}
+          >
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+          </select>
+        </div>
+      ) : null}
+
       {isPending ? (
         <EmptyState title="Loading your scan reports…" body="One moment." />
       ) : error ? (
@@ -299,9 +404,14 @@ function ScansPage() {
           title="No scans yet"
           body="Run a scan from the home page and its full report will appear here."
         />
+      ) : shown.length === 0 ? (
+        <EmptyState
+          title="Nothing matches these filters"
+          body="Try a different site, status or verdict filter."
+        />
       ) : (
         <div className="grid gap-4">
-          {cases.map((item) => (
+          {shown.map((item) => (
             <ScanReportCard
               key={item.id}
               item={item}
