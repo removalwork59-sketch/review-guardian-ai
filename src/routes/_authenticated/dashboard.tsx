@@ -331,7 +331,7 @@ function ReviewsPage() {
             {exportsData.map((exp) => (
               <article
                 key={exp.id}
-                className="app-card flex flex-col gap-2 rounded-2xl border border-border bg-card p-4"
+                className="app-card flex min-w-0 flex-col gap-2 break-words rounded-2xl border border-border bg-card p-4"
               >
                 <div className="flex items-start gap-3">
                   <span className="rounded-lg bg-info-soft p-2 text-primary">
