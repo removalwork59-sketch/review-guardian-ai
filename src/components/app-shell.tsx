@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { LayoutGrid, MapPin, Send, Upload, LogOut, Search, ListChecks } from "lucide-react";
+import { LayoutGrid, MapPin, Send, Upload, LogOut, Search, ListChecks, Menu, X } from "lucide-react";
+import { useState } from "react";
 import type { ReactNode } from "react";
 
 import { Wordmark } from "@/components/brand";
@@ -26,64 +27,99 @@ export function AppShell({
   children: ReactNode;
 }) {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
   async function signOut() {
     await supabase.auth.signOut();
     await navigate({ to: "/" });
   }
 
+  const sidebar = (
+    <div className="app-sidebar-inner">
+      <Link to="/" className="app-sidebar-brand" onClick={() => setOpen(false)}>
+        <Wordmark />
+      </Link>
+
+      <a href="/#scan" className="app-sidebar-cta">
+        <Search className="size-4" />
+        New scan
+      </a>
+
+      <nav className="app-sidebar-nav" aria-label="Workspace">
+        {NAV.map((item) => (
+          <Link
+            key={item.to}
+            to={item.to}
+            className="app-sidebar-link"
+            activeProps={{ className: "is-active" }}
+            onClick={() => setOpen(false)}
+          >
+            <item.icon className="size-4" />
+            {item.label}
+          </Link>
+        ))}
+      </nav>
+
+      <div className="app-sidebar-footer">
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={signOut}
+          className="app-sidebar-signout"
+        >
+          <LogOut className="size-4" />
+          Sign out
+        </Button>
+      </div>
+    </div>
+  );
+
   return (
     <div className="app-frame min-h-screen bg-background">
-      <header className="app-header">
-        <div className="app-container grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-4 sm:flex sm:justify-between">
-          <Link to="/" className="min-w-0">
-            <Wordmark />
-          </Link>
-          <div className="flex shrink-0 items-center gap-2">
-            <a
-              href="/#scan"
-              aria-label="Start a new review scan"
-              className="app-secondary-action"
-            >
-              <Search className="size-4" />
-              New scan
-            </a>
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={signOut}
-              className="app-signout"
-            >
-              <LogOut className="size-4" />
-              Sign out
-            </Button>
-          </div>
-        </div>
-        <nav className="app-container app-nav" aria-label="Workspace">
-          {NAV.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              className="app-nav-link"
-              activeProps={{ className: "bg-info-soft text-ink hover:bg-info-soft" }}
-            >
-              <item.icon className="size-4" />
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+      {/* Mobile top bar */}
+      <header className="app-mobilebar lg:hidden">
+        <Link to="/">
+          <Wordmark />
+        </Link>
+        <button
+          type="button"
+          className="app-mobilebar-toggle"
+          aria-expanded={open}
+          aria-label={open ? "Close menu" : "Open menu"}
+          onClick={() => setOpen((value) => !value)}
+        >
+          {open ? <X className="size-5" /> : <Menu className="size-5" />}
+        </button>
       </header>
 
-      <main className="app-container app-main">
-        <div className="app-page-heading">
-          <div className="min-w-0">
-            <h1 className="app-page-title">{title}</h1>
-            <p className="app-page-description">{description}</p>
+      <div className="app-layout">
+        {/* Desktop sidebar */}
+        <aside className="app-sidebar max-lg:hidden">{sidebar}</aside>
+
+        {/* Mobile drawer */}
+        {open ? (
+          <>
+            <button
+              type="button"
+              aria-label="Close menu"
+              className="app-sidebar-backdrop lg:hidden"
+              onClick={() => setOpen(false)}
+            />
+            <aside className="app-sidebar app-sidebar-drawer lg:hidden">{sidebar}</aside>
+          </>
+        ) : null}
+
+        <main className="app-main">
+          <div className="app-page-heading">
+            <div className="min-w-0">
+              <h1 className="app-page-title">{title}</h1>
+              <p className="app-page-description">{description}</p>
+            </div>
+            {actions ? <div className="shrink-0">{actions}</div> : null}
           </div>
-          {actions ? <div className="shrink-0">{actions}</div> : null}
-        </div>
-        <div className="app-page-content">{children}</div>
-      </main>
+          <div className="app-page-content">{children}</div>
+        </main>
+      </div>
     </div>
   );
 }
