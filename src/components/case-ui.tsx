@@ -132,6 +132,68 @@ export function CaseCard({
           Opening Google does not confirm submission. After completing the report there, update the status yourself.
         </p>
       ) : null}
+
+      {onNoteSave || onDelete ? (
+        <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border pt-3">
+          {onNoteSave ? (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              disabled={busy}
+              onClick={() => setEditing((value) => !value)}
+            >
+              {editing ? <X className="size-3.5" /> : <Pencil className="size-3.5" />}
+              {editing ? "Cancel" : "Edit note"}
+            </Button>
+          ) : null}
+          {onDelete ? (
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              disabled={busy}
+              className="ml-auto text-danger hover:text-danger"
+              onClick={() => {
+                if (window.confirm("Delete this case? This cannot be undone.")) onDelete();
+              }}
+            >
+              <Trash2 className="size-3.5" />
+              Delete
+            </Button>
+          ) : null}
+        </div>
+      ) : null}
+
+      {editing && onNoteSave ? (
+        <div className="mt-3 space-y-2">
+          <label className="text-xs text-muted-foreground" htmlFor={`note-${item.id}`}>
+            Your note about this case
+          </label>
+          <textarea
+            id={`note-${item.id}`}
+            value={note}
+            maxLength={500}
+            rows={3}
+            onChange={(event) => setNote(event.target.value)}
+            className="app-input w-full resize-y"
+            placeholder="What you did, or what to do next"
+          />
+          <Button
+            type="button"
+            size="sm"
+            disabled={busy}
+            onClick={() => {
+              onNoteSave(note);
+              setEditing(false);
+            }}
+          >
+            Save note
+          </Button>
+        </div>
+      ) : item.statusNote ? (
+        <p className="mt-3 text-xs leading-relaxed text-muted-foreground">Note: {item.statusNote}</p>
+      ) : null}
     </article>
   );
 }
