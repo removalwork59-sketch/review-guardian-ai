@@ -1,4 +1,6 @@
-import { ExternalLink, Star } from "lucide-react";
+import { ExternalLink, Pencil, Star, Trash2, X } from "lucide-react";
+import { useState } from "react";
+
 
 import {
   CASE_STATUSES,
@@ -43,12 +45,18 @@ export function VerdictBadge({ verdict }: { verdict: string }) {
 export function CaseCard({
   item,
   onStatusChange,
+  onNoteSave,
+  onDelete,
   busy,
 }: {
   item: CaseRecord;
   onStatusChange: (status: CaseStatus) => void;
+  onNoteSave?: (note: string) => void;
+  onDelete?: () => void;
   busy: boolean;
 }) {
+  const [editing, setEditing] = useState(false);
+  const [note, setNote] = useState(item.statusNote);
   const reportable = ["strong_candidate", "possible_candidate"].includes(item.verdict);
   const availableStatuses = CASE_STATUSES.filter(
     (status) => status === item.status || CASE_STATUS_TRANSITIONS[item.status].includes(status),
@@ -123,6 +131,68 @@ export function CaseCard({
         <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
           Opening Google does not confirm submission. After completing the report there, update the status yourself.
         </p>
+      ) : null}
+
+      {onNoteSave || onDelete ? (
+        <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border pt-3">
+          {onNoteSave ? (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              disabled={busy}
+              onClick={() => setEditing((value) => !value)}
+            >
+              {editing ? <X className="size-3.5" /> : <Pencil className="size-3.5" />}
+              {editing ? "Cancel" : "Edit note"}
+            </Button>
+          ) : null}
+          {onDelete ? (
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              disabled={busy}
+              className="ml-auto text-danger hover:text-danger"
+              onClick={() => {
+                if (window.confirm("Delete this case? This cannot be undone.")) onDelete();
+              }}
+            >
+              <Trash2 className="size-3.5" />
+              Delete
+            </Button>
+          ) : null}
+        </div>
+      ) : null}
+
+      {editing && onNoteSave ? (
+        <div className="mt-3 space-y-2">
+          <label className="text-xs text-muted-foreground" htmlFor={`note-${item.id}`}>
+            Your note about this case
+          </label>
+          <textarea
+            id={`note-${item.id}`}
+            value={note}
+            maxLength={500}
+            rows={3}
+            onChange={(event) => setNote(event.target.value)}
+            className="app-input w-full resize-y"
+            placeholder="What you did, or what to do next"
+          />
+          <Button
+            type="button"
+            size="sm"
+            disabled={busy}
+            onClick={() => {
+              onNoteSave(note);
+              setEditing(false);
+            }}
+          >
+            Save note
+          </Button>
+        </div>
+      ) : item.statusNote ? (
+        <p className="mt-3 text-xs leading-relaxed text-muted-foreground">Note: {item.statusNote}</p>
       ) : null}
     </article>
   );

@@ -1,5 +1,17 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { LayoutGrid, MapPin, Send, Upload, LogOut, Search, ListChecks, Menu, X } from "lucide-react";
+import {
+  LayoutGrid,
+  MapPin,
+  Send,
+  Upload,
+  LogOut,
+  Search,
+  ListChecks,
+  Menu,
+  X,
+  Mail,
+  FileText,
+} from "lucide-react";
 import { useState } from "react";
 import type { ReactNode } from "react";
 
@@ -13,6 +25,8 @@ const NAV = [
   { to: "/reports", label: "Reports", icon: Send },
   { to: "/locations", label: "Locations", icon: MapPin },
   { to: "/bulk", label: "Bulk scan", icon: Upload },
+  { to: "/messages", label: "Messages", icon: Mail },
+  { to: "/blog-manager", label: "Blog", icon: FileText },
 ] as const;
 
 export function AppShell({

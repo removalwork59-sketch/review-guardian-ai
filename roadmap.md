@@ -59,3 +59,6 @@
 - [x] Mobile audit done — fixed dark-on-dark card text in light theme
 - [x] Sidebar workspace layout (AppShell) + verify screenshots
 - [ ] Fix failed superadmin login (invalid credentials) — hard reset password, verify sign-in end-to-end
+- [ ] Dashboard: add/edit/delete controls for review cases (status, note, delete)
+- [ ] Contact form submissions stored in database and shown in dashboard Messages page
+- [ ] Blog manager in sidebar with create/edit/delete — real post content must come from the user, no fabricated posts

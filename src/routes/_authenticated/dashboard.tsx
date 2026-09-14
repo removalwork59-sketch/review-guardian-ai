@@ -5,7 +5,7 @@ import { useState } from "react";
 
 import { AppShell } from "@/components/app-shell";
 import { CaseCard, EmptyState } from "@/components/case-ui";
-import { listCases, updateCaseStatus } from "@/lib/cases.functions";
+import { deleteCase, listCases, updateCaseStatus } from "@/lib/cases.functions";
 import type { CaseRecord, CaseStatus } from "@/lib/case-types";
 import { Button } from "@/components/ui/button";
 
@@ -43,7 +43,19 @@ export function useStatusMutation() {
   const queryClient = useQueryClient();
   const update = useServerFn(updateCaseStatus);
   return useMutation({
-    mutationFn: (input: { id: string; status: CaseStatus }) => update({ data: input }),
+    mutationFn: (input: { id: string; status: CaseStatus; note?: string }) => update({ data: input }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["cases"] });
+      void queryClient.invalidateQueries({ queryKey: ["locations"] });
+    },
+  });
+}
+
+export function useDeleteCaseMutation() {
+  const queryClient = useQueryClient();
+  const remove = useServerFn(deleteCase);
+  return useMutation({
+    mutationFn: (id: string) => remove({ data: { id } }),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["cases"] });
       void queryClient.invalidateQueries({ queryKey: ["locations"] });
@@ -54,6 +66,7 @@ export function useStatusMutation() {
 function ReviewsPage() {
   const { data, isPending, error } = useCases();
   const status = useStatusMutation();
+  const removeCase = useDeleteCaseMutation();
   const [filter, setFilter] = useState<string>("all");
 
   const cases: CaseRecord[] = data ?? [];
@@ -64,7 +77,14 @@ function ReviewsPage() {
       title="Reviews"
       description="Every review you've checked, newest first."
       actions={
-        <Button asChild><Link to="/bulk">Bulk scan</Link></Button>
+        <div className="flex flex-wrap gap-2">
+          <Button asChild>
+            <a href="/#scan">Add review</a>
+          </Button>
+          <Button asChild variant="outline">
+            <Link to="/bulk">Bulk scan</Link>
+          </Button>
+        </div>
       }
     >
       <div className="app-filter-row">
@@ -113,8 +133,10 @@ function ReviewsPage() {
             <CaseCard
               key={item.id}
               item={item}
-              busy={status.isPending}
+              busy={status.isPending || removeCase.isPending}
               onStatusChange={(next) => status.mutate({ id: item.id, status: next })}
+              onNoteSave={(note) => status.mutate({ id: item.id, status: item.status, note })}
+              onDelete={() => removeCase.mutate(item.id)}
             />
           ))}
         </div>

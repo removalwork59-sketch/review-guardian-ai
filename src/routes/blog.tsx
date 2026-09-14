@@ -3,8 +3,25 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { Wordmark } from "@/components/brand";
 import { BLOG_POSTS } from "@/lib/blog";
+import { listPublishedPosts } from "@/lib/blog.functions";
 
 export const Route = createFileRoute("/blog")({
+  loader: () => listPublishedPosts(),
+  errorComponent: () => (
+    <div className="page-shell">
+      <main className="page-main">
+        <h1 className="page-title">Blog unavailable</h1>
+        <p className="page-lede">Please refresh the page and try again.</p>
+      </main>
+    </div>
+  ),
+  notFoundComponent: () => (
+    <div className="page-shell">
+      <main className="page-main">
+        <h1 className="page-title">Not found</h1>
+      </main>
+    </div>
+  ),
   head: () => ({
     meta: [
       { title: "Blog — Review Policy Guides | Removal Work" },
@@ -29,6 +46,7 @@ export const Route = createFileRoute("/blog")({
 });
 
 function BlogIndex() {
+  const dbPosts = Route.useLoaderData();
   return (
     <div className="page-shell">
       <header className="page-header">
@@ -47,6 +65,24 @@ function BlogIndex() {
           not lawyers.
         </p>
         <div className="blog-grid">
+          {(dbPosts ?? []).map((post) => (
+            <Link
+              key={post.id}
+              to="/blog/$slug"
+              params={{ slug: post.slug }}
+              className="blog-card"
+            >
+              <span className="blog-card-meta">
+                {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : "Draft"}
+                {post.authorName ? ` · ${post.authorName}` : ""}
+              </span>
+              <h2>{post.title}</h2>
+              <p>{post.description}</p>
+              <span className="blog-card-cta">
+                Read guide <ArrowRight className="size-4" />
+              </span>
+            </Link>
+          ))}
           {BLOG_POSTS.map((post) => (
             <Link
               key={post.slug}
