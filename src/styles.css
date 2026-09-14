@@ -2405,3 +2405,7 @@ body {
   .app-layout { grid-template-columns: 1fr; }
   .app-main { padding-top: 1.25rem; }
 }
+
+@media (min-width: 1024px) {
+  .app-mobilebar, .app-sidebar-drawer, .app-sidebar-backdrop { display: none !important; }
+}
