@@ -2399,7 +2399,8 @@ body {
 .app-sidebar-backdrop { position: fixed; inset: 0; z-index: 45; background: rgb(0 0 0 / .5); }
 @keyframes drawer-in { from { transform: translateX(-100%); } to { transform: translateX(0); } }
 
-.app-main { padding: 2rem clamp(1rem, 3vw, 2.5rem) 3rem; max-width: 1180px; width: 100%; }
+.app-main { padding: 2rem clamp(1rem, 3vw, 2.5rem) 3rem; max-width: 1180px; width: 100%; min-width: 0; }
+.app-layout > * { min-width: 0; }
 
 @media (max-width: 1023.98px) {
   .app-layout { grid-template-columns: 1fr; }
