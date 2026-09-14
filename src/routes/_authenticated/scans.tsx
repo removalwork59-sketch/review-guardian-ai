@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ExternalLink, Pencil, Star, Trash2, X } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
-import { EmptyState, VERDICT_META } from "@/components/case-ui";
+import { EmptyState, VerdictBadge } from "@/components/case-ui";
 import { Button } from "@/components/ui/button";
 import { CATEGORY_LABELS } from "@/lib/analysis-types";
 import type { CaseRecord, CaseStatus } from "@/lib/case-types";
@@ -88,10 +88,6 @@ function ScanReportCard({
   const [editing, setEditing] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [note, setNote] = useState(item.statusNote);
-  const verdict = VERDICT_META[item.verdict] ?? {
-    label: item.verdict,
-    className: "bg-muted text-muted-foreground",
-  };
   const analysis = item.analysis;
 
   return (
@@ -104,10 +100,8 @@ function ScanReportCard({
           <h3 className="mt-1 text-base font-bold text-ink">{item.headline}</h3>
           <p className="mt-1 text-sm text-muted-foreground">{item.plainSummary}</p>
         </div>
-        <span
-          className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${verdict.className}`}
-        >
-          {verdict.label}
+        <span className="shrink-0">
+          <VerdictBadge verdict={item.verdict} />
         </span>
       </header>
 
