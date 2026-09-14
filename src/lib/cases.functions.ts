@@ -382,7 +382,37 @@ export const updateCaseStatus = createServerFn({ method: "POST" })
       .select(CASE_SELECT)
       .single();
     if (error) throw error;
-    return toCase(row);
+
+    const saved = toCase(row);
+    const email = (context.claims as { email?: string } | undefined)?.email;
+    if (email && data.status !== currentStatus) {
+      try {
+        const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
+        const { STATUS_SHORT, VERDICT_LABELS } = await import("./case-types");
+        await sendTemplateEmail("review-status-change", email, {
+          templateData: {
+            businessName: saved.locationName,
+            siteName: saved.locationName,
+            platform: saved.platform,
+            reviewerName: saved.authorName,
+            reviewRating: saved.reviewRating,
+            reviewText: saved.reviewText,
+            verdictLabel: VERDICT_LABELS[saved.verdict] ?? saved.verdict,
+            confidence: saved.confidence,
+            oldStatus: STATUS_SHORT[currentStatus],
+            newStatus: STATUS_SHORT[data.status],
+            statusNote: data.note ?? saved.statusNote,
+            caseId: saved.id,
+            dashboardUrl: `${process.env['VITE_APP_URL'] ?? 'https://removalwork.online'}/scans`,
+          },
+          idempotencyKey: `status-change-${saved.id}-${currentStatus}-${data.status}-${Date.now()}`,
+        });
+      } catch (emailError) {
+        console.error("[updateCaseStatus] status-change email failed:", emailError);
+      }
+    }
+
+    return saved;
   });
 
 export const deleteCase = createServerFn({ method: "POST" })
