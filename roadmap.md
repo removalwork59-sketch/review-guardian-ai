@@ -69,7 +69,7 @@
 - [x] Auto email "scan-report-ready" sent to the signed-in user after each new scan; dashboard shows status updates
 
 - [x] Scan entries: add site name, date, details fields + dashboard filters (status/verdict/business)
-- [ ] Build live-review status-change email template with review details, site name, and reply link (in progress)
+- [x] Build live-review status-change email template with review details, site name, and reply link (verified: render OK, status change sent email)
 - [ ] Scan report page: PDF export per entry + export history on dashboard
 - [ ] Dashboard status change real action: auto request on reported OR public status page
 - [ ] Trigger a real Google Maps review scan and confirm it appears on /scans and sends the auto email
