@@ -66,6 +66,7 @@ export function useDeleteCaseMutation() {
 function ReviewsPage() {
   const { data, isPending, error } = useCases();
   const status = useStatusMutation();
+  const removeCase = useDeleteCaseMutation();
   const [filter, setFilter] = useState<string>("all");
 
   const cases: CaseRecord[] = data ?? [];
@@ -76,7 +77,14 @@ function ReviewsPage() {
       title="Reviews"
       description="Every review you've checked, newest first."
       actions={
-        <Button asChild><Link to="/bulk">Bulk scan</Link></Button>
+        <div className="flex flex-wrap gap-2">
+          <Button asChild>
+            <a href="/#scan">Add review</a>
+          </Button>
+          <Button asChild variant="outline">
+            <Link to="/bulk">Bulk scan</Link>
+          </Button>
+        </div>
       }
     >
       <div className="app-filter-row">
