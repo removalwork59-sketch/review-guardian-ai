@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as AuthenticatedBlogManagerRouteImport } from './routes/_authenticated/blog-manager'
 import { Route as AuthenticatedBulkRouteImport } from './routes/_authenticated/bulk'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedLocationsRouteImport } from './routes/_authenticated/locations'
@@ -48,6 +49,12 @@ const ServicesRoute = ServicesRouteImport.update({
   path: '/services',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedBlogManagerRoute =
+  AuthenticatedBlogManagerRouteImport.update({
+    id: '/blog-manager',
+    path: '/blog-manager',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedBulkRoute = AuthenticatedBulkRouteImport.update({
   id: '/bulk',
   path: '/bulk',
@@ -101,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/services': typeof ServicesRoute
+  '/blog-manager': typeof AuthenticatedBlogManagerRoute
   '/bulk': typeof AuthenticatedBulkRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/locations': typeof AuthenticatedLocationsRoute
@@ -116,6 +124,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/services': typeof ServicesRoute
+  '/blog-manager': typeof AuthenticatedBlogManagerRoute
   '/bulk': typeof AuthenticatedBulkRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/locations': typeof AuthenticatedLocationsRoute
@@ -133,6 +142,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/services': typeof ServicesRoute
+  '/_authenticated/blog-manager': typeof AuthenticatedBlogManagerRoute
   '/_authenticated/bulk': typeof AuthenticatedBulkRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/locations': typeof AuthenticatedLocationsRoute
@@ -150,6 +160,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog'
     | '/services'
+    | '/blog-manager'
     | '/bulk'
     | '/dashboard'
     | '/locations'
@@ -165,6 +176,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog'
     | '/services'
+    | '/blog-manager'
     | '/bulk'
     | '/dashboard'
     | '/locations'
@@ -181,6 +193,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog'
     | '/services'
+    | '/_authenticated/blog-manager'
     | '/_authenticated/bulk'
     | '/_authenticated/dashboard'
     | '/_authenticated/locations'
@@ -238,6 +251,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/blog-manager': {
+      id: '/_authenticated/blog-manager'
+      path: '/blog-manager'
+      fullPath: '/blog-manager'
+      preLoaderRoute: typeof AuthenticatedBlogManagerRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/bulk': {
       id: '/_authenticated/bulk'
@@ -306,6 +326,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedBlogManagerRoute: typeof AuthenticatedBlogManagerRoute
   AuthenticatedBulkRoute: typeof AuthenticatedBulkRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedLocationsRoute: typeof AuthenticatedLocationsRoute
@@ -315,6 +336,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedBlogManagerRoute: AuthenticatedBlogManagerRoute,
   AuthenticatedBulkRoute: AuthenticatedBulkRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedLocationsRoute: AuthenticatedLocationsRoute,

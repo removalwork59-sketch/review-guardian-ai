@@ -5,7 +5,7 @@ import { useState } from "react";
 
 import { AppShell } from "@/components/app-shell";
 import { CaseCard, EmptyState } from "@/components/case-ui";
-import { listCases, updateCaseStatus } from "@/lib/cases.functions";
+import { deleteCase, listCases, updateCaseStatus } from "@/lib/cases.functions";
 import type { CaseRecord, CaseStatus } from "@/lib/case-types";
 import { Button } from "@/components/ui/button";
 
@@ -43,7 +43,19 @@ export function useStatusMutation() {
   const queryClient = useQueryClient();
   const update = useServerFn(updateCaseStatus);
   return useMutation({
-    mutationFn: (input: { id: string; status: CaseStatus }) => update({ data: input }),
+    mutationFn: (input: { id: string; status: CaseStatus; note?: string }) => update({ data: input }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["cases"] });
+      void queryClient.invalidateQueries({ queryKey: ["locations"] });
+    },
+  });
+}
+
+export function useDeleteCaseMutation() {
+  const queryClient = useQueryClient();
+  const remove = useServerFn(deleteCase);
+  return useMutation({
+    mutationFn: (id: string) => remove({ data: { id } }),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["cases"] });
       void queryClient.invalidateQueries({ queryKey: ["locations"] });
