@@ -135,7 +135,7 @@ export const updatePost = createServerFn({ method: "POST" })
 
     const { data: row, error } = await context.supabase
       .from("blog_posts")
-      .update(patch)
+      .update(patch as never)
       .eq("id", data.id)
       .eq("author_id", context.userId)
       .select("*")
