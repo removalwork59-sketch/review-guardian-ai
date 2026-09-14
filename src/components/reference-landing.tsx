@@ -14,7 +14,7 @@ import scannerIcon from "@/assets/reference-icons/scanner.png";
 import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 
-
+const APPEARANCE_STORAGE_KEY = "removal-work-appearance";
 
 const platforms = [
   { name: "Google · Live", glyph: "G", color: "#4285f4" },
@@ -193,9 +193,10 @@ export function ReferenceLanding({
   const [chatOpen, setChatOpen] = useState(true);
 
   useEffect(() => {
-    const saved = window.localStorage.getItem("removal-work-appearance");
-    const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
-    setLightMode(saved ? saved === "light" : prefersLight);
+    const saved = window.localStorage.getItem(APPEARANCE_STORAGE_KEY);
+    // Appearance is intentionally user-controlled. System preference changes,
+    // browser focus and route remounts must never flip it automatically.
+    setLightMode(saved === "light");
     if (window.location.hash === "#scan") {
       setScannerOpen(true);
       window.setTimeout(() => {
@@ -209,7 +210,7 @@ export function ReferenceLanding({
   function toggleAppearance() {
     setLightMode((current) => {
       const next = !current;
-      window.localStorage.setItem("removal-work-appearance", next ? "light" : "dark");
+      window.localStorage.setItem(APPEARANCE_STORAGE_KEY, next ? "light" : "dark");
       return next;
     });
   }

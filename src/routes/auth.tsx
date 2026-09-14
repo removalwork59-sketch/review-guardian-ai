@@ -45,22 +45,35 @@ function AuthPage() {
   const [message, setMessage] = useState<{ tone: "error" | "ok"; text: string } | null>(null);
 
   useEffect(() => {
-    setReady(true);
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) void navigate({ to: "/dashboard" });
+    let active = true;
+    supabase.auth.getUser().then(({ data }) => {
+      if (!active) return;
+      if (data.user) {
+        void navigate({ to: "/dashboard", replace: true });
+        return;
+      }
+      setReady(true);
+    }).catch(() => {
+      if (active) setReady(true);
     });
+    return () => {
+      active = false;
+    };
   }, [navigate]);
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
+    if (busy || googleBusy || recoveryBusy) return;
     setBusy(true);
     setMessage(null);
 
+    const normalizedEmail = email.trim().toLowerCase();
+
     if (mode === "signup") {
       const { data, error } = await supabase.auth.signUp({
-        email,
+        email: normalizedEmail,
         password,
-        options: { emailRedirectTo: `${window.location.origin}/dashboard` },
+        options: { emailRedirectTo: window.location.origin },
       });
       setBusy(false);
       if (error) return setMessage({ tone: "error", text: error.message });
@@ -75,20 +88,44 @@ function AuthPage() {
       return;
     }
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: normalizedEmail,
+        password,
+      });
+      if (error || !data.session) {
+        setMessage({
+          tone: "error",
+          text: error?.message === "Invalid login credentials"
+            ? "The email or password is incorrect. Check both and try again."
+            : error?.message ?? "Sign-in did not complete. Please try again.",
+        });
+        return;
+      }
+
+      const { data: verified, error: verificationError } = await supabase.auth.getUser();
+      if (verificationError || !verified.user) {
+        await supabase.auth.signOut({ scope: "local" });
+        setMessage({ tone: "error", text: "Your secure session could not be verified. Please sign in again." });
+        return;
+      }
+
+      const { error: profileError } = await supabase.rpc("ensure_my_profile");
+      if (profileError) {
+        setMessage({ tone: "error", text: "You are signed in, but the workspace could not finish loading. Please try again." });
+        return;
+      }
+
+      await navigate({ to: "/dashboard", replace: true });
+    } catch {
+      setMessage({ tone: "error", text: "Sign-in could not connect. Check your connection and try again." });
+    } finally {
       setBusy(false);
-      return setMessage({ tone: "error", text: error.message });
     }
-    const { error: profileError } = await supabase.rpc("ensure_my_profile");
-    setBusy(false);
-    if (profileError) {
-      return setMessage({ tone: "error", text: "Your account is secure, but the workspace could not finish loading. Please try again." });
-    }
-    void navigate({ to: "/dashboard" });
   }
 
   async function handleGoogle() {
+    if (googleBusy || busy || recoveryBusy) return;
     setMessage(null);
     setGoogleBusy(true);
     try {
@@ -108,6 +145,7 @@ function AuthPage() {
   }
 
   async function handlePasswordRecovery() {
+    if (recoveryBusy || busy || googleBusy) return;
     setMessage(null);
     const normalizedEmail = email.trim();
     if (!normalizedEmail) {
@@ -116,7 +154,7 @@ function AuthPage() {
     }
     setRecoveryBusy(true);
     const { error } = await supabase.auth.resetPasswordForEmail(normalizedEmail, {
-      redirectTo: `${window.location.origin}/auth`,
+      redirectTo: `${window.location.origin}/reset-password`,
     });
     setRecoveryBusy(false);
     setMessage(
@@ -171,9 +209,9 @@ function AuthPage() {
 
             <form onSubmit={handleSubmit} className="auth-fields">
               <label htmlFor="email">Email address</label>
-              <input id="email" type="email" required autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@company.com" disabled={busy || googleBusy} />
+               <input id="email" type="email" required autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@company.com" disabled={busy || googleBusy || recoveryBusy} />
               <label htmlFor="password">Password</label>
-              <input id="password" type="password" required minLength={6} autoComplete={mode === "signin" ? "current-password" : "new-password"} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="At least 6 characters" disabled={busy || googleBusy} />
+               <input id="password" type="password" required minLength={6} autoComplete={mode === "signin" ? "current-password" : "new-password"} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="At least 6 characters" disabled={busy || googleBusy || recoveryBusy} />
               {mode === "signin" ? (
                 <Button type="button" variant="ghost" disabled={recoveryBusy || busy} onClick={handlePasswordRecovery} className="auth-recovery">
                   {recoveryBusy ? "Sending reset link…" : "Forgot password?"}

@@ -2425,3 +2425,86 @@ body {
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 12%, transparent);
 }
 .app-data-card { display: grid; gap: .75rem; }
+
+/* High-fidelity finish — same palette, denser materials and cleaner edge lighting. */
+:root {
+  --shadow-soft:
+    0 1px 1px color-mix(in oklab, var(--color-ink) 8%, transparent),
+    0 22px 52px -24px oklch(0 0 0 / .78),
+    0 0 34px -25px color-mix(in oklab, var(--brand-cyan) 48%, transparent);
+  --shadow-lift:
+    0 1px 1px color-mix(in oklab, var(--color-ink) 10%, transparent),
+    0 34px 82px -26px oklch(0 0 0 / .9),
+    0 0 52px -24px color-mix(in oklab, var(--brand-cyan) 58%, transparent);
+  --shadow-glow:
+    0 0 0 1px color-mix(in oklab, var(--brand-cyan) 52%, transparent),
+    0 20px 52px -17px color-mix(in oklab, var(--brand-cyan) 68%, transparent),
+    0 0 36px -21px color-mix(in oklab, var(--brand-violet) 66%, transparent);
+}
+
+.reference-page,
+.auth-page,
+.app-frame {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+.reference-page :where(.reference-proof, .reference-promise, .three-step-card, .reference-features article, .reference-scan-panel, .audit-chat-panel),
+.auth-shell,
+.auth-form-card,
+.auth-slide,
+.surface,
+.stat-tile,
+.app-data-card {
+  border-color: color-mix(in oklab, var(--brand-cyan) 34%, var(--color-border));
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--color-ink) 17%, transparent),
+    inset 0 -1px 0 oklch(0 0 0 / .38),
+    inset 0 0 38px color-mix(in oklab, var(--brand-cyan) 5%, transparent),
+    var(--shadow-soft);
+}
+
+.reference-gradient-button,
+.rw-cta,
+.audit-main-action,
+.auth-submit,
+.app-sidebar-cta {
+  filter: saturate(1.08) contrast(1.035);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / .7),
+    inset 0 -1px 0 oklch(0 0 0 / .3),
+    0 17px 40px -16px color-mix(in oklab, var(--brand-cyan) 86%, transparent),
+    0 0 28px -15px color-mix(in oklab, var(--brand-cyan) 82%, transparent);
+}
+
+.reference-gradient-button:hover,
+.rw-cta:hover,
+.audit-main-action:hover,
+.auth-submit:hover,
+.app-sidebar-cta:hover {
+  filter: saturate(1.1) contrast(1.04) brightness(1.055);
+}
+
+.auth-fields input,
+.reference-scan-panel input,
+.app-input,
+.app-select,
+.app-textarea {
+  border-color: color-mix(in oklab, var(--brand-cyan) 38%, var(--color-border));
+  box-shadow:
+    inset 0 2px 5px oklch(0 0 0 / .34),
+    inset 0 1px 0 color-mix(in oklab, var(--color-ink) 7%, transparent),
+    0 12px 30px -25px color-mix(in oklab, var(--brand-cyan) 55%, transparent);
+}
+
+.auth-fields input:focus,
+.reference-scan-panel input:focus,
+.app-input:focus,
+.app-select:focus,
+.app-textarea:focus {
+  border-color: var(--brand-cyan);
+  box-shadow:
+    inset 0 2px 5px oklch(0 0 0 / .3),
+    0 0 0 3px color-mix(in oklab, var(--brand-cyan) 13%, transparent),
+    0 0 28px -10px color-mix(in oklab, var(--brand-cyan) 58%, transparent);
+}
