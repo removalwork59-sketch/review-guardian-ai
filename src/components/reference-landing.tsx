@@ -233,6 +233,35 @@ export function ReferenceLanding({
           </ul>
         </div>
 
+        <section id="contact" className="reference-contact">
+          <div className="reference-contact-copy">
+            <h2>Contact us</h2>
+            <p>Reach out directly. Every message is handled by the Removal Work team.</p>
+          </div>
+          <div className="reference-contact-grid">
+            <a href="mailto:removalwork59@gmail.com" className="reference-contact-card">
+              <span className="contact-glyph"><Mail className="size-5" /></span>
+              <span className="contact-label">Email</span>
+              <span className="contact-value">removalwork59@gmail.com</span>
+            </a>
+            <a href="tel:+923448706466" className="reference-contact-card">
+              <span className="contact-glyph"><Phone className="size-5" /></span>
+              <span className="contact-label">Phone</span>
+              <span className="contact-value">+92 344 8706466</span>
+            </a>
+            <address className="reference-contact-card">
+              <span className="contact-glyph"><MapPin className="size-5" /></span>
+              <span className="contact-label">Address</span>
+              <span className="contact-value">Aslam Abad Bakhir Wah<br />Dera Ghazi Khan, 32200</span>
+            </address>
+            <a href="https://www.facebook.com/share/v/1FcAkYSSMf/" target="_blank" rel="noopener noreferrer" className="reference-contact-card">
+              <span className="contact-glyph"><Facebook className="size-5" /></span>
+              <span className="contact-label">Social</span>
+              <span className="contact-value">Facebook</span>
+            </a>
+          </div>
+        </section>
+
         <section id="platforms" className="reference-platforms">
           <div className="reference-platforms-copy">
             <h2>Finally, a way for businesses to protect themselves and <span>fight back.</span></h2>

@@ -1440,6 +1440,22 @@
 .reference-nav .reference-outline-button, .reference-nav .reference-gradient-button { min-height: 44px; padding: 0 18px; font-size: 14px; }
 .reference-wrap :where(.reference-copy) h1 { max-width: 12ch; }
 
+/* Contact section */
+.reference-contact { margin: 5rem 0 0; padding: clamp(2.5rem, 5vw, 4rem) var(--layout-gutter); border-radius: var(--radius-2xl); background: linear-gradient(145deg, color-mix(in oklab, var(--color-card) 92%, transparent), color-mix(in oklab, var(--color-background) 88%, transparent)); border: 1px solid color-mix(in oklab, var(--color-cyan) 14%, transparent); box-shadow: inset 0 1px 0 color-mix(in oklab, var(--color-ink) 8%, transparent), 0 24px 60px -28px oklch(0 0 0 / .55); }
+.reference-contact-copy { text-align: center; max-width: 34rem; margin: 0 auto 2.25rem; }
+.reference-contact-copy h2 { font-family: var(--font-display); font-size: clamp(1.8rem, 3.6vw, 2.6rem); font-weight: 800; letter-spacing: -0.02em; color: var(--color-ink); margin: 0 0 .55rem; }
+.reference-contact-copy p { color: var(--color-muted-foreground); line-height: 1.55; }
+.reference-contact-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--grid-gap); }
+.reference-contact-card { display: grid; align-content: start; gap: .55rem; padding: var(--card-pad); border-radius: var(--radius-xl); background: linear-gradient(145deg, color-mix(in oklab, var(--color-background) 86%, transparent), color-mix(in oklab, var(--color-card) 96%, transparent)); border: 1px solid color-mix(in oklab, var(--color-cyan) 12%, transparent); text-decoration: none; font-style: normal; transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease; }
+.reference-contact-card:hover { transform: translateY(-4px); border-color: color-mix(in oklab, var(--brand-cyan) 45%, transparent); box-shadow: inset 0 1px 0 color-mix(in oklab, var(--color-ink) 10%, transparent), 0 18px 42px -20px oklch(0 0 0 / .55), 0 0 28px color-mix(in oklab, var(--brand-cyan) 10%, transparent); }
+.contact-glyph { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 11px; background: color-mix(in oklab, var(--brand-cyan) 16%, transparent); color: var(--brand-cyan); }
+.contact-label { font-size: .72rem; font-weight: 750; text-transform: uppercase; letter-spacing: .06em; color: var(--color-muted-foreground); }
+.contact-value { color: var(--color-ink); font-weight: 600; line-height: 1.45; overflow-wrap: anywhere; }
+.reference-contact-card address { all: unset; display: contents; }
+
+@media (max-width: 960px) { .reference-contact-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .reference-contact-grid { grid-template-columns: 1fr; } .reference-contact { margin-top: 3.5rem; } }
+
 /* Platforms we cover */
 .reference-platforms { display: grid; grid-template-columns: 1fr 1.35fr; gap: 3rem; align-items: center; margin: 6rem 0 0; padding-bottom: 5rem; }
 .reference-platforms-copy h2 { font-size: clamp(2.4rem, 4.5vw, 3.9rem); font-weight: 800; line-height: 1.08; letter-spacing: -0.02em; color: #f2f7f4; margin: 0 0 1.4rem; }
