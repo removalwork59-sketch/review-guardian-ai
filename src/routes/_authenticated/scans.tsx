@@ -96,15 +96,19 @@ function EvidenceList({
 function ScanReportCard({
   item,
   busy,
+  exporting,
   onStatusChange,
   onNoteSave,
   onDelete,
+  onExport,
 }: {
   item: CaseRecord;
   busy: boolean;
+  exporting: boolean;
   onStatusChange: (status: CaseStatus) => void;
   onNoteSave: (note: string) => void;
   onDelete: () => void;
+  onExport: () => void;
 }) {
   const [editing, setEditing] = useState(false);
   const [confirming, setConfirming] = useState(false);
