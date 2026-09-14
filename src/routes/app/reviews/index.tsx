@@ -80,7 +80,7 @@ function ReviewsPage() {
           <h2 className="rw-section-title">In progress</h2>
           <ul className="grid gap-2">
             {pending.map((job) => (
-              <li key={job.id}>
+              <li key={job.id} className="min-w-0">
                 <Link
                   to="/app/reviews/new"
                   search={{ job: job.id }}

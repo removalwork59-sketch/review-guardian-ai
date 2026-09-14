@@ -96,11 +96,19 @@ export function SiteHeader({
     };
   }, []);
 
-  function toggle(key: MenuKey) {
-    setOpen((current) => (current === key ? null : key));
+  const hoverOpenedAt = useRef(0);
+
+  function openOnHover(key: MenuKey) {
+    hoverOpenedAt.current = Date.now();
+    setOpen(key);
   }
 
-  const menuProps = { open, onToggle: toggle, onOpen: setOpen, onClose: () => setOpen(null) };
+  function toggle(key: MenuKey) {
+    const justOpenedByHover = Date.now() - hoverOpenedAt.current < 600;
+    setOpen((current) => (current === key && !justOpenedByHover ? null : key));
+  }
+
+  const menuProps = { open, onToggle: toggle, onOpen: openOnHover, onClose: () => setOpen(null) };
 
   function scan() {
     setMobileOpen(false);
