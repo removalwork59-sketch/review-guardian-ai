@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Done
+- Added SEO metadata (title, description, Open Graph, Twitter, canonical) on home and auth pages; added a hero "Talk to Our Team" CTA scrolling to the contact form, verified on desktop and mobile
 - Added a public contact section after the review cards with address, phone, email, and social links; verified on desktop and mobile
 - Verified notify.removalwork.online email domain, built the validated contact email form (name/email/subject/message) delivering to removalwork59@gmail.com with rate limiting, and confirmed a real test send was accepted for delivery
 - Added an About section after the review cards with honest company story, mission, and vision copy
@@ -50,3 +51,4 @@
 - Facebook / Instagram / YouTube scanning — blocked until a Meta/YouTube connection exists
 - Verified removal outcome — Google gives no API for report status; user marks the real outcome
 - Replace the stale `removalwork.online` deployment with this verified build; the live domain currently returns 404 for `/pipeline`, so production cannot be declared ready until safe VPS deployment access is available
+

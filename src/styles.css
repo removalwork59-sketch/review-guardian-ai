@@ -612,7 +612,7 @@
 .reference-nav { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid color-mix(in oklab, var(--color-cyan) 15%, transparent); background: color-mix(in oklab, var(--color-background) 80%, transparent); backdrop-filter: blur(16px); }
 .reference-icon-button, .reference-outline-button, .reference-gradient-button { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; font-size: 12px; font-weight: 600; line-height: 1; transition: transform .2s ease, border-color .2s ease, filter .2s ease; }
 .reference-icon-button { width: 34px; height: 34px; border: 1px solid color-mix(in oklab, var(--color-cyan) 22%, transparent); color: var(--color-foreground); background: color-mix(in oklab, var(--color-card) 65%, transparent); }
-.reference-outline-button { min-height: 34px; padding: 0 15px; border: 1px solid color-mix(in oklab, var(--color-cyan) 22%, transparent); color: var(--color-ink); background: color-mix(in oklab, var(--color-card) 65%, transparent); }
+.reference-outline-button { gap: 8px; min-height: 34px; padding: 0 15px; border: 1px solid color-mix(in oklab, var(--color-cyan) 22%, transparent); color: var(--color-ink); background: color-mix(in oklab, var(--color-card) 65%, transparent); }
 .reference-gradient-button { min-height: 36px; padding: 0 17px; gap: 8px; border: 0; color: var(--color-primary-foreground); background: linear-gradient(105deg, var(--color-violet), var(--color-cyan) 65%); box-shadow: 0 10px 34px color-mix(in oklab, var(--color-violet) 20%, transparent); }
 .reference-icon-button:hover, .reference-outline-button:hover, .reference-gradient-button:hover { transform: translateY(-2px); filter: brightness(1.08); }
 
@@ -623,7 +623,7 @@
 .reference-copy h1 { margin-top: 25px; font-size: clamp(43px, 4.3vw, 61px); font-weight: 700; line-height: 1.16; }
 .reference-copy h1 span { background: linear-gradient(105deg, var(--color-violet), var(--color-cyan) 58%, var(--color-magenta)); background-clip: text; color: transparent; }
 .reference-copy > p { max-width: 560px; margin-top: 20px; color: var(--color-muted-foreground); font-size: 14px; line-height: 1.6; }
-.reference-actions { display: flex; gap: 10px; margin-top: 26px; }
+.reference-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
 .reference-primary-action, .reference-secondary-action { min-height: 44px; padding-inline: 21px; }
 .reference-checks { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 26px; margin-top: 27px; color: var(--color-muted-foreground); font-size: 11px; }
 .reference-checks li { display: flex; align-items: center; gap: 8px; }
