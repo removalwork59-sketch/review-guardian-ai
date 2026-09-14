@@ -62,3 +62,5 @@
 - [x] Dashboard: add/edit/delete controls for review cases (status, note, delete)
 - [x] Contact form submissions stored in database and shown in dashboard Messages page
 - [x] Blog manager in sidebar with create/edit/delete (live) — real post content still has to be written by the user; nothing fabricated
+- [ ] Mobile layout check: sidebar, Reviews, Messages, Blog pages — overflow, spacing, buttons (in progress)
+- [ ] Scan report page with real scan data entry/edit/delete, also visible on dashboard
