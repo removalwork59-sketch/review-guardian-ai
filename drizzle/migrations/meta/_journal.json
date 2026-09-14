@@ -64,6 +64,13 @@
       "when": 1789361999909,
       "tag": "0008_create_scan_exports",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1789362516298,
+      "tag": "0009_scan_exports_case_fk",
+      "breakpoints": true
     }
   ]
 }

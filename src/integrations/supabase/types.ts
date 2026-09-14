@@ -849,7 +849,15 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "scan_exports_case_id_fk"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "review_cases"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
