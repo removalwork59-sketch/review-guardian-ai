@@ -16,6 +16,7 @@ function toCase(row: any): CaseRecord {
     locationName: location.name ?? "Unknown business",
     locationAddress: location.address ?? "",
     platform: row.platform,
+    publicStatus: Boolean(row.public_status),
     sourceUrl: row.source_url,
     reviewUrl: row.review_url,
     authorName: row.author_name,

@@ -2,13 +2,15 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FileDown } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { AppShell } from "@/components/app-shell";
 import { CaseCard, EmptyState } from "@/components/case-ui";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 import { deleteCase, listCases, updateCaseStatus } from "@/lib/cases.functions";
 import type { CaseRecord, CaseStatus } from "@/lib/case-types";
+import { countContactMessages } from "@/lib/metrics.functions";
 import { listScanExports } from "@/lib/scan-export.functions";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -73,6 +75,59 @@ export function useScanExports() {
   });
 }
 
+export function useContactMessageCount() {
+  const fetchCount = useServerFn(countContactMessages);
+  return useQuery({
+    queryKey: ["contact-message-count"],
+    queryFn: () => fetchCount({ data: undefined }),
+  });
+}
+
+/**
+ * Keeps the dashboard counters live. Realtime only delivers rows the signed-in
+ * user is allowed to read, so this adds no new data exposure.
+ */
+export function useLiveDashboardData() {
+  const queryClient = useQueryClient();
+  useEffect(() => {
+    const refresh = () => {
+      void queryClient.invalidateQueries({ queryKey: ["cases"] });
+      void queryClient.invalidateQueries({ queryKey: ["scan-exports"] });
+      void queryClient.invalidateQueries({ queryKey: ["contact-message-count"] });
+    };
+    const channel = supabase
+      .channel("dashboard-live")
+      .on("postgres_changes", { event: "*", schema: "public", table: "review_cases" }, refresh)
+      .on("postgres_changes", { event: "*", schema: "public", table: "scan_exports" }, refresh)
+      .on("postgres_changes", { event: "*", schema: "public", table: "contact_messages" }, refresh)
+      .subscribe();
+    return () => {
+      void supabase.removeChannel(channel);
+    };
+  }, [queryClient]);
+}
+
+/** Groups exports into the last 14 days for the history chart. */
+function exportsByDay(rows: { createdAt: string }[]) {
+  const days: { key: string; label: string; count: number }[] = [];
+  for (let index = 13; index >= 0; index -= 1) {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    date.setDate(date.getDate() - index);
+    days.push({
+      key: date.toISOString().slice(0, 10),
+      label: date.toLocaleDateString(undefined, { day: "numeric", month: "short" }),
+      count: 0,
+    });
+  }
+  for (const row of rows) {
+    const key = new Date(row.createdAt).toISOString().slice(0, 10);
+    const day = days.find((item) => item.key === key);
+    if (day) day.count += 1;
+  }
+  return days;
+}
+
 const STATUS_FILTERS: { value: "all" | CaseStatus; label: string }[] = [
   { value: "all", label: "All statuses" },
   { value: "new", label: "New" },
@@ -88,9 +143,12 @@ function ReviewsPage() {
   const status = useStatusMutation();
   const removeCase = useDeleteCaseMutation();
   const { data: exportsData, isPending: exportsPending } = useScanExports();
+  const { data: messageCount } = useContactMessageCount();
   const [filter, setFilter] = useState<string>("all");
   const [siteFilter, setSiteFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+
+  useLiveDashboardData();
 
   const cases: CaseRecord[] = data ?? [];
   const sites = Array.from(new Set(cases.map((item) => item.locationName))).sort();
@@ -98,6 +156,12 @@ function ReviewsPage() {
     .filter((item) => filter === "all" || item.verdict === filter)
     .filter((item) => siteFilter === "all" || item.locationName === siteFilter)
     .filter((item) => statusFilter === "all" || item.status === statusFilter);
+
+  const pendingCount = cases.filter((item) =>
+    ["new", "reported", "pending"].includes(item.status),
+  ).length;
+  const chart = exportsByDay(exportsData ?? []);
+  const chartMax = Math.max(1, ...chart.map((day) => day.count));
 
   return (
     <AppShell
@@ -117,6 +181,32 @@ function ReviewsPage() {
         </div>
       }
     >
+      <div className="app-stats-grid mb-6">
+        <div className="stat-tile">
+          <span className="stat-tile-label">Total scans</span>
+          <span className="stat-tile-value text-ink">{cases.length}</span>
+        </div>
+        <div className="stat-tile">
+          <span className="stat-tile-label">Pending reviews</span>
+          <span className="stat-tile-value text-ink">{pendingCount}</span>
+        </div>
+        <div className="stat-tile">
+          <span className="stat-tile-label">PDF exports</span>
+          <span className="stat-tile-value text-ink">{exportsData?.length ?? 0}</span>
+        </div>
+        <div className="stat-tile">
+          <span className="stat-tile-label">
+            {messageCount?.allowed ? "Contact messages" : "Contact messages (admins only)"}
+          </span>
+          <span className="stat-tile-value text-ink">
+            {messageCount?.allowed ? messageCount.total : "—"}
+          </span>
+          {messageCount?.allowed && messageCount.unread > 0 ? (
+            <span className="mt-1 text-xs text-primary">{messageCount.unread} unread</span>
+          ) : null}
+        </div>
+      </div>
+
       <div className="app-filter-row">
         {FILTERS.map((item) => (
           <Button
@@ -198,12 +288,37 @@ function ReviewsPage() {
       )}
 
       <section className="mt-10">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-ink">Export history</h2>
-          <Button asChild variant="outline" size="sm">
+        <div className="mb-4 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+          <h2 className="truncate text-lg font-bold text-ink">Export history</h2>
+          <Button asChild variant="outline" size="sm" className="shrink-0">
             <Link to="/scans">Go to scan reports</Link>
           </Button>
         </div>
+
+        {exportsData?.length ? (
+          <figure className="app-card mb-4 rounded-2xl border border-border bg-card">
+            <figcaption className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              PDF exports — last 14 days
+            </figcaption>
+            <div className="mt-4 flex h-32 items-end gap-1.5">
+              {chart.map((day) => (
+                <div key={day.key} className="flex min-w-0 flex-1 flex-col items-center gap-1">
+                  <span className="text-[10px] text-muted-foreground">
+                    {day.count > 0 ? day.count : ""}
+                  </span>
+                  <div
+                    className="w-full rounded-t-md bg-primary/70"
+                    style={{ height: `${Math.max(4, (day.count / chartMax) * 92)}%` }}
+                    title={`${day.label}: ${day.count} export${day.count === 1 ? "" : "s"}`}
+                  />
+                  <span className="w-full truncate text-center text-[9px] text-muted-foreground">
+                    {day.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </figure>
+        ) : null}
         {exportsPending ? (
           <p className="text-sm text-muted-foreground">Loading export history…</p>
         ) : !exportsData?.length ? (

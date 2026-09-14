@@ -71,6 +71,7 @@ export type CaseRecord = {
   reportedAt: string | null;
   resolvedAt: string | null;
   createdAt: string;
+  publicStatus: boolean;
   analysis: ReviewAnalysis | null;
 };
 

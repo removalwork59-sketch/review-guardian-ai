@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as ScanRouteImport } from './routes/scan'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as AuthenticatedBlogManagerRouteImport } from './routes/_authenticated/blog-manager'
 import { Route as AuthenticatedBulkRouteImport } from './routes/_authenticated/bulk'
@@ -49,6 +50,11 @@ const BlogRoute = BlogRouteImport.update({
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScanRoute = ScanRouteImport.update({
+  id: '/scan',
+  path: '/scan',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesRoute = ServicesRouteImport.update({
@@ -120,6 +126,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
+  '/scan': typeof ScanRoute
   '/services': typeof ServicesRoute
   '/blog-manager': typeof AuthenticatedBlogManagerRoute
   '/bulk': typeof AuthenticatedBulkRoute
@@ -138,6 +145,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
+  '/scan': typeof ScanRoute
   '/services': typeof ServicesRoute
   '/blog-manager': typeof AuthenticatedBlogManagerRoute
   '/bulk': typeof AuthenticatedBulkRoute
@@ -158,6 +166,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
+  '/scan': typeof ScanRoute
   '/services': typeof ServicesRoute
   '/_authenticated/blog-manager': typeof AuthenticatedBlogManagerRoute
   '/_authenticated/bulk': typeof AuthenticatedBulkRoute
@@ -178,6 +187,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog'
     | '/reset-password'
+    | '/scan'
     | '/services'
     | '/blog-manager'
     | '/bulk'
@@ -196,6 +206,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog'
     | '/reset-password'
+    | '/scan'
     | '/services'
     | '/blog-manager'
     | '/bulk'
@@ -215,6 +226,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog'
     | '/reset-password'
+    | '/scan'
     | '/services'
     | '/_authenticated/blog-manager'
     | '/_authenticated/bulk'
@@ -235,6 +247,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   BlogRoute: typeof BlogRouteWithChildren
   ResetPasswordRoute: typeof ResetPasswordRoute
+  ScanRoute: typeof ScanRoute
   ServicesRoute: typeof ServicesRoute
   ApiPublicGoogleBusinessCallbackRoute: typeof ApiPublicGoogleBusinessCallbackRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
@@ -275,6 +288,13 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/scan': {
+      id: '/scan'
+      path: '/scan'
+      fullPath: '/scan'
+      preLoaderRoute: typeof ScanRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services': {
@@ -405,6 +425,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   BlogRoute: BlogRouteWithChildren,
   ResetPasswordRoute: ResetPasswordRoute,
+  ScanRoute: ScanRoute,
   ServicesRoute: ServicesRoute,
   ApiPublicGoogleBusinessCallbackRoute: ApiPublicGoogleBusinessCallbackRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,

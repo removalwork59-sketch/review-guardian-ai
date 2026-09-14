@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Download, ExternalLink, FileDown, Pencil, Star, Trash2, X } from "lucide-react";
+import { Download, ExternalLink, FileDown, Globe, Pencil, Star, Trash2, X } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { EmptyState, VerdictBadge } from "@/components/case-ui";
@@ -11,6 +11,7 @@ import { CATEGORY_LABELS } from "@/lib/analysis-types";
 import { CASE_STATUS_TRANSITIONS } from "@/lib/case-types";
 import type { CaseRecord, CaseStatus } from "@/lib/case-types";
 import { exportScanReport } from "@/lib/scan-export.functions";
+import { setCasePublicStatus } from "@/lib/public-status.functions";
 import {
   useCases,
   useDeleteCaseMutation,
@@ -93,6 +94,17 @@ function EvidenceList({
   );
 }
 
+function usePublicStatusMutation() {
+  const queryClient = useQueryClient();
+  const publish = useServerFn(setCasePublicStatus);
+  return useMutation({
+    mutationFn: (input: { id: string; isPublic: boolean }) => publish({ data: input }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["cases"] });
+    },
+  });
+}
+
 function ScanReportCard({
   item,
   busy,
@@ -101,6 +113,7 @@ function ScanReportCard({
   onNoteSave,
   onDelete,
   onExport,
+  onTogglePublic,
 }: {
   item: CaseRecord;
   busy: boolean;
@@ -109,6 +122,7 @@ function ScanReportCard({
   onNoteSave: (note: string) => void;
   onDelete: () => void;
   onExport: () => void;
+  onTogglePublic: (isPublic: boolean) => void;
 }) {
   const [editing, setEditing] = useState(false);
   const [confirming, setConfirming] = useState(false);
@@ -263,6 +277,35 @@ function ScanReportCard({
             </>
           )}
         </Button>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="gap-1.5"
+          disabled={busy}
+          onClick={() => onTogglePublic(!item.publicStatus)}
+          title="Publish only the status and progress. Review text and business details stay private."
+        >
+          {item.publicStatus ? (
+            <>
+              <Globe className="h-3.5 w-3.5" /> Hide from public board
+            </>
+          ) : (
+            <>
+              <Globe className="h-3.5 w-3.5" /> Show status publicly
+            </>
+          )}
+        </Button>
+        {item.publicStatus ? (
+          <a
+            href="/scan"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs font-semibold text-primary underline"
+          >
+            View public board
+          </a>
+        ) : null}
         {editing ? (
           <div className="flex w-full flex-wrap items-center gap-2">
             <input
@@ -357,6 +400,7 @@ function ScansPage() {
   const status = useStatusMutation();
   const removeCase = useDeleteCaseMutation();
   const exportCase = useExportScanMutation();
+  const publishStatus = usePublicStatusMutation();
   const [verdictFilter, setVerdictFilter] = useState<string>("all");
   const [siteFilter, setSiteFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -471,6 +515,9 @@ function ScansPage() {
               }
               onDelete={() => removeCase.mutate(item.id)}
               onExport={() => exportCase.mutate(item.id)}
+              onTogglePublic={(isPublic) =>
+                publishStatus.mutate({ id: item.id, isPublic })
+              }
             />
           ))}
         </div>

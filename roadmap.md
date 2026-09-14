@@ -75,3 +75,6 @@
 - [ ] Trigger a real Google Maps review scan and confirm it appears on /scans and sends the auto email
 - [ ] Create one REAL scan entry (live Add Review scan), one real contact message, confirm status update persists
 - [ ] Verify auto email fires when a live review/scan is added and dashboard shows the status update
+- [ ] Dashboard: real-time counters (total scans, pending reviews, contact messages) + export history chart
+- [ ] Public /scan page showing each entry's status and review progress (owner opt-in, no private data)
+- [ ] Dashboard and /scans mobile responsive: filter dropdowns and cards mobile-friendly
