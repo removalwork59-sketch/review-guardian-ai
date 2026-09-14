@@ -52,6 +52,6 @@
 - Verified removal outcome — Google gives no API for report status; user marks the real outcome
 - Replace the stale `removalwork.online` deployment with this verified build; the live domain currently returns 404 for `/pipeline`, so production cannot be declared ready until safe VPS deployment access is available
 
-- [ ] Blog + Services SEO pages with per-page titles/meta (in progress)
+- [x] Blog + Services SEO pages with per-page titles/meta (done)
 - [ ] Project showcase section — blocked until user supplies real project title/description/image/link
-- [ ] Mobile full-width/spacing/text audit for hero, cards, contact sections
+- [x] Mobile audit done — fixed dark-on-dark card text in light theme
