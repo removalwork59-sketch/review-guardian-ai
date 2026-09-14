@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { ExternalLink, Pencil, Star, Trash2, X } from "lucide-react";
+import { Download, ExternalLink, FileDown, Pencil, Star, Trash2, X } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { EmptyState, VerdictBadge } from "@/components/case-ui";
@@ -8,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { CATEGORY_LABELS } from "@/lib/analysis-types";
 import { CASE_STATUS_TRANSITIONS } from "@/lib/case-types";
 import type { CaseRecord, CaseStatus } from "@/lib/case-types";
+import { exportScanReport } from "@/lib/scan-export.functions";
 import {
   useCases,
   useDeleteCaseMutation,
