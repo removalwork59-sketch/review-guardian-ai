@@ -65,3 +65,5 @@
 - [x] Mobile layout check passed: sidebar, Reviews, Messages, Blog, Locations, Bulk — no overflow, clean spacing, working drawer
 - [x] Scan reports page (/scans) with real scan data, status edit, note edit, delete; sidebar entry added; verified desktop + mobile
 - [ ] Scan report page with real scan data entry/edit/delete, also visible on dashboard
+- [x] Dashboard → Scan reports button wired to /scans (real data, verified click-through)
+- [x] Auto email "scan-report-ready" sent to the signed-in user after each new scan; dashboard shows status updates
