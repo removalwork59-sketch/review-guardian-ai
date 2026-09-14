@@ -201,7 +201,7 @@ function Home() {
   return (
     <main className="premium-home grid-bg relative min-h-screen overflow-hidden bg-background">
       {stage === "idle" ? (
-        <ReferenceLanding signedIn={signedIn} url={url} setUrl={setUrl} onScan={handleScan} busy={busy} />
+        <ReferenceLanding signedIn={signedIn} url={url} setUrl={setUrl} onScan={handleScan} busy={busy} scanError={error} />
       ) : null}
       {stage !== "idle" ? <header className="site-nav sticky top-0 z-50">
         <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-5 py-4 sm:px-8 lg:px-10">
