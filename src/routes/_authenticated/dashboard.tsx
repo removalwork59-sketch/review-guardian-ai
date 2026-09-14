@@ -82,6 +82,9 @@ function ReviewsPage() {
             <a href="/#scan">Add review</a>
           </Button>
           <Button asChild variant="outline">
+            <Link to="/scans">Scan reports</Link>
+          </Button>
+          <Button asChild variant="outline">
             <Link to="/bulk">Bulk scan</Link>
           </Button>
         </div>
