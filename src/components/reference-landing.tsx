@@ -307,6 +307,32 @@ export function ReferenceLanding({
           </ul>
         </div>
 
+        <section id="about" className="reference-about">
+          <div className="reference-about-copy">
+            <h2>About Removal Work</h2>
+            <p>
+              Removal Work started with a simple frustration: honest businesses had no structured way to answer
+              reviews that break platform rules. We built a workspace that reads the real review, checks it against
+              Google's published policies with AI, prepares the evidence, and keeps a truthful record of every case —
+              so decisions stay in the owner's hands.
+            </p>
+          </div>
+          <div className="reference-about-grid">
+            <article className="reference-about-card">
+              <h3>Our mission</h3>
+              <p>Give every business a clear, evidence-first way to investigate policy-violating reviews — with real data, honest verdicts, and no fabricated outcomes.</p>
+            </article>
+            <article className="reference-about-card">
+              <h3>Our vision</h3>
+              <p>A reputation workflow where every report is backed by verified evidence, every status is user-recorded, and trust is earned by accuracy — across every major review platform.</p>
+            </article>
+            <article className="reference-about-card">
+              <h3>How we work</h3>
+              <p>Real Google lookups, adversarial AI policy checks, and durable case tracking. If evidence does not support a report, we say so — we never claim submissions or removals that did not happen.</p>
+            </article>
+          </div>
+        </section>
+
         <section id="contact" className="reference-contact">
           <div className="reference-contact-copy">
             <h2>Contact us</h2>
