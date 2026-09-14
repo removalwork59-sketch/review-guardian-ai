@@ -2286,3 +2286,43 @@ body {
   .bulk-result-verdict { grid-column: 2; justify-self: start; }
   .reference-page .audit-finale-copy h2 { font-size: clamp(2.6rem, 12.5vw, 3.25rem); }
 }
+
+/* ---------- Content pages (services / blog) ---------- */
+.page-shell { min-height: 100vh; display: flex; flex-direction: column; background: var(--color-background); color: var(--color-ink); }
+.page-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.25rem clamp(1rem, 4vw, 3rem); border-bottom: 1px solid var(--color-border); }
+.page-back { display: inline-flex; align-items: center; gap: .4rem; width: fit-content; color: var(--color-muted-foreground); font-size: .9rem; font-weight: 600; transition: color .18s ease; }
+.page-back:hover { color: var(--brand-cyan); }
+.page-main { flex: 1; width: min(1080px, 100%); margin-inline: auto; padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1rem, 4vw, 2rem); }
+.page-eyebrow { margin: 0 0 .6rem; color: var(--brand-cyan); font-size: .75rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+.page-title { margin: 0 0 .9rem; max-width: 22ch; font-size: clamp(1.9rem, 4.5vw, 2.9rem); font-weight: 850; line-height: 1.12; letter-spacing: -.02em; text-wrap: balance; }
+.page-lede { margin: 0 0 2.5rem; max-width: 62ch; color: var(--color-muted-foreground); font-size: 1.05rem; line-height: 1.65; }
+.page-h2 { margin: 2rem 0 .6rem; font-size: 1.3rem; font-weight: 750; }
+.page-p { margin: 0 0 .9rem; max-width: 68ch; color: var(--color-muted-foreground); line-height: 1.7; }
+.page-footer { padding: 1.5rem clamp(1rem, 4vw, 3rem); border-top: 1px solid var(--color-border); color: var(--color-muted-foreground); font-size: .82rem; }
+.page-footer p { margin: 0; }
+
+.blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 1.25rem; }
+.blog-card { display: grid; align-content: start; gap: .7rem; padding: 1.5rem; border: 1px solid var(--color-border); border-radius: 18px; background: var(--color-card); text-decoration: none; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+.blog-card:hover { transform: translateY(-3px); border-color: var(--brand-cyan); box-shadow: 0 12px 32px -16px rgba(45, 212, 191, .35); }
+.blog-card h2 { margin: 0; font-size: 1.15rem; font-weight: 750; line-height: 1.3; text-wrap: balance; }
+.blog-card p { margin: 0; color: var(--color-muted-foreground); font-size: .92rem; line-height: 1.6; }
+.blog-card-meta { color: var(--brand-cyan); font-size: .75rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.blog-card-cta { display: inline-flex; align-items: center; gap: .35rem; margin-top: .4rem; color: var(--brand-cyan); font-size: .88rem; font-weight: 700; }
+
+.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 1.25rem; }
+.service-card { display: grid; align-content: start; gap: .65rem; padding: 1.6rem; border: 1px solid var(--color-border); border-radius: 18px; background: var(--color-card); transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+.service-card:hover { transform: translateY(-3px); border-color: var(--brand-cyan); box-shadow: 0 12px 32px -16px rgba(45, 212, 191, .35); }
+.service-card h2 { margin: 0; font-size: 1.15rem; font-weight: 750; }
+.service-card p { margin: 0; color: var(--color-muted-foreground); font-size: .92rem; line-height: 1.6; }
+.service-icon { color: var(--brand-cyan); }
+.service-status { width: fit-content; padding: .2rem .6rem; border: 1px solid color-mix(in oklab, var(--brand-cyan) 45%, transparent); border-radius: 999px; color: var(--brand-cyan); font-size: .68rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+
+.page-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; margin-top: 3rem; padding: 1.6rem; border: 1px solid var(--color-border); border-radius: 18px; background: color-mix(in oklab, var(--brand-cyan) 6%, var(--color-card)); }
+.page-cta p { margin: 0; flex: 1 1 16rem; font-weight: 650; }
+.page-cta-button { display: inline-flex; align-items: center; padding: .7rem 1.4rem; border-radius: 999px; background: var(--brand-cyan); color: #052a26; font-weight: 750; text-decoration: none; transition: transform .18s ease, box-shadow .18s ease; }
+.page-cta-button:hover { transform: translateY(-1px); box-shadow: 0 10px 24px -10px rgba(45, 212, 191, .5); }
+
+@media (max-width: 640px) {
+  .page-main { padding-top: 2rem; }
+  .page-title { font-size: 1.7rem; }
+}
