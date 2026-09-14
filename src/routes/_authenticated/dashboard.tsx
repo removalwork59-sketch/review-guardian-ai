@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { FileDown, Trash2 } from "lucide-react";
+import { FileDown } from "lucide-react";
 import { useState } from "react";
 
 import { AppShell } from "@/components/app-shell";
