@@ -1,4 +1,6 @@
-import { ExternalLink, Star } from "lucide-react";
+import { ExternalLink, Pencil, Star, Trash2, X } from "lucide-react";
+import { useState } from "react";
+
 
 import {
   CASE_STATUSES,
@@ -43,12 +45,18 @@ export function VerdictBadge({ verdict }: { verdict: string }) {
 export function CaseCard({
   item,
   onStatusChange,
+  onNoteSave,
+  onDelete,
   busy,
 }: {
   item: CaseRecord;
   onStatusChange: (status: CaseStatus) => void;
+  onNoteSave?: (note: string) => void;
+  onDelete?: () => void;
   busy: boolean;
 }) {
+  const [editing, setEditing] = useState(false);
+  const [note, setNote] = useState(item.statusNote);
   const reportable = ["strong_candidate", "possible_candidate"].includes(item.verdict);
   const availableStatuses = CASE_STATUSES.filter(
     (status) => status === item.status || CASE_STATUS_TRANSITIONS[item.status].includes(status),
