@@ -35,7 +35,8 @@
 
 ## Open
 - Add a real client showcase after the review cards using only client names, projects, and public contact details supplied by the user; blocked until verified client data is provided
-- Add a validated contact email form for name, subject, and message that delivers to removalwork59@gmail.com; sender-domain setup must be confirmed first
+- Add a validated contact email form for name, subject, and message that delivers to removalwork59@gmail.com; sender domain notify.removalwork.online is now verified — build, send, and confirm delivery
+- Add an About section after the review cards with company story, mission, and vision (honest copy, no fabricated claims)
 - Enable Connect Google by saving the approved Google Business Profile client ID and secret (secure form; user must supply)
 - Sync the user's own Google Business Profile reviews into review records and show them in Reviews with AI analysis and a report button (code ready; needs the approved Google OAuth client saved)
 - Submit one real report from the user's own listing and track its status updates in Reports (needs live consent plus explicit user confirmation before the irreversible submission)
