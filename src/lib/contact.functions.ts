@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestHeaders } from "@tanstack/react-start/server";
 import { z } from "zod";
 
 import { sendTemplateEmail } from "@/lib/email-templates/send-email";
@@ -30,10 +31,11 @@ function rateLimit(key: string): boolean {
 
 export const sendContactMessage = createServerFn({ method: "POST" })
   .inputValidator((data) => contactSchema.parse(data))
-  .handler(async ({ data, request }) => {
+  .handler(async ({ data }) => {
+    const headers = getRequestHeaders();
     const ip =
-      request.headers.get("cf-connecting-ip") ??
-      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+      headers.get("cf-connecting-ip") ??
+      headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
       "anonymous";
     if (!rateLimit(ip)) {
       return { sent: false as const, reason: "rate_limited" as const };

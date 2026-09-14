@@ -88,7 +88,7 @@ const styles = {
 export const template = {
   component: ContactMessageEmail,
   subject: (data: Record<string, any>) =>
-    `Contact form: ${data.subject || 'New message'} — ${data.name || 'Visitor'}`,
+    `Contact form: ${data['subject'] || 'New message'} — ${data['name'] || 'Visitor'}`,
   displayName: 'Contact form message',
   previewData: {
     name: 'Aisha Khan',
