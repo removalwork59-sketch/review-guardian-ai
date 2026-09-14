@@ -238,6 +238,7 @@ export function ReferenceLanding({
             <div className="reference-actions">
               <button type="button" onClick={openScanner} className="reference-gradient-button reference-primary-action">Get Your Free Review Audit <span className="arrow-dot"><ArrowRight className="size-3.5" /></span></button>
               <a href="#how" className="reference-outline-button reference-secondary-action">See How It Works <ArrowRight className="size-4" /></a>
+              <a href="#contact" className="reference-outline-button reference-secondary-action">Talk to Our Team <Mail className="size-4" /></a>
             </div>
           </div>
 
