@@ -86,8 +86,8 @@ function BlogPost() {
           {post.date} · {post.readingTime}
         </span>
         <h1 className="page-title">{post.title}</h1>
-        {post.sections.map((section) => (
-          <section key={section.heading}>
+        {post.sections.map((section, index) => (
+          <section key={section.heading || index}>
             <h2 className="page-h2">{section.heading}</h2>
             {section.paragraphs.map((p, i) => (
               <p key={i} className="page-p">
