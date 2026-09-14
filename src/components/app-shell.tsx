@@ -1,5 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import {
+  ScanSearch,
+
   LayoutGrid,
   MapPin,
   Send,
