@@ -256,6 +256,34 @@ export const saveCase = createServerFn({ method: "POST" })
       status: "completed",
     });
     if (auditError) throw auditError;
+
+    // Notify the user that their scan report is ready. Email failure never
+    // blocks saving the case.
+    const email = (context.claims as { email?: string } | undefined)?.email;
+    if (email) {
+      try {
+        const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
+        const verdictLabels: Record<string, string> = {
+          likely_violation: "Likely policy violation",
+          possible_violation: "Possible policy violation",
+          not_reportable: "No clear policy violation",
+        };
+        await sendTemplateEmail("scan-report-ready", email, {
+          templateData: {
+            name: data.business.name,
+            businessName: data.business.name,
+            reviewerName: data.review.authorName,
+            verdictLabel: verdictLabels[analysis.verdict] ?? analysis.verdict,
+            confidence: analysis.confidence,
+            headline: analysis.headline,
+          },
+          idempotencyKey: `scan-report-${saved.id}`,
+        });
+      } catch (emailError) {
+        console.error("[saveCase] scan-report email failed:", emailError);
+      }
+    }
+
     return { case: saved, analysis };
   });
 
