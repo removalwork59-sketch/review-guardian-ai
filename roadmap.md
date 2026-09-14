@@ -54,3 +54,4 @@
 
 - [ ] Blog + Services SEO pages with per-page titles/meta (in progress)
 - [ ] Project showcase section — blocked until user supplies real project title/description/image/link
+- [ ] Mobile full-width/spacing/text audit for hero, cards, contact sections
