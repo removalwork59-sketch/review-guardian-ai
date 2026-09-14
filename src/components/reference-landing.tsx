@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 import { sendContactMessage } from "@/lib/contact.functions";
 
+import chatAvatar from "@/assets/chat-avatar.png";
 import analyticsIcon from "@/assets/reference-icons/analytics.png";
 import casesIcon from "@/assets/reference-icons/cases.png";
 import locationsIcon from "@/assets/reference-icons/locations.png";
