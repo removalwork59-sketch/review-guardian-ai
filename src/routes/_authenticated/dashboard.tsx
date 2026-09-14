@@ -133,8 +133,10 @@ function ReviewsPage() {
             <CaseCard
               key={item.id}
               item={item}
-              busy={status.isPending}
+              busy={status.isPending || removeCase.isPending}
               onStatusChange={(next) => status.mutate({ id: item.id, status: next })}
+              onNoteSave={(note) => status.mutate({ id: item.id, status: item.status, note })}
+              onDelete={() => removeCase.mutate(item.id)}
             />
           ))}
         </div>
