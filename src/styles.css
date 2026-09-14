@@ -2409,3 +2409,19 @@ body {
 @media (min-width: 1024px) {
   .app-mobilebar, .app-sidebar-drawer, .app-sidebar-backdrop { display: none !important; }
 }
+
+/* ── Workspace form inputs ── */
+.app-input {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: .6rem .75rem;
+  background: var(--color-card);
+  color: var(--color-ink);
+  font-size: .875rem;
+  outline: none;
+}
+.app-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 12%, transparent);
+}
+.app-data-card { display: grid; gap: .75rem; }
