@@ -179,12 +179,14 @@ export function ReferenceLanding({
   setUrl,
   onScan,
   busy,
+  scanError,
 }: {
   signedIn: boolean;
   url: string;
   setUrl: (value: string) => void;
   onScan: (event: React.FormEvent) => void;
   busy: boolean;
+  scanError?: { message: string; hint: string } | null;
 }) {
   const [scannerOpen, setScannerOpen] = useState(false);
   const [lightMode, setLightMode] = useState(false);
@@ -399,8 +401,14 @@ export function ReferenceLanding({
             <div><span className="reference-kicker"><Sparkles className="size-3.5" /> Live Google review scan</span><h2>Paste a review URL</h2><p>We fetch the real business and available review text before AI checks the policy evidence.</p></div>
             <form onSubmit={onScan}>
               <input id="reference-review-url" value={url} onChange={(event) => setUrl(event.target.value)} placeholder="https://g.page/r/..." inputMode="url" aria-label="Google review URL" />
-              <Button type="submit" disabled={busy} className="reference-gradient-button">Scan review <ArrowRight className="size-4" /></Button>
+              <Button type="submit" disabled={busy} className="reference-gradient-button">{busy ? "Scanning…" : "Scan review"} <ArrowRight className="size-4" /></Button>
             </form>
+            {scanError ? (
+              <div role="alert" className="mt-4 rounded-2xl border border-danger/25 bg-danger-soft px-4 py-3 text-left">
+                <p className="text-sm font-semibold text-danger">{scanError.message}</p>
+                {scanError.hint ? <p className="mt-1 text-sm text-danger/80">{scanError.hint}</p> : null}
+              </div>
+            ) : null}
           </section>
         ) : null}
 

@@ -67,3 +67,7 @@
 - [ ] Scan report page with real scan data entry/edit/delete, also visible on dashboard
 - [x] Dashboard → Scan reports button wired to /scans (real data, verified click-through)
 - [x] Auto email "scan-report-ready" sent to the signed-in user after each new scan; dashboard shows status updates
+
+- [ ] Scan entries: add site name, date, details fields + dashboard filters (status/verdict/business)
+- [ ] Create one REAL scan entry (live Add Review scan), one real contact message, confirm status update persists
+- [ ] Verify auto email fires when a live review/scan is added and dashboard shows the status update (in progress)

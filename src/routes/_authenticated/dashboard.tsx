@@ -63,14 +63,30 @@ export function useDeleteCaseMutation() {
   });
 }
 
+const STATUS_FILTERS: { value: "all" | CaseStatus; label: string }[] = [
+  { value: "all", label: "All statuses" },
+  { value: "new", label: "New" },
+  { value: "reported", label: "I reported it" },
+  { value: "pending", label: "Awaiting outcome" },
+  { value: "removed", label: "Confirmed removed" },
+  { value: "rejected", label: "Kept by Google" },
+  { value: "ignored", label: "Ignore" },
+];
+
 function ReviewsPage() {
   const { data, isPending, error } = useCases();
   const status = useStatusMutation();
   const removeCase = useDeleteCaseMutation();
   const [filter, setFilter] = useState<string>("all");
+  const [siteFilter, setSiteFilter] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
 
   const cases: CaseRecord[] = data ?? [];
-  const shown = filter === "all" ? cases : cases.filter((item) => item.verdict === filter);
+  const sites = Array.from(new Set(cases.map((item) => item.locationName))).sort();
+  const shown = cases
+    .filter((item) => filter === "all" || item.verdict === filter)
+    .filter((item) => siteFilter === "all" || item.locationName === siteFilter)
+    .filter((item) => statusFilter === "all" || item.status === statusFilter);
 
   return (
     <AppShell
@@ -112,6 +128,31 @@ function ReviewsPage() {
             ) : null}
           </Button>
         ))}
+        <select
+          aria-label="Filter by site"
+          className="app-input w-auto min-w-40 text-xs"
+          value={siteFilter}
+          onChange={(event) => setSiteFilter(event.target.value)}
+        >
+          <option value="all">All sites</option>
+          {sites.map((site) => (
+            <option key={site} value={site}>
+              {site}
+            </option>
+          ))}
+        </select>
+        <select
+          aria-label="Filter by status"
+          className="app-input w-auto min-w-40 text-xs"
+          value={statusFilter}
+          onChange={(event) => setStatusFilter(event.target.value)}
+        >
+          {STATUS_FILTERS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
       </div>
 
       {isPending ? (
