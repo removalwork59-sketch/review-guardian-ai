@@ -65,18 +65,8 @@ export function pipelineLoad() {
 // ---------------------------------------------------------------------------------------------
 // Job persistence helpers
 // ---------------------------------------------------------------------------------------------
-export function canonicalizeUrl(raw: string) {
-  try {
-    const url = new URL(raw.trim().startsWith("http") ? raw.trim() : `https://${raw.trim()}`);
-    url.hash = "";
-    for (const key of [...url.searchParams.keys()]) {
-      if (key.toLowerCase().startsWith("utm_")) url.searchParams.delete(key);
-    }
-    return url.toString().replace(/\/$/, "");
-  } catch {
-    return raw.trim();
-  }
-}
+import { canonicalizeUrl } from "./case-types";
+export { canonicalizeUrl };
 
 async function loadJob(id: string) {
   const db = await admin();

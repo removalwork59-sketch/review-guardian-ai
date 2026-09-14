@@ -121,6 +121,20 @@ export const VERDICT_TONE: Record<string, "safe" | "warning" | "danger" | "info"
 };
 
 /** Split pasted text into candidate links, de-duplicated and validated. */
+/** Canonical form of a pasted link: no fragment, no utm_* tracking parameters, no trailing slash. */
+export function canonicalizeUrl(raw: string) {
+  try {
+    const url = new URL(raw.trim().startsWith("http") ? raw.trim() : `https://${raw.trim()}`);
+    url.hash = "";
+    for (const key of [...url.searchParams.keys()]) {
+      if (key.toLowerCase().startsWith("utm_")) url.searchParams.delete(key);
+    }
+    return url.toString().replace(/\/$/, "");
+  } catch {
+    return raw.trim();
+  }
+}
+
 export function parseUrlList(input: string) {
   const seen = new Set<string>();
   const rows: { url: string; valid: boolean; reason: string }[] = [];
@@ -128,7 +142,7 @@ export function parseUrlList(input: string) {
   for (const raw of input.split(/[\s,]+/)) {
     const value = raw.trim().replace(/[),.]+$/, "");
     if (!value) continue;
-    const key = value.toLowerCase();
+    const key = canonicalizeUrl(value);
     if (seen.has(key)) continue;
     seen.add(key);
 
