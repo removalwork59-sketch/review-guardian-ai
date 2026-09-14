@@ -464,11 +464,13 @@ function ScansPage() {
               key={item.id}
               item={item}
               busy={status.isPending || removeCase.isPending}
+              exporting={exportCase.isPending && exportCase.variables === item.id}
               onStatusChange={(next) => status.mutate({ id: item.id, status: next })}
               onNoteSave={(note) =>
                 status.mutate({ id: item.id, status: item.status, note })
               }
               onDelete={() => removeCase.mutate(item.id)}
+              onExport={() => exportCase.mutate(item.id)}
             />
           ))}
         </div>
