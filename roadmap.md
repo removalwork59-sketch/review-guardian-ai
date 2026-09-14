@@ -57,3 +57,5 @@
 - [ ] Blog section real posts — blocked until user supplies real title/author/date/content/image for each post
 - [ ] Homepage SEO title/meta/OG update with real company name and services — blocked until user supplies exact company name and target service keywords
 - [x] Mobile audit done — fixed dark-on-dark card text in light theme
+- [x] Sidebar workspace layout (AppShell) + verify screenshots
+- [ ] Fix failed superadmin login (invalid credentials) — hard reset password, verify sign-in end-to-end
