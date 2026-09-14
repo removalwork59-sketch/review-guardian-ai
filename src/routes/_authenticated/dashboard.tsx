@@ -65,6 +65,14 @@ export function useDeleteCaseMutation() {
   });
 }
 
+export function useScanExports() {
+  const fetchExports = useServerFn(listScanExports);
+  return useQuery({
+    queryKey: ["scan-exports"],
+    queryFn: () => fetchExports({ data: undefined }),
+  });
+}
+
 const STATUS_FILTERS: { value: "all" | CaseStatus; label: string }[] = [
   { value: "all", label: "All statuses" },
   { value: "new", label: "New" },
