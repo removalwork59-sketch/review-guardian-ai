@@ -145,3 +145,36 @@ export const REPORT_STATUS_TONE: Record<
   appeal_submitted: "info",
   appeal_result: "warning",
 };
+
+/** Failure codes the worker retries automatically, with backoff, while attempts remain. */
+export const RETRYABLE_JOB_ERROR_CODES: readonly string[] = [
+  "rate_limited",
+  "provider_unavailable",
+  "ai_unavailable",
+];
+
+const SETTLED_JOB_STATUSES: readonly string[] = [
+  "completed",
+  "report_ready",
+  "needs_human_review",
+  "cancelled",
+];
+
+/**
+ * True when a review job needs nothing more from the worker: it finished, or it failed in a way
+ * that will not be retried automatically. A person can still retry such a failure by hand.
+ */
+export function isJobSettled(job: {
+  status: string;
+  errorCode: string | null;
+  attemptCount: number;
+  maxAttempts: number;
+}) {
+  if (SETTLED_JOB_STATUSES.includes(job.status)) return true;
+  if (job.status !== "failed") return false;
+  const retriesAutomatically =
+    job.errorCode !== null &&
+    RETRYABLE_JOB_ERROR_CODES.includes(job.errorCode) &&
+    job.attemptCount < job.maxAttempts;
+  return !retriesAutomatically;
+}

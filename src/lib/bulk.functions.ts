@@ -5,17 +5,10 @@ import { dbError } from "./errors";
 
 import { parseUrlList } from "./case-types";
 import { FriendlyError } from "./google.server";
-import type { ReviewJobStatus } from "./state-machines";
+import { isJobSettled, type ReviewJobStatus } from "./state-machines";
 import { assertWorkspaceRole, requireWorkspace } from "./workspace-middleware";
 
 export const MAX_BULK_URLS = 25;
-
-const FINISHED: readonly string[] = [
-  "completed",
-  "report_ready",
-  "needs_human_review",
-  "cancelled",
-];
 
 export type BulkJobItem = {
   id: string;
@@ -50,6 +43,7 @@ type ItemRow = {
     case_id: string | null;
     attempt_count: number;
     max_attempts: number;
+    error_code: string | null;
   } | null;
 };
 
@@ -91,7 +85,7 @@ async function readBulkJob(
   const { data: rows, error: itemError } = await client
     .from("bulk_job_items")
     .select(
-      "id,position,source_url,review_job_id,review_jobs(status,detail,business,case_id,attempt_count,max_attempts)",
+      "id,position,source_url,review_job_id,review_jobs(status,detail,business,case_id,attempt_count,max_attempts,error_code)",
     )
     .eq("bulk_job_id", bulkJobId)
     .order("position", { ascending: true });
@@ -112,8 +106,14 @@ async function readBulkJob(
   }));
   const counts: BulkJob["counts"] = {};
   for (const item of items) counts[item.status] = (counts[item.status] ?? 0) + 1;
-  const done = items.every(
-    (item) => FINISHED.includes(item.status) || (item.status === "failed" && !item.canRetry),
+  // A failed item keeps the scan running only while the worker will retry it automatically.
+  const done = (rows ?? []).every((row) =>
+    isJobSettled({
+      status: row.review_jobs?.status ?? "queued",
+      errorCode: row.review_jobs?.error_code ?? null,
+      attemptCount: row.review_jobs?.attempt_count ?? 0,
+      maxAttempts: row.review_jobs?.max_attempts ?? 0,
+    }),
   );
 
   return {

@@ -26,7 +26,8 @@ export type JobCandidates = { source: ReviewSource; reviews: NormalizedReview[] 
 
 const LEASE_MS = 5 * 60_000;
 const MAX_ATTEMPTS = 5;
-export const RETRYABLE_ERROR_CODES = ["rate_limited", "provider_unavailable", "ai_unavailable"];
+import { RETRYABLE_JOB_ERROR_CODES as RETRYABLE_ERROR_CODES } from "./state-machines";
+export { RETRYABLE_ERROR_CODES };
 const CONCURRENCY = Math.max(1, Number(process.env["REVIEW_PIPELINE_CONCURRENCY"] ?? 3));
 
 async function admin(): Promise<Admin> {
