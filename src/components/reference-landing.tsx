@@ -360,6 +360,7 @@ export function ReferenceLanding({
               <span className="contact-value">Facebook</span>
             </a>
           </div>
+          <ContactForm />
         </section>
 
         <section id="platforms" className="reference-platforms">
