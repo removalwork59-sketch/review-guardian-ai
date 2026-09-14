@@ -283,7 +283,7 @@ export const listScanExports = createServerFn({ method: "POST" })
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from("scan_exports")
-      .select("*, review_cases ( location_name, verdict, confidence, status )")
+      .select("*, review_cases ( verdict, confidence, status, locations ( name ) )")
       .order("created_at", { ascending: false })
       .limit(200);
     if (error) throw error;
@@ -294,7 +294,7 @@ export const listScanExports = createServerFn({ method: "POST" })
       fileName: row.file_name,
       fileSize: row.file_size,
       createdAt: row.created_at,
-      locationName: row.review_cases?.location_name ?? "Unknown business",
+      locationName: row.review_cases?.locations?.name ?? "Unknown business",
       verdict: row.review_cases?.verdict ?? "",
       confidence: row.review_cases?.confidence ?? 0,
       status: row.review_cases?.status ?? "",
