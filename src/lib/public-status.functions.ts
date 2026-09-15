@@ -144,7 +144,44 @@ export const getPublicCaseDetail = createServerFn({ method: "GET" })
       plainSummary: anyRow.plain_summary ?? "",
       rejectionRisk: anyRow.rejection_risk ?? "",
       analysis: (anyRow.analysis as ReviewAnalysis) ?? null,
+      ownerReply: anyRow.owner_reply ?? null,
+      ownerReplyAt: anyRow.owner_reply_at ?? null,
     };
+  });
+
+/** Tells the signed-in visitor whether they own this case (and may reply). */
+export const getMyCaseReplyAccess = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
+  .handler(async ({ data, context }): Promise<{ isOwner: boolean }> => {
+    const { data: row, error } = await context.supabase
+      .from("review_cases")
+      .select("id")
+      .eq("id", data.id)
+      .eq("user_id", context.userId)
+      .maybeSingle();
+    if (error) throw error;
+    return { isOwner: Boolean(row) };
+  });
+
+/** Owner's public reply to the review, shown on the published case page. */
+export const setCaseOwnerReply = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z.object({ id: z.string().uuid(), reply: z.string().max(2000) }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const trimmed = data.reply.trim();
+    const { error } = await context.supabase
+      .from("review_cases")
+      .update({
+        owner_reply: trimmed.length > 0 ? trimmed : null,
+        owner_reply_at: trimmed.length > 0 ? new Date().toISOString() : null,
+      })
+      .eq("id", data.id)
+      .eq("user_id", context.userId);
+    if (error) throw error;
+    return { ok: true as const, reply: trimmed.length > 0 ? trimmed : null };
   });
 
 /** Owner opt-in: publish or unpublish a case's status on the public page. */
