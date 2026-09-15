@@ -7,7 +7,7 @@ not live yet, it says so and names the real blocker.
 
 | Area | State |
 |---|---|
-| Production hosting | `removalwork.online` → VPS 187.53.134.164 → nginx → Node app on 127.0.0.1:3000 (`review-guardian-ai.service`). The retired OrbitRep app is stopped and disabled; its backup is kept. |
+| Production hosting | `removalwork.online` → VPS 187.53.134.164 → nginx → Node app on 127.0.0.1:3000 (`review-guardian-ai.service`). The retired legacy app has been removed from the server; its archive is kept in `/root/backups`. |
 | Database schema | `supabase/migrations/20260913200000_removal_work_schema.sql` is written and tested (see §19) but **not yet applied to the production Supabase project**: no credential on the VPS can run DDL. Until it is applied, signed-in pages fail with an explicit error. |
 | Google Places | Live. Identifies businesses; Google withholds review text for this Cloud project. |
 | Google Business Profile API | OAuth client, redirect URI, secret and a real connected account verified. **Google reports a 0 requests/minute quota** (`DefaultRequestsPerMinutePerProject = 0`): Basic API Access for Cloud project 201313343292 is not approved, so owner reviews cannot be read until Google approves it. |
@@ -351,8 +351,7 @@ Non-retryable failures notify the job's creator and show the real reason in the 
 
 - Nightly configuration backup (`removalwork-config-backup.timer`) of the env file, systemd units,
   nginx and certbot renewal config to `/root/backups/config` (14 days).
-- Retired app archive `/root/backups/orbitrep-pre-rga-20260913-153552.tar.gz`; rollback script
-  `/root/rollback-to-orbitrep.sh`.
+- Retired legacy app: archived only (`/root/backups/orbitrep-*.tar.gz`); it is not installed and has no rollback path to production.
 - Application rollback: `deploy/release.sh` keeps `.output.previous` and restores it automatically.
 - Database: the migration is additive and idempotent; `supabase/rollback/…down.sql` removes only what
   it created (tested). Database backups are Supabase-managed; no database credential exists on the VPS

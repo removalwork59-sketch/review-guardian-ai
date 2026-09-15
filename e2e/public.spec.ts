@@ -1,5 +1,8 @@
 import { expect, test } from "@playwright/test";
 
+/** Names of retired projects that must never appear on the Removal Work site. */
+const LEGACY_IDENTITY = /OrbitRep|SEO ?Val[ae]|Ranking ?Star/i;
+
 test.describe("public production surface", () => {
   test("serves the Removal Work application, not the retired app", async ({ page, request }) => {
     const version = await (await request.get("/api/public/version")).json();
@@ -7,7 +10,10 @@ test.describe("public production surface", () => {
 
     await page.goto("/");
     await expect(page).toHaveTitle(/Removal Work/);
-    await expect(page.locator("body")).not.toContainText(/OrbitRep/i);
+    await expect(page.locator("body")).not.toContainText(LEGACY_IDENTITY);
+    await page.goto("/auth");
+    await expect(page).toHaveTitle(/Removal Work/);
+    await expect(page.locator("body")).not.toContainText(LEGACY_IDENTITY);
   });
 
   test("sends the security headers", async ({ request }) => {
@@ -15,7 +21,7 @@ test.describe("public production surface", () => {
     const headers = response.headers();
     expect(headers["strict-transport-security"]).toContain("max-age=");
     expect(headers["x-content-type-options"]).toBe("nosniff");
-    expect(headers["x-frame-options"]).toBe("DENY");
+    expect(headers["content-security-policy"]).toContain("frame-ancestors 'self'");
     expect(headers["server"]).toBe("nginx");
   });
 
@@ -75,4 +81,12 @@ test.describe("public production surface", () => {
       expect(overflow, path).toBeLessThanOrEqual(1);
     }
   });
+});
+
+test("publishes robots and a sitemap on the canonical domain", async ({ request }) => {
+  const robots = await (await request.get("/robots.txt")).text();
+  expect(robots).toContain("Sitemap: https://removalwork.online/sitemap.xml");
+  const sitemap = await request.get("/sitemap.xml");
+  expect(sitemap.status()).toBe(200);
+  expect(await sitemap.text()).toContain("<loc>https://removalwork.online/</loc>");
 });

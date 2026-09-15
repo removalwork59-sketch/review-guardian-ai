@@ -51,7 +51,7 @@ export function configurationFlags() {
     tokenEncryptionKey: present("GOOGLE_BUSINESS_TOKEN_ENCRYPTION_KEY"),
     openai: present("OPENAI_API_KEY"),
     anthropic: present("ANTHROPIC_API_KEY", "CLAUDE_API_KEY"),
-    workerSecret: present("CRON_SECRET", "LOVABLE_CRON_SECRET"),
+    workerSecret: present("CRON_SECRET"),
     publicOrigin: present("PUBLIC_ORIGIN"),
   };
 }

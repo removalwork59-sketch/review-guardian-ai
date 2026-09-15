@@ -59,8 +59,10 @@ export const Route = createFileRoute("/")({
           "Paste a review link. AI finds the business, reads the review and tells you in plain English whether it breaks the rules.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://removalwork.online/" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://removalwork.online/" }],
   }),
   component: Home,
 });

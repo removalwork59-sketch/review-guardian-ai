@@ -158,7 +158,7 @@ export async function getGoogleAccountEmail(accessToken: string) {
   return payload.email ?? null;
 }
 
-/** Only the production origin, Lovable previews and localhost may start or finish Google OAuth. */
+/** Only the production origin and localhost may start or finish Google OAuth. */
 export function assertAllowedOrigin(origin: string) {
   const url = new URL(origin);
   const local = url.hostname === "localhost" || url.hostname === "127.0.0.1";
@@ -168,8 +168,7 @@ export function assertAllowedOrigin(origin: string) {
   const allowed =
     local ||
     url.hostname === productionHost ||
-    url.hostname === "removalwork.online" ||
-    url.hostname.endsWith(".lovable.app");
+    url.hostname === "removalwork.online";
   if (!allowed) throw new Error("This origin is not allowed.");
   return url.origin;
 }
