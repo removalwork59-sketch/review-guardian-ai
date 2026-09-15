@@ -55,7 +55,7 @@ export const Route = createFileRoute("/scan/$slug")({
   component: PublicCaseDetailPage,
 });
 
-function Bullets({ title, items }: { title: string; items?: string[] }) {
+function Bullets({ title, items }: { title: string; items?: string[] | undefined }) {
   if (!items || items.length === 0) return null;
   return (
     <div className="mt-5">
