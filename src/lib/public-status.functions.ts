@@ -54,20 +54,7 @@ export const PUBLIC_PROGRESS_STEPS = 4;
 /** Public, read-only status feed. No review text, author, or business data. */
 export const listPublicCaseStatuses = createServerFn({ method: "GET" }).handler(
   async (): Promise<PublicCaseStatus[]> => {
-    const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
-    const supabasePublic = createClient<Database>(process.env["SUPABASE_URL"]!, key, {
-      auth: { persistSession: false, autoRefreshToken: false },
-      global: {
-        fetch: (input, init) => {
-          const headers = new Headers(init?.headers);
-          if (key.startsWith("sb_") && headers.get("Authorization") === `Bearer ${key}`) {
-            headers.delete("Authorization");
-          }
-          headers.set("apikey", key);
-          return fetch(input, { ...init, headers });
-        },
-      },
-    });
+    const supabasePublic = createPublicClient();
 
     const { data, error } = await supabasePublic
       .from("review_cases")
