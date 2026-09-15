@@ -96,6 +96,8 @@ export type PublicCaseDetail = PublicCaseStatus & {
   plainSummary: string;
   rejectionRisk: string;
   analysis: ReviewAnalysis | null;
+  ownerReply: string | null;
+  ownerReplyAt: string | null;
 };
 
 /** Public detail for one owner-published case. Returns null when not published. */
@@ -107,7 +109,7 @@ export const getPublicCaseDetail = createServerFn({ method: "GET" })
     const { data: row, error } = await supabasePublic
       .from("review_cases")
       .select(
-        "id, public_slug, platform, headline, status, verdict, confidence, severity, reported_at, resolved_at, created_at, updated_at, source_url, review_url, author_name, review_rating, review_text, review_relative_time, violation_category, plain_summary, rejection_risk, analysis, locations ( name, address )",
+        "id, public_slug, platform, headline, status, verdict, confidence, severity, reported_at, resolved_at, created_at, updated_at, source_url, review_url, author_name, review_rating, review_text, review_relative_time, violation_category, plain_summary, rejection_risk, analysis, owner_reply, owner_reply_at, locations ( name, address )",
       )
       .eq("public_status", true)
       .eq("public_slug", data.slug)
