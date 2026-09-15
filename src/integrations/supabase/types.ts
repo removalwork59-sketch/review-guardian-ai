@@ -628,6 +628,8 @@ export type Database = {
           headline: string
           id: string
           location_id: string
+          owner_reply: string | null
+          owner_reply_at: string | null
           plain_summary: string
           platform: string
           public_slug: string | null
@@ -662,6 +664,8 @@ export type Database = {
           headline?: string
           id?: string
           location_id: string
+          owner_reply?: string | null
+          owner_reply_at?: string | null
           plain_summary?: string
           platform?: string
           public_slug?: string | null
@@ -696,6 +700,8 @@ export type Database = {
           headline?: string
           id?: string
           location_id?: string
+          owner_reply?: string | null
+          owner_reply_at?: string | null
           plain_summary?: string
           platform?: string
           public_slug?: string | null
