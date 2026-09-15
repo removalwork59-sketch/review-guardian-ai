@@ -5,6 +5,24 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { Database } from "@/integrations/supabase/types";
 import type { CaseStatus } from "./case-types";
+import type { ReviewAnalysis } from "./analysis-types";
+
+function createPublicClient() {
+  const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
+  return createClient<Database>(process.env["SUPABASE_URL"]!, key, {
+    auth: { persistSession: false, autoRefreshToken: false },
+    global: {
+      fetch: (input, init) => {
+        const headers = new Headers(init?.headers);
+        if (key.startsWith("sb_") && headers.get("Authorization") === `Bearer ${key}`) {
+          headers.delete("Authorization");
+        }
+        headers.set("apikey", key);
+        return fetch(input, { ...init, headers });
+      },
+    },
+  });
+}
 
 export type PublicCaseStatus = {
   id: string;
@@ -36,20 +54,7 @@ export const PUBLIC_PROGRESS_STEPS = 4;
 /** Public, read-only status feed. No review text, author, or business data. */
 export const listPublicCaseStatuses = createServerFn({ method: "GET" }).handler(
   async (): Promise<PublicCaseStatus[]> => {
-    const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
-    const supabasePublic = createClient<Database>(process.env["SUPABASE_URL"]!, key, {
-      auth: { persistSession: false, autoRefreshToken: false },
-      global: {
-        fetch: (input, init) => {
-          const headers = new Headers(init?.headers);
-          if (key.startsWith("sb_") && headers.get("Authorization") === `Bearer ${key}`) {
-            headers.delete("Authorization");
-          }
-          headers.set("apikey", key);
-          return fetch(input, { ...init, headers });
-        },
-      },
-    });
+    const supabasePublic = createPublicClient();
 
     const { data, error } = await supabasePublic
       .from("review_cases")
@@ -77,6 +82,68 @@ export const listPublicCaseStatuses = createServerFn({ method: "GET" }).handler(
     }));
   },
 );
+
+export type PublicCaseDetail = PublicCaseStatus & {
+  locationName: string;
+  locationAddress: string;
+  sourceUrl: string;
+  reviewUrl: string;
+  authorName: string;
+  reviewRating: number | null;
+  reviewText: string;
+  reviewRelativeTime: string;
+  violationCategory: string;
+  plainSummary: string;
+  rejectionRisk: string;
+  analysis: ReviewAnalysis | null;
+};
+
+/** Public detail for one owner-published case. Returns null when not published. */
+export const getPublicCaseDetail = createServerFn({ method: "GET" })
+  .inputValidator((input: unknown) => z.object({ slug: z.string().min(1) }).parse(input))
+  .handler(async ({ data }): Promise<PublicCaseDetail | null> => {
+    const supabasePublic = createPublicClient();
+
+    const { data: row, error } = await supabasePublic
+      .from("review_cases")
+      .select(
+        "id, public_slug, platform, headline, status, verdict, confidence, severity, reported_at, resolved_at, created_at, updated_at, source_url, review_url, author_name, review_rating, review_text, review_relative_time, violation_category, plain_summary, rejection_risk, analysis, locations ( name, address )",
+      )
+      .eq("public_status", true)
+      .eq("public_slug", data.slug)
+      .maybeSingle();
+    if (error) throw error;
+    if (!row) return null;
+
+    const anyRow = row as any;
+    const location = anyRow.locations ?? {};
+    return {
+      id: anyRow.id,
+      slug: anyRow.public_slug ?? anyRow.id,
+      platform: anyRow.platform,
+      headline: anyRow.headline,
+      status: anyRow.status as CaseStatus,
+      verdict: anyRow.verdict,
+      confidence: anyRow.confidence,
+      severity: anyRow.severity,
+      reportedAt: anyRow.reported_at,
+      resolvedAt: anyRow.resolved_at,
+      createdAt: anyRow.created_at,
+      updatedAt: anyRow.updated_at,
+      locationName: location.name ?? "Business not disclosed",
+      locationAddress: location.address ?? "",
+      sourceUrl: anyRow.source_url ?? "",
+      reviewUrl: anyRow.review_url ?? "",
+      authorName: anyRow.author_name ?? "",
+      reviewRating: anyRow.review_rating === null ? null : Number(anyRow.review_rating),
+      reviewText: anyRow.review_text ?? "",
+      reviewRelativeTime: anyRow.review_relative_time ?? "",
+      violationCategory: anyRow.violation_category ?? "",
+      plainSummary: anyRow.plain_summary ?? "",
+      rejectionRisk: anyRow.rejection_risk ?? "",
+      analysis: (anyRow.analysis as ReviewAnalysis) ?? null,
+    };
+  });
 
 /** Owner opt-in: publish or unpublish a case's status on the public page. */
 export const setCasePublicStatus = createServerFn({ method: "POST" })

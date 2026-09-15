@@ -14,7 +14,6 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as ScanRouteImport } from './routes/scan'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as AuthenticatedBlogManagerRouteImport } from './routes/_authenticated/blog-manager'
 import { Route as AuthenticatedBulkRouteImport } from './routes/_authenticated/bulk'
@@ -25,6 +24,8 @@ import { Route as AuthenticatedPipelineRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedScansRouteImport } from './routes/_authenticated/scans'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as ScanIndexRouteImport } from './routes/scan.index'
+import { Route as ScanSlugRouteImport } from './routes/scan.$slug'
 import { Route as ApiPublicGoogleBusinessCallbackRouteImport } from './routes/api/public/google-business/callback'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
@@ -50,11 +51,6 @@ const BlogRoute = BlogRouteImport.update({
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ScanRoute = ScanRouteImport.update({
-  id: '/scan',
-  path: '/scan',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesRoute = ServicesRouteImport.update({
@@ -108,6 +104,16 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => BlogRoute,
 } as any)
+const ScanIndexRoute = ScanIndexRouteImport.update({
+  id: '/scan/',
+  path: '/scan/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScanSlugRoute = ScanSlugRouteImport.update({
+  id: '/scan/$slug',
+  path: '/scan/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicGoogleBusinessCallbackRoute =
   ApiPublicGoogleBusinessCallbackRouteImport.update({
     id: '/api/public/google-business/callback',
@@ -126,7 +132,6 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
-  '/scan': typeof ScanRoute
   '/services': typeof ServicesRoute
   '/blog-manager': typeof AuthenticatedBlogManagerRoute
   '/bulk': typeof AuthenticatedBulkRoute
@@ -137,6 +142,8 @@ export interface FileRoutesByFullPath {
   '/reports': typeof AuthenticatedReportsRoute
   '/scans': typeof AuthenticatedScansRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/scan/$slug': typeof ScanSlugRoute
+  '/scan/': typeof ScanIndexRoute
   '/api/public/google-business/callback': typeof ApiPublicGoogleBusinessCallbackRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
@@ -145,7 +152,6 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
-  '/scan': typeof ScanRoute
   '/services': typeof ServicesRoute
   '/blog-manager': typeof AuthenticatedBlogManagerRoute
   '/bulk': typeof AuthenticatedBulkRoute
@@ -156,6 +162,8 @@ export interface FileRoutesByTo {
   '/reports': typeof AuthenticatedReportsRoute
   '/scans': typeof AuthenticatedScansRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/scan/$slug': typeof ScanSlugRoute
+  '/scan': typeof ScanIndexRoute
   '/api/public/google-business/callback': typeof ApiPublicGoogleBusinessCallbackRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
@@ -166,7 +174,6 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
-  '/scan': typeof ScanRoute
   '/services': typeof ServicesRoute
   '/_authenticated/blog-manager': typeof AuthenticatedBlogManagerRoute
   '/_authenticated/bulk': typeof AuthenticatedBulkRoute
@@ -177,6 +184,8 @@ export interface FileRoutesById {
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/scans': typeof AuthenticatedScansRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/scan/$slug': typeof ScanSlugRoute
+  '/scan/': typeof ScanIndexRoute
   '/api/public/google-business/callback': typeof ApiPublicGoogleBusinessCallbackRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
@@ -187,7 +196,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog'
     | '/reset-password'
-    | '/scan'
     | '/services'
     | '/blog-manager'
     | '/bulk'
@@ -198,6 +206,8 @@ export interface FileRouteTypes {
     | '/reports'
     | '/scans'
     | '/blog/$slug'
+    | '/scan/$slug'
+    | '/scan/'
     | '/api/public/google-business/callback'
     | '/lovable/email/transactional/preview'
   fileRoutesByTo: FileRoutesByTo
@@ -206,7 +216,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog'
     | '/reset-password'
-    | '/scan'
     | '/services'
     | '/blog-manager'
     | '/bulk'
@@ -217,6 +226,8 @@ export interface FileRouteTypes {
     | '/reports'
     | '/scans'
     | '/blog/$slug'
+    | '/scan/$slug'
+    | '/scan'
     | '/api/public/google-business/callback'
     | '/lovable/email/transactional/preview'
   id:
@@ -226,7 +237,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog'
     | '/reset-password'
-    | '/scan'
     | '/services'
     | '/_authenticated/blog-manager'
     | '/_authenticated/bulk'
@@ -237,6 +247,8 @@ export interface FileRouteTypes {
     | '/_authenticated/reports'
     | '/_authenticated/scans'
     | '/blog/$slug'
+    | '/scan/$slug'
+    | '/scan/'
     | '/api/public/google-business/callback'
     | '/lovable/email/transactional/preview'
   fileRoutesById: FileRoutesById
@@ -247,8 +259,9 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   BlogRoute: typeof BlogRouteWithChildren
   ResetPasswordRoute: typeof ResetPasswordRoute
-  ScanRoute: typeof ScanRoute
   ServicesRoute: typeof ServicesRoute
+  ScanSlugRoute: typeof ScanSlugRoute
+  ScanIndexRoute: typeof ScanIndexRoute
   ApiPublicGoogleBusinessCallbackRoute: typeof ApiPublicGoogleBusinessCallbackRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
@@ -288,13 +301,6 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/scan': {
-      id: '/scan'
-      path: '/scan'
-      fullPath: '/scan'
-      preLoaderRoute: typeof ScanRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services': {
@@ -367,6 +373,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof BlogRoute
     }
+    '/scan/': {
+      id: '/scan/'
+      path: '/scan'
+      fullPath: '/scan/'
+      preLoaderRoute: typeof ScanIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/scan/$slug': {
+      id: '/scan/$slug'
+      path: '/scan/$slug'
+      fullPath: '/scan/$slug'
+      preLoaderRoute: typeof ScanSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/google-business/callback': {
       id: '/api/public/google-business/callback'
       path: '/api/public/google-business/callback'
@@ -425,8 +445,9 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   BlogRoute: BlogRouteWithChildren,
   ResetPasswordRoute: ResetPasswordRoute,
-  ScanRoute: ScanRoute,
   ServicesRoute: ServicesRoute,
+  ScanSlugRoute: ScanSlugRoute,
+  ScanIndexRoute: ScanIndexRoute,
   ApiPublicGoogleBusinessCallbackRoute: ApiPublicGoogleBusinessCallbackRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
