@@ -8,7 +8,7 @@ import {
   listPublicCaseStatuses,
 } from "@/lib/public-status.functions";
 
-export const Route = createFileRoute("/scan")({
+export const Route = createFileRoute("/scan/")({
   loader: () => listPublicCaseStatuses(),
   errorComponent: () => (
     <div className="page-shell">

@@ -25,6 +25,7 @@ import { Route as AuthenticatedPipelineRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedScansRouteImport } from './routes/_authenticated/scans'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as ScanSlugRouteImport } from './routes/scan.$slug'
 import { Route as ApiPublicGoogleBusinessCallbackRouteImport } from './routes/api/public/google-business/callback'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
@@ -108,6 +109,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => BlogRoute,
 } as any)
+const ScanSlugRoute = ScanSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ScanRoute,
+} as any)
 const ApiPublicGoogleBusinessCallbackRoute =
   ApiPublicGoogleBusinessCallbackRouteImport.update({
     id: '/api/public/google-business/callback',
@@ -126,7 +132,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
-  '/scan': typeof ScanRoute
+  '/scan': typeof ScanRouteWithChildren
   '/services': typeof ServicesRoute
   '/blog-manager': typeof AuthenticatedBlogManagerRoute
   '/bulk': typeof AuthenticatedBulkRoute
@@ -137,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/reports': typeof AuthenticatedReportsRoute
   '/scans': typeof AuthenticatedScansRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/scan/$slug': typeof ScanSlugRoute
   '/api/public/google-business/callback': typeof ApiPublicGoogleBusinessCallbackRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
@@ -145,7 +152,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
-  '/scan': typeof ScanRoute
+  '/scan': typeof ScanRouteWithChildren
   '/services': typeof ServicesRoute
   '/blog-manager': typeof AuthenticatedBlogManagerRoute
   '/bulk': typeof AuthenticatedBulkRoute
@@ -156,6 +163,7 @@ export interface FileRoutesByTo {
   '/reports': typeof AuthenticatedReportsRoute
   '/scans': typeof AuthenticatedScansRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/scan/$slug': typeof ScanSlugRoute
   '/api/public/google-business/callback': typeof ApiPublicGoogleBusinessCallbackRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
@@ -166,7 +174,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
-  '/scan': typeof ScanRoute
+  '/scan': typeof ScanRouteWithChildren
   '/services': typeof ServicesRoute
   '/_authenticated/blog-manager': typeof AuthenticatedBlogManagerRoute
   '/_authenticated/bulk': typeof AuthenticatedBulkRoute
@@ -177,6 +185,7 @@ export interface FileRoutesById {
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/scans': typeof AuthenticatedScansRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/scan/$slug': typeof ScanSlugRoute
   '/api/public/google-business/callback': typeof ApiPublicGoogleBusinessCallbackRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
@@ -198,6 +207,7 @@ export interface FileRouteTypes {
     | '/reports'
     | '/scans'
     | '/blog/$slug'
+    | '/scan/$slug'
     | '/api/public/google-business/callback'
     | '/lovable/email/transactional/preview'
   fileRoutesByTo: FileRoutesByTo
@@ -217,6 +227,7 @@ export interface FileRouteTypes {
     | '/reports'
     | '/scans'
     | '/blog/$slug'
+    | '/scan/$slug'
     | '/api/public/google-business/callback'
     | '/lovable/email/transactional/preview'
   id:
@@ -237,6 +248,7 @@ export interface FileRouteTypes {
     | '/_authenticated/reports'
     | '/_authenticated/scans'
     | '/blog/$slug'
+    | '/scan/$slug'
     | '/api/public/google-business/callback'
     | '/lovable/email/transactional/preview'
   fileRoutesById: FileRoutesById
@@ -247,7 +259,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   BlogRoute: typeof BlogRouteWithChildren
   ResetPasswordRoute: typeof ResetPasswordRoute
-  ScanRoute: typeof ScanRoute
+  ScanRoute: typeof ScanRouteWithChildren
   ServicesRoute: typeof ServicesRoute
   ApiPublicGoogleBusinessCallbackRoute: typeof ApiPublicGoogleBusinessCallbackRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
@@ -367,6 +379,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof BlogRoute
     }
+    '/scan/$slug': {
+      id: '/scan/$slug'
+      path: '/$slug'
+      fullPath: '/scan/$slug'
+      preLoaderRoute: typeof ScanSlugRouteImport
+      parentRoute: typeof ScanRoute
+    }
     '/api/public/google-business/callback': {
       id: '/api/public/google-business/callback'
       path: '/api/public/google-business/callback'
@@ -419,13 +438,23 @@ const BlogRouteChildren: BlogRouteChildren = {
 
 const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
+interface ScanRouteChildren {
+  ScanSlugRoute: typeof ScanSlugRoute
+}
+
+const ScanRouteChildren: ScanRouteChildren = {
+  ScanSlugRoute: ScanSlugRoute,
+}
+
+const ScanRouteWithChildren = ScanRoute._addFileChildren(ScanRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   BlogRoute: BlogRouteWithChildren,
   ResetPasswordRoute: ResetPasswordRoute,
-  ScanRoute: ScanRoute,
+  ScanRoute: ScanRouteWithChildren,
   ServicesRoute: ServicesRoute,
   ApiPublicGoogleBusinessCallbackRoute: ApiPublicGoogleBusinessCallbackRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
