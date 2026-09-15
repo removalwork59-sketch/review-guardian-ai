@@ -114,6 +114,14 @@ function PublicStatusPage() {
                     ))}
                   </div>
 
+                  <Link
+                    to="/scan/$slug"
+                    params={{ slug: entry.slug }}
+                    className="mt-3 inline-flex text-sm font-semibold text-primary underline-offset-4 hover:underline"
+                  >
+                    View full case detail
+                  </Link>
+
                   <p className="mt-3 text-xs text-muted-foreground">
                     Last update:{" "}
                     {new Date(entry.updatedAt).toLocaleString(undefined, {
